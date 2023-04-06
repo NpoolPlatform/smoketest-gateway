@@ -64,7 +64,7 @@ pipeline {
         sh 'git clone https://github.com/NpoolPlatform/apollo-base-config.git .apollo-base-config'
         sh (returnStdout: false, script: '''
           PASSWORD=`kubectl get secret --namespace "kube-system" mysql-password-secret -o jsonpath="{.data.rootpassword}" | base64 --decode`
-          kubectl exec --namespace kube-system mysql-0 -- mysql -h 127.0.0.1 -uroot -p$PASSWORD -P3306 -e "create database if not exists service_template;"
+          kubectl exec --namespace kube-system mysql-0 -- mysql -h 127.0.0.1 -uroot -p$PASSWORD -P3306 -e "create database if not exists smoketest_manager;"
 
           username=`helm status rabbitmq --namespace kube-system | grep Username | awk -F ' : ' '{print $2}' | sed 's/"//g'`
           for vhost in `cat cmd/*/*.viper.yaml | grep hostname | awk '{print $2}' | sed 's/"//g' | sed 's/\\./-/g'`; do
@@ -73,7 +73,7 @@ pipeline {
 
             cd .apollo-base-config
             ./apollo-base-config.sh $APP_ID $TARGET_ENV $vhost
-            ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost database_name service_template
+            ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost database_name smoketest_manager
             cd -
           done
         '''.stripIndent())
@@ -87,7 +87,7 @@ pipeline {
       steps {
         sh (returnStdout: false, script: '''
           devboxpod=`kubectl get pods -A | grep development-box | head -n1 | awk '{print $2}'`
-          servicename="service-template"
+          servicename="smoketest-gateway"
 
           kubectl exec --namespace kube-system $devboxpod -- make -C /tmp/$servicename after-test || true
           kubectl exec --namespace kube-system $devboxpod -- rm -rf /tmp/$servicename || true

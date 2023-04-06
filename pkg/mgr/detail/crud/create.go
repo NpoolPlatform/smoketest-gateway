@@ -3,17 +3,17 @@ package detail
 import (
 	"context"
 
-	constant "github.com/NpoolPlatform/service-template/pkg/message/const"
+	constant "github.com/NpoolPlatform/smoketest-gateway/pkg/message/const"
 
-	tracer "github.com/NpoolPlatform/service-template/pkg/mgr/detail/tracer"
+	tracer "github.com/NpoolPlatform/smoketest-gateway/pkg/mgr/detail/tracer"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/codes"
 
 	npool "github.com/NpoolPlatform/message/npool/servicetmpl/mgr/v1/detail"
 
-	"github.com/NpoolPlatform/service-template/pkg/db"
-	"github.com/NpoolPlatform/service-template/pkg/db/ent"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent"
 
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"

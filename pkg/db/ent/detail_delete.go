@@ -9,8 +9,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/NpoolPlatform/service-template/pkg/db/ent/detail"
-	"github.com/NpoolPlatform/service-template/pkg/db/ent/predicate"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent/detail"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent/predicate"
 )
 
 // DetailDelete is the builder for deleting a Detail entity.

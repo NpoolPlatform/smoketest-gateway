@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/service-template/pkg/db/ent/detail"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent/detail"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 )

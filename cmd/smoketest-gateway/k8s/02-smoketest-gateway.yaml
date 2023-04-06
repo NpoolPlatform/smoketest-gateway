@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-template
+  name: smoketest-gateway
   namespace: kube-system
   annotations:
     "sidecar.jaegertracing.io/inject": "true"
@@ -9,19 +9,19 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: service-template
+      app: smoketest-gateway
   template:
     metadata:
       labels:
-        app: service-template
+        app: smoketest-gateway
     spec:
       containers:
-        - name: service-template
-          image: uhub.service.ucloud.cn/entropypool/service-template:latest
+        - name: smoketest-gateway
+          image: uhub.service.ucloud.cn/entropypool/smoketest-gateway:latest
           imagePullPolicy: Always
           volumeMounts:
             - name: service-config
-              mountPath: /etc/ServiceTemplate
+              mountPath: /etc/SmoketestGateway
           env:
             - name: ENV_ENVIRONMENT_TARGET
               valueFrom:
@@ -45,29 +45,29 @@ spec:
       volumes:
         - name: service-config
           configMap:
-            name: service-template-config
+            name: smoketest-gateway-config
             items:
               - key: service-conf
-                path: ServiceTemplate.viper.yaml
+                path: SmoketestGateway.viper.yaml
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-template
+  name: smoketest-gateway
   namespace: kube-system
 spec:
   ports:
     - name: http
-      port: 50330
-      targetPort: 50330
+      port: 50760
+      targetPort: 50760
     - name: grpc
-      port: 50331
-      targetPort: 50331
+      port: 50761
+      targetPort: 50761
     - name: healthz
-      port: 50332
-      targetPort: 50332
+      port: 50762
+      targetPort: 50762
     - name: prometheus
-      port: 50333
-      targetPort: 50333
+      port: 50763
+      targetPort: 50763
   selector:
-    app: service-template
+    app: smoketest-gateway

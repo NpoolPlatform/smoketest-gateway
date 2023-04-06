@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NpoolPlatform/service-template/pkg/db/ent"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent"
 )
 
 // The DetailFunc type is an adapter to allow the use of ordinary

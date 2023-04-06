@@ -3,12 +3,9 @@ package main
 import (
 	"context"
 
-	"github.com/NpoolPlatform/service-template/api"
-	"github.com/NpoolPlatform/service-template/pkg/db"
-	"github.com/NpoolPlatform/service-template/pkg/migrator"
-
-	"github.com/NpoolPlatform/service-template/pkg/feeder"
-	"github.com/NpoolPlatform/service-template/pkg/watcher"
+	"github.com/NpoolPlatform/smoketest-gateway/api"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/migrator"
 
 	action "github.com/NpoolPlatform/go-service-framework/pkg/action"
 
@@ -47,8 +44,6 @@ func run(ctx context.Context) error {
 }
 
 func watch(ctx context.Context) error {
-	go watcher.Watch(ctx)
-	go feeder.Watch(ctx)
 	return nil
 }
 

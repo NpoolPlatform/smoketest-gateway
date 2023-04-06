@@ -2,7 +2,7 @@ package detail
 
 import (
 	npool "github.com/NpoolPlatform/message/npool/servicetmpl/mgr/v1/detail"
-	"github.com/NpoolPlatform/service-template/pkg/db/ent"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent"
 )
 
 func Ent2Grpc(row *ent.Detail) *npool.Detail {

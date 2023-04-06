@@ -3,7 +3,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     release: prometheus
-  name: service-template
+  name: smoketest-gateway
   namespace: monitor
 spec:
   endpoints:
@@ -14,4 +14,4 @@ spec:
       - kube-system
   selector:
     matchLabels:
-      app: service-template
+      app: smoketest-gateway

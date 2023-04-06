@@ -4,12 +4,12 @@ package detail
 import (
 	"context"
 
-	commontracer "github.com/NpoolPlatform/service-template/pkg/tracer"
+	commontracer "github.com/NpoolPlatform/smoketest-gateway/pkg/tracer"
 
-	converter "github.com/NpoolPlatform/service-template/pkg/mgr/detail/converter"
-	crud "github.com/NpoolPlatform/service-template/pkg/mgr/detail/crud"
+	converter "github.com/NpoolPlatform/smoketest-gateway/pkg/mgr/detail/converter"
+	crud "github.com/NpoolPlatform/smoketest-gateway/pkg/mgr/detail/crud"
 
-	constant "github.com/NpoolPlatform/service-template/pkg/message/const"
+	constant "github.com/NpoolPlatform/smoketest-gateway/pkg/message/const"
 
 	"go.opentelemetry.io/otel"
 	scodes "go.opentelemetry.io/otel/codes"

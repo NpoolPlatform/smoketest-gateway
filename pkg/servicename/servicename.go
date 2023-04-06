@@ -1,6 +1,6 @@
 package servicename
 
 const (
-	ServiceName   = "Service Template"
-	ServiceDomain = "service-template.npool.top"
+	ServiceName   = "Smoketest Gateway"
+	ServiceDomain = "smoketest-gateway.npool.top"
 )

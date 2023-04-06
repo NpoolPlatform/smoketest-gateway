@@ -4,7 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema/field"
-	"github.com/NpoolPlatform/service-template/pkg/db/mixin"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/mixin"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 

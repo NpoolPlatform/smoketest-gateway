@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NpoolPlatform/service-template/pkg/db/ent"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent"
 
 	"entgo.io/ent/entql"
 	"entgo.io/ent/privacy"

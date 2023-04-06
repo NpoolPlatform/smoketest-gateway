@@ -1,4 +1,4 @@
-module github.com/NpoolPlatform/service-template
+module github.com/NpoolPlatform/smoketest-gateway
 
 go 1.17
 

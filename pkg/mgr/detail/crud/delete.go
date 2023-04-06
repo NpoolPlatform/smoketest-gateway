@@ -4,14 +4,14 @@ import (
 	"context"
 	"time"
 
-	constant "github.com/NpoolPlatform/service-template/pkg/message/const"
-	commontracer "github.com/NpoolPlatform/service-template/pkg/tracer"
+	constant "github.com/NpoolPlatform/smoketest-gateway/pkg/message/const"
+	commontracer "github.com/NpoolPlatform/smoketest-gateway/pkg/tracer"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/codes"
 
-	"github.com/NpoolPlatform/service-template/pkg/db"
-	"github.com/NpoolPlatform/service-template/pkg/db/ent"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent"
 
 	"github.com/google/uuid"
 )

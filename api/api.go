@@ -5,7 +5,7 @@ import (
 
 	"github.com/NpoolPlatform/message/npool/servicetmpl"
 
-	"github.com/NpoolPlatform/service-template/api/mgr/detail"
+	"github.com/NpoolPlatform/smoketest-gateway/api/mgr/detail"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"

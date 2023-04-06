@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: service-template-config
+  name: smoketest-gateway-config
   namespace: kube-system
 data:
   service-conf: |
     config:
-      hostname: "service-template.npool.top"
-      http_port: 50330
-      grpc_port: 50331
-      healthz_port: 50332
-      prometheus_port: 50333
+      hostname: "smoketest-gateway.npool.top"
+      http_port: 50760
+      grpc_port: 50761
+      healthz_port: 50762
+      prometheus_port: 50763
       appid: "89089012783789789719823798127398"
       serviceid: "6161ecc0-0b2c-11ed-b571-72e9de4b20f6"
       logdir: "./"

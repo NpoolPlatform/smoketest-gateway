@@ -11,7 +11,7 @@ import (
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	npool "github.com/NpoolPlatform/message/npool/servicetmpl/mgr/v1/detail"
 
-	constant "github.com/NpoolPlatform/service-template/pkg/message/const"
+	constant "github.com/NpoolPlatform/smoketest-gateway/pkg/message/const"
 )
 
 var timeout = 10 * time.Second

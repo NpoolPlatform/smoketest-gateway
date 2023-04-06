@@ -7,14 +7,14 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/NpoolPlatform/service-template/pkg/db/ent"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent"
 	"github.com/shopspring/decimal"
 
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 
 	basetypes "github.com/NpoolPlatform/message/npool/basetypes/v1"
 	npool "github.com/NpoolPlatform/message/npool/servicetmpl/mgr/v1/detail"
-	testinit "github.com/NpoolPlatform/service-template/pkg/testinit"
+	testinit "github.com/NpoolPlatform/smoketest-gateway/pkg/testinit"
 	"github.com/google/uuid"
 
 	"github.com/stretchr/testify/assert"

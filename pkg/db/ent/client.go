@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/NpoolPlatform/service-template/pkg/db/ent/migrate"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent/migrate"
 	"github.com/google/uuid"
 
-	"github.com/NpoolPlatform/service-template/pkg/db/ent/detail"
+	"github.com/NpoolPlatform/smoketest-gateway/pkg/db/ent/detail"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
