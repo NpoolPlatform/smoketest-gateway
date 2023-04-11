@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	servicename "github.com/NpoolPlatform/gas-feeder/pkg/service-name"
 	"github.com/NpoolPlatform/go-service-framework/pkg/app"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
+	servicename "github.com/NpoolPlatform/smoketest-gateway/pkg/servicename"
 
 	mysqlconst "github.com/NpoolPlatform/go-service-framework/pkg/mysql/const"
 	rabbitmqconst "github.com/NpoolPlatform/go-service-framework/pkg/rabbitmq/const"
