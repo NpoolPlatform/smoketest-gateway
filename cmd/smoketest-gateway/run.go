@@ -5,9 +5,9 @@ import (
 
 	"github.com/NpoolPlatform/smoketest-gateway/pkg/migrator"
 
-	"github.com/NpoolPlatform/smoketest-gateway/api"
 	"github.com/NpoolPlatform/go-service-framework/pkg/oss"
 	ossconst "github.com/NpoolPlatform/go-service-framework/pkg/oss/const"
+	"github.com/NpoolPlatform/smoketest-gateway/api"
 
 	grpc2 "github.com/NpoolPlatform/go-service-framework/pkg/grpc"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
