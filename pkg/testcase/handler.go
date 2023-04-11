@@ -15,7 +15,7 @@ type Handler struct {
 	Description       *string
 	ModuleID          *string
 	ModuleName        *string
-	ApiID             *string
+	APIID             *string
 	Arguments         *string
 	ExpectationResult *string
 	TestCaseType      *testcasemgrpb.TestCaseType
