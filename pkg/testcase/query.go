@@ -31,16 +31,17 @@ func GetTestCases(ctx context.Context, offset, limit int32) ([]*npool.TestCase, 
 	apiIDs := []string{}
 	for _, info := range infos {
 		apiIDs = append(apiIDs, info.ApiID)
-		testCaseIDs = append(apiIDs, info.ID)
+		testCaseIDs = append(testCaseIDs, info.ID)
 	}
 
 	fmt.Println("TestCaseIDs: ", testCaseIDs)
+	fmt.Println("ApiIDs: ", apiIDs)
 
-	//查询用例关联的前置条件|后置条件
-	//TODO
+	// 查询用例关联的前置条件|后置条件
+	// TODO
 
-	//查询API信息
-	//TODO
+	// 查询API信息
+	// TODO
 
 	_infos := []*npool.TestCase{}
 	_relatedTestCases := []*relatedtestcase.RelatedTestCase{}
