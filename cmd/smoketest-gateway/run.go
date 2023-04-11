@@ -1,12 +1,8 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/NpoolPlatform/smoketest-gateway/pkg/migrator"
 
-	"github.com/NpoolPlatform/go-service-framework/pkg/oss"
-	ossconst "github.com/NpoolPlatform/go-service-framework/pkg/oss/const"
 	"github.com/NpoolPlatform/smoketest-gateway/api"
 
 	grpc2 "github.com/NpoolPlatform/go-service-framework/pkg/grpc"
@@ -20,8 +16,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-const BukectKey = "kyc_bucket"
-
 var runCmd = &cli.Command{
 	Name:    "run",
 	Aliases: []string{"s"},
@@ -29,10 +23,6 @@ var runCmd = &cli.Command{
 	Action: func(c *cli.Context) error {
 		if err := migrator.Migrate(c.Context); err != nil {
 			return err
-		}
-
-		if err := oss.Init(ossconst.SecretStoreKey, BukectKey); err != nil {
-			return fmt.Errorf("fail to init s3: %v", err)
 		}
 
 		go func() {
