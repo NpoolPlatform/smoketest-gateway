@@ -3,28 +3,21 @@ package api
 import (
 	"context"
 
-	"github.com/NpoolPlatform/message/npool/servicetmpl"
+	testcasegw "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
-	"github.com/NpoolPlatform/smoketest-gateway/api/mgr/detail"
-
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )
 
 type Server struct {
-	servicetmpl.UnimplementedManagerServer
+	testcasegw.UnimplementedGatewayServer
 }
 
 func Register(server grpc.ServiceRegistrar) {
-	servicetmpl.RegisterManagerServer(server, &Server{})
-	detail.Register(server)
+	testcasegw.RegisterGatewayServer(server, &Server{})
 }
-
 func RegisterGateway(mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
-	if err := servicetmpl.RegisterManagerHandlerFromEndpoint(context.Background(), mux, endpoint, opts); err != nil {
-		return err
-	}
-	if err := detail.RegisterGateway(mux, endpoint, opts); err != nil {
+	if err := testcasegw.RegisterGatewayHandlerFromEndpoint(context.Background(), mux, endpoint, opts); err != nil {
 		return err
 	}
 	return nil
