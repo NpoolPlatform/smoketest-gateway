@@ -5,7 +5,8 @@ go 1.17
 require (
 	github.com/NpoolPlatform/basal-middleware v0.0.0-20230411075853-7cc99c8fe66b
 	github.com/NpoolPlatform/go-service-framework v0.0.0-20230327065405-91484c9b17ea
-	github.com/NpoolPlatform/message v0.0.0-20230412025214-e0296d357a04
+	github.com/NpoolPlatform/libent-cruder v0.0.0-20220621110548-8f3f8049ecc5
+	github.com/NpoolPlatform/message v0.0.0-20230412034353-1cc7b2f4ec96
 	github.com/NpoolPlatform/smoketest-middleware v0.0.0-20230411114808-db8278930e14
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gogo/status v1.1.1
@@ -18,7 +19,6 @@ require (
 )
 
 require (
-	github.com/NpoolPlatform/libent-cruder v0.0.0-20220621110548-8f3f8049ecc5 // indirect
 	github.com/Shonminh/apollo-client v0.4.0 // indirect
 	github.com/andres-erbsen/clock v0.0.0-20160526145045-9e14626cd129 // indirect
 	github.com/armon/go-metrics v0.3.10 // indirect
