@@ -8,7 +8,6 @@ import (
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	"github.com/NpoolPlatform/message/npool/smoketest/gw/v1/relatedtestcase"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
-	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 
 	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
@@ -17,12 +16,12 @@ import (
 	commonpb "github.com/NpoolPlatform/message/npool"
 )
 
-func GetTestCases(ctx context.Context, offset, limit int32) ([]*npool.TestCase, uint32, error) {
+func (handler *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, error) {
 	infos, total, err := testcasemwcli.GetTestCases(
 		ctx,
-		&testcasemgrpb.Conds{},
-		offset,
-		limit,
+		handler.Conds,
+		*handler.Offset,
+		*handler.Limit,
 	)
 	if err != nil {
 		logger.Sugar().Errorw("GetTestCases", "err", err)
@@ -39,6 +38,8 @@ func GetTestCases(ctx context.Context, offset, limit int32) ([]*npool.TestCase, 
 		apiIDs = append(apiIDs, info.ApiID)
 		testCaseIDs = append(testCaseIDs, info.ID)
 	}
+
+	fmt.Println("TestCaseIDs: ", testCaseIDs)
 
 	apis, _, err := apimwcli.GetAPIs(ctx, &apimgrpb.Conds{
 		IDs: &commonpb.StringSliceVal{

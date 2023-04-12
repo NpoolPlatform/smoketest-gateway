@@ -48,6 +48,11 @@ func WithConds(conds *testcasemgrpb.Conds, offset, limit int32) func(context.Con
 				return err
 			}
 		}
+		if conds.ModuleID != nil {
+			if _, err := uuid.Parse(conds.GetModuleID().GetValue()); err != nil {
+				return err
+			}
+		}
 
 		h.Conds = conds
 		h.Offset = &offset
