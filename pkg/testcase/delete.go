@@ -16,7 +16,7 @@ func (h *Handler) DeleteTestCase(ctx context.Context) (*npool.TestCase, error) {
 		Handler: h,
 	}
 
-	info, err := handler.GetTestCase(ctx)
+	info, err := handler.DeleteTestCase(ctx)
 	if err != nil {
 		return nil, err
 	}

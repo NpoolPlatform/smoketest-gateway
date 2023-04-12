@@ -23,6 +23,7 @@ func (h *createHandler) validate() error {
 	return nil
 }
 
+//nolint
 func (h *Handler) CreateModule(ctx context.Context) (*npool.Module, error) {
 	handler := &createHandler{
 		Handler: h,
