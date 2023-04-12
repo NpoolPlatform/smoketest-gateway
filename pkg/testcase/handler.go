@@ -15,7 +15,7 @@ type Handler struct {
 	Description       *string
 	ModuleID          *string
 	ModuleName        *string
-	APIID             *string
+	ApiID             *string //nolint
 	Arguments         *string
 	ExpectationResult *string
 	TestCaseType      *testcasemgrpb.TestCaseType
@@ -54,6 +54,70 @@ func WithConds(conds *testcasemgrpb.Conds, offset, limit int32) func(context.Con
 		}
 		h.Limit = &limit
 
+		return nil
+	}
+}
+
+//nolint
+func WithApiID(apiID *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if _, err := uuid.Parse(*apiID); err != nil {
+			return err
+		}
+		h.ApiID = apiID
+		return nil
+	}
+}
+
+func WithModuleName(moduleName *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if moduleName == nil {
+			return nil
+		}
+		h.ModuleName = moduleName
+		return nil
+	}
+}
+
+func WithExpectationResult(expectationResult *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if expectationResult == nil {
+			return fmt.Errorf("invalid expectation result")
+		}
+		h.ExpectationResult = expectationResult
+		return nil
+	}
+}
+
+func WithArguments(arguments *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if arguments == nil {
+			return fmt.Errorf("invalid arguments")
+		}
+		h.Arguments = arguments
+		return nil
+	}
+}
+
+func WithDescription(description *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if description == nil {
+			return nil
+		}
+		h.Description = description
+		return nil
+	}
+}
+
+func WithName(name *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if name == nil {
+			return nil
+		}
+		if *name == "" {
+			return fmt.Errorf("invalid testcase name")
+		}
+		h.Name = name
 		return nil
 	}
 }

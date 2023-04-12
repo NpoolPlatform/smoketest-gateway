@@ -3,9 +3,10 @@ module github.com/NpoolPlatform/smoketest-gateway
 go 1.17
 
 require (
-	github.com/NpoolPlatform/basal-middleware v0.0.0-20230221094657-688f81366495
+	github.com/NpoolPlatform/basal-middleware v0.0.0-20230412040939-3e6d3c1533dd
 	github.com/NpoolPlatform/go-service-framework v0.0.0-20230327065405-91484c9b17ea
-	github.com/NpoolPlatform/message v0.0.0-20230411124005-4fd45a99c17e
+	github.com/NpoolPlatform/libent-cruder v0.0.0-20220621110548-8f3f8049ecc5
+	github.com/NpoolPlatform/message v0.0.0-20230412034353-1cc7b2f4ec96
 	github.com/NpoolPlatform/smoketest-middleware v0.0.0-20230411114808-db8278930e14
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gogo/status v1.1.1
@@ -18,7 +19,6 @@ require (
 )
 
 require (
-	github.com/NpoolPlatform/libent-cruder v0.0.0-20220621110548-8f3f8049ecc5 // indirect
 	github.com/Shonminh/apollo-client v0.4.0 // indirect
 	github.com/andres-erbsen/clock v0.0.0-20160526145045-9e14626cd129 // indirect
 	github.com/armon/go-metrics v0.3.10 // indirect
@@ -38,7 +38,6 @@ require (
 	github.com/gogo/googleapis v0.0.0-20180223154316-0cd9801be74a // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
@@ -85,7 +84,6 @@ require (
 	go.uber.org/ratelimit v0.2.0 // indirect
 	go.uber.org/zap v1.21.0 // indirect
 	golang.org/x/net v0.8.0 // indirect
-	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220411194840-2f41105eb62f // indirect
