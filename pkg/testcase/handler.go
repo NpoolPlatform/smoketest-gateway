@@ -2,7 +2,6 @@ package testcase
 
 import (
 	"context"
-	"fmt"
 
 	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
 	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
@@ -22,7 +21,6 @@ type Handler struct {
 	ExpectationResult *string
 	TestCaseType      *testcasemgrpb.TestCaseType
 	Deprecated        *bool
-	Conds             *testcasemgrpb.Conds
 	Offset            *int32
 	Limit             *int32
 }
@@ -37,24 +35,8 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	return handler, nil
 }
 
-func WithConds(conds *testcasemgrpb.Conds, offset, limit int32) func(context.Context, *Handler) error {
+func WithConds(offset, limit int32) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if conds == nil {
-			return fmt.Errorf("invalid conds")
-		}
-
-		if conds.ID != nil {
-			if _, err := uuid.Parse(conds.GetID().GetValue()); err != nil {
-				return err
-			}
-		}
-		if conds.ModuleID != nil {
-			if _, err := uuid.Parse(conds.GetModuleID().GetValue()); err != nil {
-				return err
-			}
-		}
-
-		h.Conds = conds
 		h.Offset = &offset
 		if limit == 0 {
 			limit = constant.DefaultRowLimit
@@ -71,6 +53,19 @@ func WithID(id *string) func(context.Context, *Handler) error {
 			return err
 		}
 		h.ID = id
+		return nil
+	}
+}
+
+func WithModuleID(moduleID *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if moduleID == nil {
+			return nil
+		}
+		if _, err := uuid.Parse(*moduleID); err != nil {
+			return err
+		}
+		h.ModuleID = moduleID
 		return nil
 	}
 }

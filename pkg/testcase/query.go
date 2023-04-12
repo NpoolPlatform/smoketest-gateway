@@ -8,6 +8,7 @@ import (
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	"github.com/NpoolPlatform/message/npool/smoketest/gw/v1/relatedtestcase"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
+	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 
 	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
@@ -16,10 +17,35 @@ import (
 	commonpb "github.com/NpoolPlatform/message/npool"
 )
 
-func (handler *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, error) {
+type queryHandler struct {
+	*Handler
+}
+
+func (h *queryHandler) validate() error {
+	if h.Offset == nil {
+		return fmt.Errorf("invalid offset")
+	}
+	return nil
+}
+
+func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, error) {
+	handler := &queryHandler{
+		Handler: h,
+	}
+
+	if err := handler.validate(); err != nil {
+		return nil, 0, err
+	}
+
+	conds := &testcasemgrpb.Conds{}
+
+	if h.ModuleID != nil {
+		conds.ModuleID = &commonpb.StringVal{Op: cruder.EQ, Value: *h.ModuleID}
+	}
+
 	infos, total, err := testcasemwcli.GetTestCases(
 		ctx,
-		handler.Conds,
+		conds,
 		*handler.Offset,
 		*handler.Limit,
 	)
