@@ -2,6 +2,7 @@ package testcase
 
 import (
 	"context"
+	"fmt"
 
 	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
 	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
@@ -60,6 +61,7 @@ func WithID(id *string) func(context.Context, *Handler) error {
 func WithModuleID(moduleID *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if moduleID == nil {
+			fmt.Println("...........")
 			return nil
 		}
 		if _, err := uuid.Parse(*moduleID); err != nil {
