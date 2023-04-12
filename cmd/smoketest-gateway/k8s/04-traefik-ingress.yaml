@@ -68,6 +68,14 @@ spec:
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
+          - path: /api/smoketest/v1/update/testcase
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/delete/testcase
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
     - host: api.procyon.vip
       http: *http_rules
     - host: api.xpool.top
