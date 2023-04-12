@@ -16,9 +16,9 @@ func (s *Server) CreateTestCase(ctx context.Context, in *npool.CreateTestCaseReq
 		testcase1.WithApiID(&in.ApiID),
 		testcase1.WithName(&in.Name),
 		testcase1.WithDescription(&in.Description),
-		testcase1.WithModuleName(in.ModuleName),
+		testcase1.WithModuleName(&in.ModuleName),
 		testcase1.WithArguments(&in.Arguments),
-		testcase1.WithExpectationResult(&in.ExpectationResult),
+		testcase1.WithExpectationResult(&in.Expectation),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(
