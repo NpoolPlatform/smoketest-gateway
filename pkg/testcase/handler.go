@@ -64,6 +64,10 @@ func WithModuleID(moduleID *string) func(context.Context, *Handler) error {
 			fmt.Println("...........")
 			return nil
 		}
+		if *moduleID == "" {
+			fmt.Println("...........")
+			return nil
+		}
 		if _, err := uuid.Parse(*moduleID); err != nil {
 			return err
 		}
