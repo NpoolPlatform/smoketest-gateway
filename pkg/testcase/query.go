@@ -97,7 +97,6 @@ func (handler *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error
 		},
 	)
 	if err != nil {
-		logger.Sugar().Errorw("CreateTestCase", "err", err)
 		return nil, err
 	}
 
