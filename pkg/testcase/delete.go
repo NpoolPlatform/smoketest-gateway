@@ -21,6 +21,8 @@ func (h *Handler) DeleteTestCase(ctx context.Context) (*npool.TestCase, error) {
 		return nil, err
 	}
 
+	h.ID = &info.ID
+
 	_, err = testcasemwcli.DeleteTestCase(ctx, *handler.ID)
 	if err != nil {
 		return nil, err
