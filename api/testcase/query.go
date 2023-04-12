@@ -31,7 +31,7 @@ func (s *Server) GetTestCases(ctx context.Context, in *npool.GetTestCasesRequest
 		logger.Sugar().Errorw(
 			"GetTestCases",
 			"In", in,
-			"error", err,
+			"Error", err,
 		)
 		return &npool.GetTestCasesResponse{}, status.Error(codes.InvalidArgument, err.Error())
 	}

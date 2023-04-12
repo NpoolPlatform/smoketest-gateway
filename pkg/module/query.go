@@ -10,12 +10,12 @@ import (
 	modulemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/module"
 )
 
-func GetModules(ctx context.Context, offset, limit int32) ([]*npool.Module, uint32, error) {
+func (handler *Handler) GetModules(ctx context.Context) ([]*npool.Module, uint32, error) {
 	infos, total, err := modulemwcli.GetModules(
 		ctx,
 		&modulemgrpb.Conds{},
-		offset,
-		limit,
+		*handler.Offset,
+		*handler.Limit,
 	)
 	if err != nil {
 		logger.Sugar().Errorw("GetModules", "err", err)
