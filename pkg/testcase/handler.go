@@ -70,7 +70,7 @@ func WithID(id *string) func(context.Context, *Handler) error {
 		if _, err := uuid.Parse(*id); err != nil {
 			return err
 		}
-		h.ApiID = id
+		h.ID = id
 		return nil
 	}
 }
