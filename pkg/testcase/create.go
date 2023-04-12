@@ -2,15 +2,11 @@ package testcase
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
-	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
-	relatedtestcase "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/relatedtestcase"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
 	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
-
-	commonpb "github.com/NpoolPlatform/message/npool"
 )
 
 type createHandler struct {
@@ -22,7 +18,7 @@ func (h *createHandler) validate() error {
 		return fmt.Errorf("invalid name")
 	}
 	if h.ModuleName == nil {
-		return fmt.Errorf("invalid module")
+		return fmt.Errorf("invalid module name")
 	}
 	if h.ApiID == nil {
 		return fmt.Errorf("invalid api")
