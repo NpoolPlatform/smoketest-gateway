@@ -2,7 +2,6 @@ package testcase
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
@@ -12,74 +11,57 @@ import (
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 
 	commonpb "github.com/NpoolPlatform/message/npool"
-
-	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
-	apimgrpb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
 )
 
-func CreateTestCase(ctx context.Context, handler *Handler) (*npool.TestCase, error) {
-	_, err := apimwcli.ExistAPI(
-		ctx,
-		&apimgrpb.APIReq{
-			ID: handler.ApiID,
-		},
-	)
-	if err != nil {
-		logger.Sugar().Errorw("CreateTestCase", "err", err)
-		return nil, fmt.Errorf("invalid api id")
+type createHandler struct {
+	*Handler
+}
+
+func (h *createHandler) validate() error {
+	if h.Name == nil {
+		return fmt.Errorf("invalid name")
+	}
+	if h.ModuleName == nil {
+		return fmt.Errorf("invalid module")
+	}
+	if h.ApiID == nil {
+		return fmt.Errorf("invalid api")
+	}
+	if h.Arguments == nil {
+		return fmt.Errorf("invalid arguments")
+	}
+	if h.ExpectationResult == nil {
+		return fmt.Errorf("invalid expectation")
+	}
+
+	return nil
+}
+
+func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
+	handler := &createHandler{
+		Handler: h,
+	}
+
+	if err := handler.validate(); err != nil {
+		return nil, err
 	}
 
 	info, err := testcasemwcli.CreateTestCase(
 		ctx,
 		&testcasemwpb.CreateTestCaseReq{
-			Name:              *handler.Name,
-			Description:       handler.Description,
-			ModuleName:        handler.ModuleName,
-			ApiID:             *handler.ApiID,
-			Arguments:         *handler.Arguments,
-			ExpectationResult: *handler.ExpectationResult,
+			Name:              *h.Name,
+			Description:       h.Description,
+			ModuleName:        h.ModuleName,
+			ApiID:             *h.ApiID,
+			Arguments:         *h.Arguments,
+			ExpectationResult: *h.ExpectationResult,
 		},
 	)
 	if err != nil {
-		logger.Sugar().Errorw("CreateTestCase", "err", err)
 		return nil, err
 	}
 
-	_api, err := apimwcli.GetAPIOnly(
-		ctx,
-		&apimgrpb.Conds{
-			ID: &commonpb.StringVal{
-				Op:    cruder.EQ,
-				Value: info.ApiID,
-			},
-		},
-	)
+	h.ID = &info.ID
 
-	if err != nil {
-		logger.Sugar().Errorw("CreateTestCase", "err", err)
-		return nil, err
-	}
-
-	_info := &npool.TestCase{
-		ID:               info.ID,
-		Name:             info.Name,
-		ModuleID:         info.ModuleID,
-		ModuleName:       info.ModuleName,
-		ApiID:            info.ApiID,
-		ApiPath:          _api.Path,
-		ApiPathPrefix:    _api.PathPrefix,
-		ApiServiceName:   _api.ServiceName,
-		ApiProtocol:      _api.Protocol.String(),
-		ApiMethod:        _api.Method.String(),
-		ApiDeprecated:    _api.GetDepracated(),
-		Arguments:        info.Arguments,
-		Expectation:      info.ExpectationResult,
-		TestCaseType:     info.TestCaseType,
-		RelatedTestCases: []*relatedtestcase.RelatedTestCase{},
-		Deprecated:       info.Deprecated,
-		CreatedAt:        info.CreatedAt,
-		UpdatedAt:        info.UpdatedAt,
-	}
-
-	return _info, nil
+	return h.GetTestCase(ctx)
 }

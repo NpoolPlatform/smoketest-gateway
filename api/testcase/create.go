@@ -6,6 +6,7 @@ import (
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
 	testcase1 "github.com/NpoolPlatform/smoketest-gateway/pkg/testcase"
+
 	"github.com/gogo/status"
 	"google.golang.org/grpc/codes"
 )
@@ -24,15 +25,19 @@ func (s *Server) CreateTestCase(ctx context.Context, in *npool.CreateTestCaseReq
 		logger.Sugar().Errorw(
 			"CreateTestCase",
 			"In", in,
-			"error", err,
+			"Error", err,
 		)
 		return &npool.CreateTestCaseResponse{}, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	info, err := testcase1.CreateTestCase(ctx, handler)
+	info, err := handler.CreateTestCase(ctx)
 	if err != nil {
-		logger.Sugar().Errorw("CreateTestCase", "err", err)
-		return &npool.CreateTestCaseResponse{}, err
+		logger.Sugar().Errorw(
+			"CreateTestCase",
+			"In", in,
+			"Error", err,
+		)
+		return &npool.CreateTestCaseResponse{}, status.Error(codes.Internal, err.Error())
 	}
 
 	return &npool.CreateTestCaseResponse{
