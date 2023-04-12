@@ -23,5 +23,8 @@ func RegisterGateway(mux *runtime.ServeMux, endpoint string, opts []grpc.DialOpt
 	if err := smoketest.RegisterGatewayHandlerFromEndpoint(context.Background(), mux, endpoint, opts); err != nil {
 		return err
 	}
+	if err := testcase.RegisterGateway(mux, endpoint, opts); err != nil {
+		return err
+	}
 	return nil
 }
