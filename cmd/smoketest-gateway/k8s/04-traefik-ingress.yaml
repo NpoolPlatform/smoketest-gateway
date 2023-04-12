@@ -21,7 +21,7 @@ spec:
     - host: api.npool.top
       http: &http_rules
         paths:
-          - path: /api/smoketest-gateway
+          - path: /api/smoketest/v1/version
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
@@ -37,15 +37,15 @@ spec:
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: inspire-gateway-traefik-app-user-ingress
+  name: smoketest-gateway-traefik-app-user-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: inspire-gateway-traefik-app-user
-    k8s.kuboard.cn/workload: inspire-gateway-traefik-app-user
+    k8s.kuboard.cn/displayName: smoketest-gateway-traefik-app-user
+    k8s.kuboard.cn/workload: smoketest-gateway-traefik-app-user
     kubernetes.io/ingress.class: "traefik-internet"
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
     traefik.ingress.kubernetes.io/router.middlewares:
-      kube-system-strip-inspire-gateway-prefix@kubernetescrd,
+      kube-system-strip-smoketest-gateway-prefix@kubernetescrd,
       kube-system-http-redirect-https@kubernetescrd,
       kube-system-common-headers@kubernetescrd,
       kube-system-headers-appid-to-body@kubernetescrd,
