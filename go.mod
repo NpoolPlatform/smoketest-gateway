@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/NpoolPlatform/basal-middleware v0.0.0-20230221094657-688f81366495
 	github.com/NpoolPlatform/go-service-framework v0.0.0-20230327065405-91484c9b17ea
-	github.com/NpoolPlatform/message v0.0.0-20230411124005-4fd45a99c17e
+	github.com/NpoolPlatform/message v0.0.0-20230412020833-fa30fa5def06
 	github.com/NpoolPlatform/smoketest-middleware v0.0.0-20230411114808-db8278930e14
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gogo/status v1.1.1
