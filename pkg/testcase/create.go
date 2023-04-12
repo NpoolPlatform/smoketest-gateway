@@ -33,6 +33,7 @@ func (h *createHandler) validate() error {
 	return nil
 }
 
+//nolint
 func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	handler := &createHandler{
 		Handler: h,
