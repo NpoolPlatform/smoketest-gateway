@@ -2,6 +2,7 @@ package testcase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
@@ -13,10 +14,21 @@ import (
 	commonpb "github.com/NpoolPlatform/message/npool"
 
 	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
-	mgrpb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
+	apimgrpb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
 )
 
 func CreateTestCase(ctx context.Context, handler *Handler) (*npool.TestCase, error) {
+	_, err := apimwcli.ExistAPI(
+		ctx,
+		&apimgrpb.APIReq{
+			ID: handler.ApiID,
+		},
+	)
+	if err != nil {
+		logger.Sugar().Errorw("CreateTestCase", "err", err)
+		return nil, fmt.Errorf("invalid api id")
+	}
+
 	info, err := testcasemwcli.CreateTestCase(
 		ctx,
 		&testcasemwpb.CreateTestCaseReq{
@@ -35,7 +47,7 @@ func CreateTestCase(ctx context.Context, handler *Handler) (*npool.TestCase, err
 
 	_api, err := apimwcli.GetAPIOnly(
 		ctx,
-		&mgrpb.Conds{
+		&apimgrpb.Conds{
 			ID: &commonpb.StringVal{
 				Op:    cruder.EQ,
 				Value: info.ApiID,
