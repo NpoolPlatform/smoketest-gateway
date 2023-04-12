@@ -60,6 +60,16 @@ func WithConds(conds *testcasemgrpb.Conds, offset, limit int32) func(context.Con
 	}
 }
 
+func WithID(id *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if _, err := uuid.Parse(*id); err != nil {
+			return err
+		}
+		h.ApiID = id
+		return nil
+	}
+}
+
 //nolint
 func WithApiID(apiID *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
