@@ -12,18 +12,19 @@ import (
 )
 
 type Handler struct {
-	ID                *string
-	Name              *string
-	Description       *string
-	ModuleID          *string
-	ModuleName        *string
-	ApiID             *string //nolint
-	Arguments         *string
-	ExpectationResult *string
-	TestCaseType      *testcasemgrpb.TestCaseType
-	Deprecated        *bool
-	Offset            *int32
-	Limit             *int32
+	ID                 *string
+	Name               *string
+	Description        *string
+	ModuleID           *string
+	ModuleName         *string
+	ApiID              *string //nolint
+	Arguments          *string
+	ArgTypeDescription *string
+	ExpectationResult  *string
+	TestCaseType       *testcasemgrpb.TestCaseType
+	Deprecated         *bool
+	Offset             *int32
+	Limit              *int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -121,6 +122,15 @@ func WithArguments(arguments *string) func(context.Context, *Handler) error {
 	}
 }
 
+func WithArgTypeDescription(description *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if description == nil {
+			return nil
+		}
+		h.ArgTypeDescription = description
+		return nil
+	}
+}
 func WithDescription(description *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if description == nil {

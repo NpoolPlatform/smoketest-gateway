@@ -19,6 +19,7 @@ func (s *Server) CreateTestCase(ctx context.Context, in *npool.CreateTestCaseReq
 		testcase1.WithDescription(&in.Description),
 		testcase1.WithModuleName(&in.ModuleName),
 		testcase1.WithArguments(&in.Arguments),
+		testcase1.WithArgTypeDescription(&in.ArgTypeDescription),
 		testcase1.WithExpectationResult(&in.Expectation),
 	)
 	if err != nil {

@@ -46,12 +46,13 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	info, err := testcasemwcli.CreateTestCase(
 		ctx,
 		&testcasemwpb.CreateTestCaseReq{
-			Name:              h.Name,
-			Description:       h.Description,
-			ModuleName:        h.ModuleName,
-			ApiID:             h.ApiID,
-			Arguments:         h.Arguments,
-			ExpectationResult: h.ExpectationResult,
+			Name:               h.Name,
+			Description:        h.Description,
+			ModuleName:         h.ModuleName,
+			ApiID:              h.ApiID,
+			Arguments:          h.Arguments,
+			ArgTypeDescription: h.ArgTypeDescription,
+			ExpectationResult:  h.ExpectationResult,
 		},
 	)
 	if err != nil {
