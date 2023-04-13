@@ -15,13 +15,13 @@ type updateHandler struct {
 func (h *Handler) UpdateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	_, err := testcasemwcli.UpdateTestCase(ctx, &testcasemwpb.UpdateTestCaseRequest{
 		Info: &testcasemwpb.CreateTestCaseReq{
-			ID:                *h.ID,
-			Name:              *h.Name,
+			ID:                h.ID,
+			Name:              h.Name,
 			Description:       h.Description,
-			Arguments:         *h.Arguments,
-			ExpectationResult: *h.ExpectationResult,
+			Arguments:         h.Arguments,
+			ExpectationResult: h.ExpectationResult,
 			TestCaseType:      h.TestCaseType,
-			Deprecated:        *h.Deprecated,
+			Deprecated:        h.Deprecated,
 		},
 	})
 	if err != nil {
