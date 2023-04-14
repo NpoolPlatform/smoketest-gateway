@@ -76,6 +76,22 @@ spec:
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
+          - path: /api/smoketest/v1/create/testplan
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/get/testplans
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/create/planrelatedtestcase
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/get/planrelatedtestcases
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
     - host: api.procyon.vip
       http: *http_rules
     - host: api.xpool.top
