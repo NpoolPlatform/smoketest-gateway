@@ -23,10 +23,10 @@ func (h *createHandler) validate() error {
 	if h.ApiID == nil {
 		return fmt.Errorf("invalid api")
 	}
-	if h.Arguments == nil {
-		return fmt.Errorf("invalid arguments")
+	if h.Input == nil {
+		return fmt.Errorf("invalid input")
 	}
-	if h.ExpectationResult == nil {
+	if h.Expectation == nil {
 		return fmt.Errorf("invalid expectation")
 	}
 
@@ -46,13 +46,13 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	info, err := testcasemwcli.CreateTestCase(
 		ctx,
 		&testcasemwpb.CreateTestCaseReq{
-			Name:               h.Name,
-			Description:        h.Description,
-			ModuleName:         h.ModuleName,
-			ApiID:              h.ApiID,
-			Arguments:          h.Arguments,
-			ArgTypeDescription: h.ArgTypeDescription,
-			ExpectationResult:  h.ExpectationResult,
+			Name:        h.Name,
+			Description: h.Description,
+			ModuleName:  h.ModuleName,
+			ApiID:       h.ApiID,
+			Input:       h.Input,
+			InputDesc:   h.InputDesc,
+			Expectation: h.Expectation,
 		},
 	)
 	if err != nil {
