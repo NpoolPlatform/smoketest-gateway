@@ -76,6 +76,14 @@ spec:
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
+          - path: /api/smoketest/v1/create/module
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/get/modules
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
           - path: /api/smoketest/v1/create/testplan
             backend:
               serviceName: smoketest-gateway
