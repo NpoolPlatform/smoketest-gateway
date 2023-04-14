@@ -8,10 +8,6 @@ import (
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/planrelatedtestcase"
 )
 
-type createHandler struct {
-	*Handler
-}
-
 //nolint
 func (h *Handler) CreatePlanRelatedTestCase(ctx context.Context) (*npool.PlanRelatedTestCase, error) {
 	info, err := testcasemwcli.CreatePlanRelatedTestCase(

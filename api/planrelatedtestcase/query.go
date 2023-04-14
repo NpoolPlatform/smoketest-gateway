@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
+//nolint
 func (s *Server) GetPlanRelatedTestCases(ctx context.Context, in *npool.GetPlanRelatedTestCasesRequest) (*npool.GetPlanRelatedTestCasesResponse, error) {
 	handler, err := prt1.NewHandler(
 		ctx,
