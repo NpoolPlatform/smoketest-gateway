@@ -15,7 +15,7 @@ type Handler struct {
 	TestCaseID     *string
 	TestUserID     *string
 	TestCaseOutput *string
-	TestCaseResult *string
+	TestCaseResult *planrelatedtestcasemwpb.TestCaseResult
 	Description    *string
 	Index          *uint32
 	RunDuration    *uint32
