@@ -10,7 +10,6 @@ import (
 	commonpb "github.com/NpoolPlatform/message/npool"
 	apimgrpb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/planrelatedtestcase"
-	"github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/planrelatedtestcase"
 	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
 	planrelatedtestcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/planrelatedtestcase"
 	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
@@ -102,7 +101,7 @@ func (handler *Handler) GetPlanRelatedTestCases(ctx context.Context) ([]*npool.P
 			TestCaseArguments:   _testCase.Arguments,
 			TestCaseType:        _testCase.TestCaseType,
 			TestCaseOutput:      info.TestCaseOutput,
-			TestCaseResult:      planrelatedtestcase.TestCaseResult_DefaultTestCaseResult,
+			TestCaseResult:      planrelatedtestcasemwpb.TestCaseResult_DefaultTestCaseResult,
 			TestCaseExpectation: _testCase.ExpectationResult,
 			Description:         info.Description,
 			RunDuration:         info.RunDuration,
@@ -152,7 +151,7 @@ func (handler *Handler) GetPlanRelatedTestCase(ctx context.Context) (*npool.Plan
 		TestCaseArguments:   _testCase.Arguments,
 		TestCaseType:        _testCase.TestCaseType,
 		TestCaseOutput:      info.TestCaseOutput,
-		TestCaseResult:      planrelatedtestcase.TestCaseResult_DefaultTestCaseResult,
+		TestCaseResult:      planrelatedtestcasemwpb.TestCaseResult_DefaultTestCaseResult,
 		TestCaseExpectation: _testCase.ExpectationResult,
 		Description:         info.Description,
 		RunDuration:         info.RunDuration,
