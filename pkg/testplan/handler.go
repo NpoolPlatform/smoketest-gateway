@@ -12,7 +12,7 @@ import (
 type Handler struct {
 	ID        *string
 	Name      *string
-	State     **testplanmgrpb.TestPlanState
+	State     *testplanmgrpb.TestPlanState
 	CreatedBy *string
 	Executor  *string
 	Deadline  *uint32
@@ -83,6 +83,24 @@ func WithExecutor(executor *string) func(context.Context, *Handler) error {
 			return err
 		}
 		h.Executor = executor
+		return nil
+	}
+}
+
+func WithState(state *testplanmgrpb.TestPlanState) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if state == nil {
+			return nil
+		}
+		switch *state {
+		case testplanmgrpb.TestPlanState_WaitStart:
+		case testplanmgrpb.TestPlanState_InProgress:
+		case testplanmgrpb.TestPlanState_Finished:
+		case testplanmgrpb.TestPlanState_Overdue:
+		default:
+			return fmt.Errorf("plan state %v invalid", *state)
+		}
+		h.State = state
 		return nil
 	}
 }
