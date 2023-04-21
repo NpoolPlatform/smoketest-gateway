@@ -5,7 +5,6 @@ import (
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan"
-	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan"
 	testplan1 "github.com/NpoolPlatform/smoketest-gateway/pkg/testplan"
 	"github.com/gogo/status"
 	"google.golang.org/grpc/codes"
@@ -14,11 +13,8 @@ import (
 func (s *Server) GetTestPlans(ctx context.Context, in *npool.GetTestPlansRequest) (*npool.GetTestPlansResponse, error) {
 	handler, err := testplan1.NewHandler(
 		ctx,
-		testplan1.WithConds(
-			&testplanmgrpb.Conds{},
-			in.GetOffset(),
-			in.GetLimit(),
-		),
+		testplan1.WithOffset(in.GetOffset()),
+		testplan1.WithLimit(in.GetLimit()),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

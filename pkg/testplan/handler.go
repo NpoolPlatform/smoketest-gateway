@@ -5,20 +5,19 @@ import (
 	"fmt"
 
 	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan"
-	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
+	constant "github.com/NpoolPlatform/smoketest-gateway/pkg/const"
 	"github.com/google/uuid"
 )
 
 type Handler struct {
-	ID                *string
-	Name              *string
-	State             *string
-	OwnerID           *string
-	ResponsibleUserID *string
-	Deadline          *uint32
-	Conds             *testplanmgrpb.Conds
-	Offset            *int32
-	Limit             *int32
+	ID        *string
+	Name      *string
+	State     **testplanmgrpb.TestPlanState
+	CreatedBy *string
+	Executor  *string
+	Deadline  *uint32
+	Offset    int32
+	Limit     int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -46,17 +45,21 @@ func WithName(name *string) func(context.Context, *Handler) error {
 		if name == nil {
 			return nil
 		}
+		const leastNameLen = 4
+		if len(*name) < leastNameLen {
+			return fmt.Errorf("name %v too short", *name)
+		}
 		h.Name = name
 		return nil
 	}
 }
 
-func WithOwnerID(ownerID *string) func(context.Context, *Handler) error {
+func WithCreatedBy(createdBy *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if _, err := uuid.Parse(*ownerID); err != nil {
+		if _, err := uuid.Parse(*createdBy); err != nil {
 			return err
 		}
-		h.OwnerID = ownerID
+		h.CreatedBy = createdBy
 		return nil
 	}
 }
@@ -71,47 +74,32 @@ func WithDeadline(deadline *uint32) func(context.Context, *Handler) error {
 	}
 }
 
-func WithResponsibleUserID(userID *string) func(context.Context, *Handler) error {
+func WithExecutor(executor *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if userID == nil {
+		if executor == nil {
 			return nil
 		}
-		if _, err := uuid.Parse(*userID); err != nil {
+		if _, err := uuid.Parse(*executor); err != nil {
 			return err
 		}
-		h.ResponsibleUserID = userID
+		h.Executor = executor
 		return nil
 	}
 }
 
-func WithConds(conds *testplanmgrpb.Conds, offset, limit int32) func(context.Context, *Handler) error {
+func WithOffset(offset int32) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if conds == nil {
-			return fmt.Errorf("invalid conds")
-		}
+		h.Offset = offset
+		return nil
+	}
+}
 
-		if conds.ID != nil {
-			if _, err := uuid.Parse(conds.GetID().GetValue()); err != nil {
-				return err
-			}
-		}
-		if conds.ResponsibleUserID != nil {
-			if _, err := uuid.Parse(conds.GetResponsibleUserID().GetValue()); err != nil {
-				return err
-			}
-		}
-
-		h.Conds = conds
-
-		if h.Offset == nil {
-			offset = constant.DefaultRowLimit
-		}
-		h.Offset = &offset
+func WithLimit(limit int32) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
 		if limit == 0 {
 			limit = constant.DefaultRowLimit
 		}
-		h.Limit = &limit
-
+		h.Limit = limit
 		return nil
 	}
 }
