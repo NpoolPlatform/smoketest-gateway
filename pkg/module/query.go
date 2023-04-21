@@ -5,17 +5,16 @@ import (
 	"fmt"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
-	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/module"
-	modulemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/module"
+	npool "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/module"
 	modulemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/module"
 )
 
-func (handler *Handler) GetModules(ctx context.Context) ([]*npool.Module, uint32, error) {
+func (h *Handler) GetModules(ctx context.Context) ([]*npool.Module, uint32, error) {
 	infos, total, err := modulemwcli.GetModules(
 		ctx,
-		&modulemgrpb.Conds{},
-		*handler.Offset,
-		*handler.Limit,
+		&npool.Conds{},
+		h.Offset,
+		h.Limit,
 	)
 	if err != nil {
 		logger.Sugar().Errorw("GetModules", "err", err)
@@ -26,18 +25,7 @@ func (handler *Handler) GetModules(ctx context.Context) ([]*npool.Module, uint32
 		return []*npool.Module{}, 0, nil
 	}
 
-	_infos := []*npool.Module{}
-	for _, info := range infos {
-		row := npool.Module{
-			ID:          info.ID,
-			Name:        info.Name,
-			Description: info.Description,
-			CreatedAt:   info.CreatedAt,
-		}
-		_infos = append(_infos, &row)
-	}
-
-	return _infos, total, nil
+	return infos, total, nil
 }
 
 func (handler *Handler) GetModule(ctx context.Context) (*npool.Module, error) {
@@ -49,12 +37,5 @@ func (handler *Handler) GetModule(ctx context.Context) (*npool.Module, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	_info := &npool.Module{
-		ID:          info.ID,
-		Name:        info.Name,
-		Description: info.Description,
-		CreatedAt:   info.CreatedAt,
-	}
-	return _info, nil
+	return info, nil
 }

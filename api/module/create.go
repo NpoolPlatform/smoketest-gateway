@@ -15,7 +15,7 @@ func (s *Server) CreateModule(ctx context.Context, in *npool.CreateModuleRequest
 	handler, err := module1.NewHandler(
 		ctx,
 		module1.WithName(&in.Name),
-		module1.WithDescription(&in.Description),
+		module1.WithDescription(in.Description),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(
