@@ -1,4 +1,4 @@
-package planrelatedtestcase
+package plantestcase
 
 import (
 	"context"
@@ -9,18 +9,17 @@ import (
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	commonpb "github.com/NpoolPlatform/message/npool"
 	apimgrpb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
-	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/planrelatedtestcase"
 	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
-	planrelatedtestcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/planrelatedtestcase"
 	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
-	planrelatedtestcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/planrelatedtestcase"
+	plantestcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
+	plantestcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
 )
 
-func (handler *Handler) GetPlanRelatedTestCases(ctx context.Context) ([]*npool.PlanRelatedTestCase, uint32, error) {
-	infos, total, err := planrelatedtestcasemwcli.GetPlanRelatedTestCases(
+func (handler *Handler) Getplantestcases(ctx context.Context) ([]*npool.plantestcase, uint32, error) {
+	infos, total, err := plantestcasemwcli.Getplantestcases(
 		ctx,
-		&planrelatedtestcasemwpb.Conds{
+		&plantestcasemwpb.Conds{
 			TestPlanID: &commonpb.StringVal{
 				Op:    cruder.EQ,
 				Value: *handler.TestPlanID,
@@ -30,12 +29,12 @@ func (handler *Handler) GetPlanRelatedTestCases(ctx context.Context) ([]*npool.P
 		*handler.Limit,
 	)
 	if err != nil {
-		logger.Sugar().Errorw("GetPlanRelatedTestCases", "err", err)
+		logger.Sugar().Errorw("Getplantestcases", "err", err)
 		return nil, 0, err
 	}
 
 	if len(infos) == 0 {
-		return []*npool.PlanRelatedTestCase{}, 0, nil
+		return []*npool.plantestcase{}, 0, nil
 	}
 
 	testCaseIDs := []string{}
@@ -78,7 +77,7 @@ func (handler *Handler) GetPlanRelatedTestCases(ctx context.Context) ([]*npool.P
 		apiMap[row.ID] = row
 	}
 
-	_infos := []*npool.PlanRelatedTestCase{}
+	_infos := []*npool.plantestcase{}
 	for _, info := range infos {
 		_testCase, ok := testCaseMap[info.TestCaseID]
 		if !ok {
@@ -90,7 +89,7 @@ func (handler *Handler) GetPlanRelatedTestCases(ctx context.Context) ([]*npool.P
 			continue
 		}
 
-		row := npool.PlanRelatedTestCase{
+		row := npool.plantestcase{
 			ID:                  info.ID,
 			TestPlanID:          info.TestPlanID,
 			TestPlanName:        info.TestPlanID,
@@ -101,7 +100,7 @@ func (handler *Handler) GetPlanRelatedTestCases(ctx context.Context) ([]*npool.P
 			TestCaseArguments:   _testCase.Arguments,
 			TestCaseType:        _testCase.TestCaseType,
 			TestCaseOutput:      info.TestCaseOutput,
-			TestCaseResult:      planrelatedtestcasemwpb.TestCaseResult_DefaultTestCaseResult,
+			TestCaseResult:      plantestcasemwpb.TestCaseResult_DefaultTestCaseResult,
 			TestCaseExpectation: _testCase.ExpectationResult,
 			Description:         info.Description,
 			RunDuration:         info.RunDuration,
@@ -115,12 +114,12 @@ func (handler *Handler) GetPlanRelatedTestCases(ctx context.Context) ([]*npool.P
 	return _infos, total, nil
 }
 
-func (handler *Handler) GetPlanRelatedTestCase(ctx context.Context) (*npool.PlanRelatedTestCase, error) {
+func (handler *Handler) Getplantestcase(ctx context.Context) (*npool.plantestcase, error) {
 	if handler.ID == nil {
-		return nil, fmt.Errorf("invalid planrelatedtestcase id")
+		return nil, fmt.Errorf("invalid plantestcase id")
 	}
 
-	info, err := planrelatedtestcasemwcli.GetPlanRelatedTestCase(ctx, *handler.ID)
+	info, err := plantestcasemwcli.Getplantestcase(ctx, *handler.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +139,7 @@ func (handler *Handler) GetPlanRelatedTestCase(ctx context.Context) (*npool.Plan
 		return nil, err
 	}
 
-	_info := &npool.PlanRelatedTestCase{
+	_info := &npool.plantestcase{
 		ID:                  info.ID,
 		TestPlanID:          info.TestPlanID,
 		TestPlanName:        info.TestPlanID,
@@ -151,7 +150,7 @@ func (handler *Handler) GetPlanRelatedTestCase(ctx context.Context) (*npool.Plan
 		TestCaseArguments:   _testCase.Arguments,
 		TestCaseType:        _testCase.TestCaseType,
 		TestCaseOutput:      info.TestCaseOutput,
-		TestCaseResult:      planrelatedtestcasemwpb.TestCaseResult_DefaultTestCaseResult,
+		TestCaseResult:      plantestcasemwpb.TestCaseResult_DefaultTestCaseResult,
 		TestCaseExpectation: _testCase.ExpectationResult,
 		Description:         info.Description,
 		RunDuration:         info.RunDuration,

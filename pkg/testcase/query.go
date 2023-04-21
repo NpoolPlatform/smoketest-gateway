@@ -6,7 +6,7 @@ import (
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
-	"github.com/NpoolPlatform/message/npool/smoketest/gw/v1/relatedtestcase"
+	"github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase/cond"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
 	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
@@ -78,7 +78,7 @@ func (h *queryHandler) formalize(infos []*testcasemgrpb.TestCase) ([]*npool.Test
 			Arguments:          info.Arguments,
 			ArgTypeDescription: info.ArgTypeDescription,
 			TestCaseType:       info.TestCaseType,
-			RelatedTestCases:   []*relatedtestcase.RelatedTestCase{},
+			RelatedTestCases:   []*cond.RelatedTestCase{},
 			Deprecated:         info.Deprecated,
 			CreatedAt:          info.CreatedAt,
 			UpdatedAt:          info.UpdatedAt,

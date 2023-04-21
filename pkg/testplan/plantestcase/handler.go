@@ -1,10 +1,10 @@
-package planrelatedtestcase
+package plantestcase
 
 import (
 	"context"
 	"fmt"
 
-	planrelatedtestcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/planrelatedtestcase"
+	plantestcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
 	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 	"github.com/google/uuid"
 )
@@ -15,11 +15,11 @@ type Handler struct {
 	TestCaseID     *string
 	TestUserID     *string
 	TestCaseOutput *string
-	TestCaseResult *planrelatedtestcasemwpb.TestCaseResult
+	TestCaseResult *plantestcasemwpb.TestCaseResult
 	Description    *string
 	Index          *uint32
 	RunDuration    *uint32
-	Conds          *planrelatedtestcasemwpb.Conds
+	Conds          *plantestcasemwpb.Conds
 	Offset         *int32
 	Limit          *int32
 }
@@ -87,7 +87,7 @@ func WithTestCaseOutput(output *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestCaseResult(result *planrelatedtestcasemwpb.TestCaseResult) func(context.Context, *Handler) error {
+func WithTestCaseResult(result *plantestcasemwpb.TestCaseResult) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if result == nil {
 			return fmt.Errorf("need testcase result")
@@ -127,7 +127,7 @@ func WithDescription(description *string) func(context.Context, *Handler) error 
 	}
 }
 
-func WithConds(conds *planrelatedtestcasemwpb.Conds, offset, limit int32) func(context.Context, *Handler) error {
+func WithConds(conds *plantestcasemwpb.Conds, offset, limit int32) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if conds == nil {
 			return fmt.Errorf("invalid conds")
