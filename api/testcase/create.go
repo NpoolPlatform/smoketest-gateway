@@ -14,13 +14,13 @@ import (
 func (s *Server) CreateTestCase(ctx context.Context, in *npool.CreateTestCaseRequest) (*npool.CreateTestCaseResponse, error) {
 	handler, err := testcase1.NewHandler(
 		ctx,
-		testcase1.WithApiID(&in.ApiID),
 		testcase1.WithName(&in.Name),
-		testcase1.WithDescription(&in.Description),
+		testcase1.WithDescription(in.Description),
 		testcase1.WithModuleName(&in.ModuleName),
-		testcase1.WithArguments(&in.Arguments),
-		testcase1.WithArgTypeDescription(&in.ArgTypeDescription),
-		testcase1.WithExpectationResult(&in.Expectation),
+		testcase1.WithApiID(&in.ApiID),
+		testcase1.WithInput(in.Input),
+		testcase1.WithInputDesc(in.InputDesc),
+		testcase1.WithExpectation(in.Expectation),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

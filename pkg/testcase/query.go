@@ -4,11 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
-	"github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase/cond"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
 	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
+	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 
 	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
@@ -20,28 +19,12 @@ import (
 type queryHandler struct {
 	*Handler
 	moduleID string
+	Infos    []*testcasemwpb.TestCase
 }
 
-func (h *queryHandler) validate(multiple bool) error {
-	if multiple {
-		if h.Offset == nil {
-			return fmt.Errorf("invalid offset")
-		}
-		if h.Limit == nil {
-			return fmt.Errorf("invalid limit")
-		}
-	} else {
-		if h.ID == nil {
-			return fmt.Errorf("invalid id")
-		}
-	}
-
-	return nil
-}
-
-func (h *queryHandler) formalize(infos []*testcasemgrpb.TestCase) ([]*npool.TestCase, error) {
+func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error) {
 	apiIDs := []string{}
-	for _, info := range infos {
+	for _, info := range h.Infos {
 		apiIDs = append(apiIDs, info.ApiID)
 	}
 
@@ -57,36 +40,35 @@ func (h *queryHandler) formalize(infos []*testcasemgrpb.TestCase) ([]*npool.Test
 		apiMap[row.ID] = row
 	}
 
-	_infos := []*npool.TestCase{}
-	for _, info := range infos {
-		_api, ok := apiMap[info.ApiID]
+	infos := []*npool.TestCase{}
+	for _, info := range h.Infos {
+		api, ok := apiMap[info.ApiID]
 		if !ok {
 			continue
 		}
 		row := npool.TestCase{
-			ID:                 info.ID,
-			Name:               info.Name,
-			ModuleID:           info.ModuleID,
-			ModuleName:         info.ModuleName,
-			ApiID:              info.ApiID,
-			ApiPath:            _api.Path,
-			ApiPathPrefix:      _api.PathPrefix,
-			ApiServiceName:     _api.ServiceName,
-			ApiProtocol:        _api.Protocol.String(),
-			ApiMethod:          _api.Method.String(),
-			ApiDeprecated:      _api.Depracated,
-			Arguments:          info.Arguments,
-			ArgTypeDescription: info.ArgTypeDescription,
-			TestCaseType:       info.TestCaseType,
-			RelatedTestCases:   []*cond.RelatedTestCase{},
-			Deprecated:         info.Deprecated,
-			CreatedAt:          info.CreatedAt,
-			UpdatedAt:          info.UpdatedAt,
+			ID:             info.ID,
+			Name:           info.Name,
+			ModuleID:       info.ModuleID,
+			ModuleName:     info.ModuleName,
+			ApiID:          info.ApiID,
+			ApiPath:        api.Path,
+			ApiPathPrefix:  api.PathPrefix,
+			ApiServiceName: api.ServiceName,
+			ApiProtocol:    api.Protocol.String(),
+			ApiMethod:      api.Method.String(),
+			ApiDeprecated:  api.Depracated,
+			Input:          info.Input,
+			InputDesc:      info.InputDesc,
+			TestCaseType:   info.TestCaseType,
+			Deprecated:     info.Deprecated,
+			CreatedAt:      info.CreatedAt,
+			UpdatedAt:      info.UpdatedAt,
 		}
-		_infos = append(_infos, &row)
+		infos = append(infos, &row)
 	}
 
-	return _infos, nil
+	return infos, nil
 }
 
 func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, error) {
@@ -94,16 +76,12 @@ func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, 
 		Handler: h,
 	}
 
-	if err := handler.validate(true); err != nil {
-		return nil, 0, err
-	}
-
 	conds := &testcasemgrpb.Conds{}
-	if h.ModuleID != nil {
-		conds.ModuleID = &commonpb.StringVal{Op: cruder.EQ, Value: *h.ModuleID}
+	if handler.ModuleID != nil {
+		conds.ModuleID = &commonpb.StringVal{Op: cruder.EQ, Value: *handler.ModuleID}
 	}
 
-	infos, total, err := testcasemwcli.GetTestCases(ctx, conds, *handler.Offset, *handler.Limit)
+	infos, total, err := testcasemwcli.GetTestCases(ctx, conds, handler.Offset, handler.Limit)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -112,7 +90,9 @@ func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, 
 		return nil, 0, nil
 	}
 
-	_infos, err := h.formalize(infos)
+	handler.Infos = infos
+
+	_infos, err := handler.formalize(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -120,20 +100,27 @@ func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, 
 	return _infos, total, nil
 }
 
-func (handler *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
-	if err := handler.validate(true); err != nil {
-		return nil, err
+func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
+	if h.ID == nil {
+		return nil, fmt.Errorf("invalid id")
 	}
 
-	info, err := testcasemwcli.GetTestCase(ctx, *handler.ID)
+	info, err := testcasemwcli.GetTestCase(ctx, *h.ID)
 	if err != nil {
 		return nil, err
 	}
+
 	if info == nil {
-		return nil, fmt.Errorf("invalid testcase id")
+		return nil, fmt.Errorf("invalid testcase")
 	}
 
-	_infos, err := h.formalize([]*testcasemgrpb.TestCase{info})
+	handler := &queryHandler{
+		Handler: h,
+	}
+
+	handler.Infos = []*testcasemwpb.TestCase{info}
+
+	_infos, err := handler.formalize(ctx)
 	if err != nil {
 		return nil, err
 	}

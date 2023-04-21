@@ -2,6 +2,7 @@ package testcase
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
@@ -23,8 +24,8 @@ type Handler struct {
 	Expectation  *string
 	TestCaseType *testcasemgrpb.TestCaseType
 	Deprecated   *bool
-	Offset       *int32
-	Limit        *int32
+	Offset       int32
+	Limit        int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -35,24 +36,6 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 		}
 	}
 	return handler, nil
-}
-
-func WithOffset(offset int32) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		h.Offset = &offset
-		return nil
-	}
-}
-
-func WithLimit(limit int32) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if limit == 0 {
-			limit = constant.DefaultRowLimit
-		}
-		h.Limit = &limit
-
-		return nil
-	}
 }
 
 func WithID(id *string) func(context.Context, *Handler) error {
@@ -78,7 +61,6 @@ func WithModuleID(moduleID *string) func(context.Context, *Handler) error {
 	}
 }
 
-//nolint
 func WithApiID(apiID *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if apiID == nil {
@@ -101,24 +83,11 @@ func WithModuleName(moduleName *string) func(context.Context, *Handler) error {
 		if moduleName == nil {
 			return nil
 		}
-		const leastModuleNameLen = 8
+		const leastModuleNameLen = 2
 		if len(*moduleName) < leastModuleNameLen {
 			return fmt.Errorf("invalid module name")
 		}
 		h.ModuleName = moduleName
-		return nil
-	}
-}
-
-func WithModuleID(moduleID *string) func(context.Context, *Handler) error {
-	return func(context.Context, *Handler) error {
-		if moduleID == nil {
-			return nil
-		}
-		if _, err := uuid.Parse(*moduleID); err != nil {
-			return err
-		}
-		h.ModuleID = moduleID
 		return nil
 	}
 }
@@ -181,7 +150,7 @@ func WithName(name *string) func(context.Context, *Handler) error {
 			return nil
 		}
 		const leastNameLen = 5
-		if len(*name) < leaseNameLen {
+		if len(*name) < leastNameLen {
 			return fmt.Errorf("invalid name")
 		}
 		h.Name = name
@@ -211,6 +180,24 @@ func WithTestCaseType(testCaseType *testcasemgrpb.TestCaseType) func(context.Con
 			return fmt.Errorf("invalid testcase type")
 		}
 		h.TestCaseType = testCaseType
+		return nil
+	}
+}
+
+func WithOffset(offset int32) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		h.Offset = offset
+		return nil
+	}
+}
+
+func WithLimit(limit int32) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if limit == 0 {
+			limit = constant.DefaultRowLimit
+		}
+		h.Limit = limit
+
 		return nil
 	}
 }

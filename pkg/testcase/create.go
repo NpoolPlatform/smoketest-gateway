@@ -5,8 +5,9 @@ import (
 	"fmt"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
-	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
+	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
+	"github.com/google/uuid"
 )
 
 type createHandler struct {
@@ -23,17 +24,9 @@ func (h *createHandler) validate() error {
 	if h.ApiID == nil {
 		return fmt.Errorf("invalid api")
 	}
-	if h.Input == nil {
-		return fmt.Errorf("invalid input")
-	}
-	if h.Expectation == nil {
-		return fmt.Errorf("invalid expectation")
-	}
-
 	return nil
 }
 
-//nolint
 func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	handler := &createHandler{
 		Handler: h,
@@ -43,9 +36,13 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 		return nil, err
 	}
 
-	info, err := testcasemwcli.CreateTestCase(
+	id := uuid.NewString()
+	h.ID = &id
+
+	if _, err := testcasemwcli.CreateTestCase(
 		ctx,
-		&testcasemwpb.CreateTestCaseReq{
+		&testcasemgrpb.TestCaseReq{
+			ID:          h.ID,
 			Name:        h.Name,
 			Description: h.Description,
 			ModuleName:  h.ModuleName,
@@ -54,12 +51,9 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 			InputDesc:   h.InputDesc,
 			Expectation: h.Expectation,
 		},
-	)
-	if err != nil {
+	); err != nil {
 		return nil, err
 	}
-
-	h.ID = &info.ID
 
 	return h.GetTestCase(ctx)
 }
