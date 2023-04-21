@@ -84,7 +84,19 @@ spec:
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
+          - path: /api/smoketest/v1/delete/module
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
           - path: /api/smoketest/v1/create/testplan
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/update/testplan
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/delete/testplan
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
@@ -92,11 +104,19 @@ spec:
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
-          - path: /api/smoketest/v1/create/planrelatedtestcase
+          - path: /api/smoketest/v1/create/plantestcase
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
-          - path: /api/smoketest/v1/get/planrelatedtestcases
+          - path: /api/smoketest/v1/update/plantestcase
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/delete/plantestcase
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/get/plantestcases
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
