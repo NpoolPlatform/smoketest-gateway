@@ -8,8 +8,13 @@ import (
 )
 
 func (h *Handler) DeleteModule(ctx context.Context) (*npool.Module, error) {
+	info, err := h.GetModule(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	if _, err := modulecli.DeleteModule(ctx, *h.ID); err != nil {
 		return nil, err
 	}
-	return h.GetModule(ctx)
+	return info, nil
 }
