@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	plantestcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
-	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
+	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan/plantestcase"
+	constant "github.com/NpoolPlatform/smoketest-gateway/pkg/const"
 	"github.com/google/uuid"
 )
 
@@ -15,13 +15,12 @@ type Handler struct {
 	TestCaseID     *string
 	TestUserID     *string
 	TestCaseOutput *string
-	TestCaseResult *plantestcasemwpb.TestCaseResult
+	Result         *mgrpb.TestCaseResult
 	Description    *string
 	Index          *uint32
 	RunDuration    *uint32
-	Conds          *plantestcasemwpb.Conds
-	Offset         *int32
-	Limit          *int32
+	Offset         int32
+	Limit          int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -87,12 +86,12 @@ func WithTestCaseOutput(output *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestCaseResult(result *plantestcasemwpb.TestCaseResult) func(context.Context, *Handler) error {
+func WithTestCaseResult(result *mgrpb.TestCaseResult) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if result == nil {
 			return fmt.Errorf("need testcase result")
 		}
-		h.TestCaseResult = result
+		h.Result = result
 		return nil
 	}
 }
@@ -127,34 +126,19 @@ func WithDescription(description *string) func(context.Context, *Handler) error 
 	}
 }
 
-func WithConds(conds *plantestcasemwpb.Conds, offset, limit int32) func(context.Context, *Handler) error {
+func WithOffset(offset int32) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if conds == nil {
-			return fmt.Errorf("invalid conds")
-		}
+		h.Offset = offset
+		return nil
+	}
+}
 
-		if conds.ID != nil {
-			if _, err := uuid.Parse(conds.GetID().GetValue()); err != nil {
-				return err
-			}
-		}
-		if conds.TestPlanID != nil {
-			if _, err := uuid.Parse(conds.GetTestPlanID().GetValue()); err != nil {
-				return err
-			}
-		}
-
-		h.Conds = conds
-
-		if h.Offset == nil {
-			offset = constant.DefaultRowLimit
-		}
-		h.Offset = &offset
+func WithLimit(limit int32) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
 		if limit == 0 {
 			limit = constant.DefaultRowLimit
 		}
-		h.Limit = &limit
-
+		h.Limit = limit
 		return nil
 	}
 }

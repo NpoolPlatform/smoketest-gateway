@@ -5,39 +5,34 @@ import (
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan/plantestcase"
-	prtmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
-	prt1 "github.com/NpoolPlatform/smoketest-gateway/pkg/testplan/plantestcase"
+	plantestcase1 "github.com/NpoolPlatform/smoketest-gateway/pkg/testplan/plantestcase"
 	"github.com/gogo/status"
 	"google.golang.org/grpc/codes"
 )
 
-//nolint
-func (s *Server) Getplantestcases(ctx context.Context, in *npool.GetplantestcasesRequest) (*npool.GetplantestcasesResponse, error) {
-	handler, err := prt1.NewHandler(
+func (s *Server) GetPlanTestCases(ctx context.Context, in *npool.GetPlanTestCasesRequest) (*npool.GetPlanTestCasesResponse, error) {
+	handler, err := plantestcase1.NewHandler(
 		ctx,
-		prt1.WithConds(
-			&prtmgrpb.Conds{},
-			in.GetOffset(),
-			in.GetLimit(),
-		),
-		prt1.WithTestPlanID(&in.TestPlanID),
+		plantestcase1.WithTestPlanID(&in.TestPlanID),
+		plantestcase1.WithOffset(in.GetOffset()),
+		plantestcase1.WithLimit(in.GetLimit()),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(
-			"Getplantestcases",
+			"GetPlanTestCases",
 			"In", in,
 			"Error", err,
 		)
-		return &npool.GetplantestcasesResponse{}, status.Error(codes.InvalidArgument, err.Error())
+		return &npool.GetPlanTestCasesResponse{}, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	infos, total, err := handler.Getplantestcases(ctx)
+	infos, total, err := handler.GetPlanTestCases(ctx)
 	if err != nil {
-		logger.Sugar().Errorw("Getplantestcases", "err", err)
-		return &npool.GetplantestcasesResponse{}, err
+		logger.Sugar().Errorw("GetPlanTestCases", "err", err)
+		return &npool.GetPlanTestCasesResponse{}, err
 	}
 
-	return &npool.GetplantestcasesResponse{
+	return &npool.GetPlanTestCasesResponse{
 		Infos: infos,
 		Total: total,
 	}, nil

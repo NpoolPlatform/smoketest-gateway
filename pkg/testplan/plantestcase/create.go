@@ -3,31 +3,30 @@ package plantestcase
 import (
 	"context"
 
-	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
+	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan/plantestcase"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
+	"github.com/google/uuid"
 )
 
-//nolint
-func (h *Handler) Createplantestcase(ctx context.Context) (*npool.plantestcase, error) {
-	info, err := testcasemwcli.Createplantestcase(
+func (h *Handler) CreatePlanTestCase(ctx context.Context) (*mgrpb.PlanTestCase, error) {
+	id := uuid.NewString()
+	h.ID = &id
+
+	if _, err := testcasemwcli.CreatePlanTestCase(
 		ctx,
-		&testcasemwpb.CreateplantestcaseRequest{
-			Info: &testcasemwpb.plantestcaseReq{
-				TestPlanID:     h.TestPlanID,
-				TestCaseID:     h.TestCaseID,
-				TestUserID:     h.TestUserID,
-				TestCaseOutput: h.TestCaseOutput,
-				TestCaseResult: h.TestCaseResult,
-				Index:          h.Index,
-				RunDuration:    h.RunDuration,
-			},
+		&mgrpb.PlanTestCaseReq{
+			ID:             h.ID,
+			TestPlanID:     h.TestPlanID,
+			TestCaseID:     h.TestCaseID,
+			TestUserID:     h.TestUserID,
+			TestCaseOutput: h.TestCaseOutput,
+			Result:         h.Result,
+			Index:          h.Index,
+			RunDuration:    h.RunDuration,
 		},
-	)
-	if err != nil {
+	); err != nil {
 		return nil, err
 	}
 
-	h.ID = &info.ID
-
-	return h.Getplantestcase(ctx)
+	return h.GetPlanTestCase(ctx)
 }
