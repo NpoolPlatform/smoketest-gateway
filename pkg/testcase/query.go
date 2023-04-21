@@ -18,8 +18,7 @@ import (
 
 type queryHandler struct {
 	*Handler
-	moduleID string
-	Infos    []*testcasemwpb.TestCase
+	Infos []*testcasemwpb.TestCase
 }
 
 func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error) {
