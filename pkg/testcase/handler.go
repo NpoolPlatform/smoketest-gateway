@@ -61,6 +61,7 @@ func WithModuleID(moduleID *string) func(context.Context, *Handler) error {
 	}
 }
 
+//nolint
 func WithApiID(apiID *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if apiID == nil {

@@ -20,7 +20,7 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestPlan, error)
 		row := npool.TestPlan{
 			ID:               info.ID,
 			Name:             info.Name,
-			State:            testplanmgrpb.TestPlanState(info.GetState()),
+			State:            info.GetState(),
 			CreatedBy:        info.CreatedBy,
 			Username:         info.CreatedBy,
 			Executor:         info.Executor,
@@ -29,7 +29,7 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestPlan, error)
 			Skips:            info.Skips,
 			Passes:           info.Passes,
 			RunDuration:      info.RunDuration,
-			Result:           testplanmgrpb.TestResultState(info.Result),
+			Result:           info.Result,
 			Deadline:         info.Deadline,
 			CreatedAt:        info.CreatedAt,
 		}
