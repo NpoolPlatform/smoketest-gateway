@@ -1,23 +1,23 @@
-package testplan
+package cond
 
 import (
 	"context"
 	"fmt"
 
-	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan"
+	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase/cond"
 	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 	"github.com/google/uuid"
 )
 
 type Handler struct {
-	ID        *string
-	Name      *string
-	State     *testplanmgrpb.TestPlanState
-	CreatedBy *string
-	Executor  *string
-	Deadline  *uint32
-	Offset    int32
-	Limit     int32
+	ID             *string
+	TestCaseID     *string
+	CondTestCaseID *string
+	CondType       *mgrpb.CondType
+	Index          *uint32
+	ArgumentMap    *string
+	Offset         int32
+	Limit          int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -40,67 +40,59 @@ func WithID(id *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithName(name *string) func(context.Context, *Handler) error {
+func WithTestCaseID(id *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if name == nil {
-			return nil
-		}
-		const leastNameLen = 4
-		if len(*name) < leastNameLen {
-			return fmt.Errorf("name %v too short", *name)
-		}
-		h.Name = name
-		return nil
-	}
-}
-
-func WithCreatedBy(createdBy *string) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if _, err := uuid.Parse(*createdBy); err != nil {
+		if _, err := uuid.Parse(*id); err != nil {
 			return err
 		}
-		h.CreatedBy = createdBy
+		h.TestCaseID = id
 		return nil
 	}
 }
 
-func WithDeadline(deadline *uint32) func(context.Context, *Handler) error {
+func WithCondTestCaseID(id *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if deadline == nil {
-			return nil
-		}
-		h.Deadline = deadline
-		return nil
-	}
-}
-
-func WithExecutor(executor *string) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if executor == nil {
-			return nil
-		}
-		if _, err := uuid.Parse(*executor); err != nil {
+		if _, err := uuid.Parse(*id); err != nil {
 			return err
 		}
-		h.Executor = executor
+		h.CondTestCaseID = id
 		return nil
 	}
 }
 
-func WithState(state *testplanmgrpb.TestPlanState) func(context.Context, *Handler) error {
+func WithCondType(_type *mgrpb.CondType) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if state == nil {
+		if _type == nil {
 			return nil
 		}
-		switch *state {
-		case testplanmgrpb.TestPlanState_WaitStart:
-		case testplanmgrpb.TestPlanState_InProgress:
-		case testplanmgrpb.TestPlanState_Finished:
-		case testplanmgrpb.TestPlanState_Overdue:
+		switch *_type {
+		case mgrpb.CondType_PreCondition:
+		case mgrpb.CondType_Cleaner:
 		default:
-			return fmt.Errorf("plan state %v invalid", *state)
+			return fmt.Errorf("invalid CondType")
 		}
-		h.State = state
+
+		h.CondType = _type
+		return nil
+	}
+}
+
+func WithIndex(index *uint32) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if index == nil {
+			return nil
+		}
+		h.Index = index
+		return nil
+	}
+}
+
+func WithArgumentMap(argMap *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if argMap == nil {
+			return nil
+		}
+		h.ArgumentMap = argMap
 		return nil
 	}
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	constant "github.com/NpoolPlatform/smoketest-gateway/pkg/const"
+	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 
 	"github.com/google/uuid"
 )

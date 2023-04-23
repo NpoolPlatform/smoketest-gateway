@@ -51,10 +51,10 @@ github.com/NpoolPlatform/go-service-framework v0.0.0-20230327065405-91484c9b17ea
 github.com/NpoolPlatform/go-service-framework v0.0.0-20230327065405-91484c9b17ea/go.mod h1:/sor3E0i0XR8BaKInJwWC85aXLmbMFRNLdIuw+ed+ig=
 github.com/NpoolPlatform/libent-cruder v0.0.0-20220621110548-8f3f8049ecc5 h1:JF3d0OshTe/tHBKflk2x71N83ZgwxNF+EjApSa6qm1M=
 github.com/NpoolPlatform/libent-cruder v0.0.0-20220621110548-8f3f8049ecc5/go.mod h1:zvvqlRwbOdTUauPQ9dFDhDuxa91ILV0CQfVdPBZj+eA=
-github.com/NpoolPlatform/message v0.0.0-20230421060919-784aef4b7c4a h1:EP8BGCtu+EKogRzB/vXk9vtnGFcAnE7r1CdQsUrliXU=
-github.com/NpoolPlatform/message v0.0.0-20230421060919-784aef4b7c4a/go.mod h1:siMqIrLuxDkKaqlPyeNSXCfvGsiEwmDBoEqgXMXFyjc=
-github.com/NpoolPlatform/smoketest-middleware v0.0.0-20230421030015-e00498db05b1 h1:IJsHdQ4oi3fScR9J7XLnFdVDXziV2jJKqwvWap34xEM=
-github.com/NpoolPlatform/smoketest-middleware v0.0.0-20230421030015-e00498db05b1/go.mod h1:SuabX/MVaJQxBJkSGrOR8mloJB9dJtYHA6F+Gn2yxJI=
+github.com/NpoolPlatform/message v0.0.0-20230423031439-efd2356a16b3 h1:6vn4t3SROKk+ChSu/sT4yu47aAo7uqR/Er8bahXCog0=
+github.com/NpoolPlatform/message v0.0.0-20230423031439-efd2356a16b3/go.mod h1:siMqIrLuxDkKaqlPyeNSXCfvGsiEwmDBoEqgXMXFyjc=
+github.com/NpoolPlatform/smoketest-middleware v0.0.0-20230423042200-f01dcf98d547 h1:VeLPsi2zJZRGAIqGr8r7bbg7RIs7p4oPutBgCNpLhLM=
+github.com/NpoolPlatform/smoketest-middleware v0.0.0-20230423042200-f01dcf98d547/go.mod h1:yTxnyhxdoUMtTpGteN+iEnOY8808shcXug1NaFcFTZ0=
 github.com/OneOfOne/xxhash v1.2.2 h1:KMrpdQIwFcEqXDklaen+P1axHaj9BSKzvpUUfnHldSE=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/Shonminh/apollo-client v0.4.0 h1:AXGp4wOahrEKjheMXehgsG9B8dEfLQHttRLHeEefvus=
@@ -429,7 +429,6 @@ github.com/subosito/gotenv v1.2.0 h1:Slr1R9HxAlEKefgq5jn9U+DnETlIUa6HfgEzj0g5d7s
 github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
 github.com/tv42/httpunix v0.0.0-20150427012821-b75d8614f926/go.mod h1:9ESjWnEqriFuLhtthL60Sar/7RFoluCcXsuvEwTV5KM=
 github.com/ugorji/go v1.1.4/go.mod h1:uQMGLiO92mf5W77hV/PUCpI3pbzQx3CRekS0kk+RGrc=
-github.com/ugorji/go v1.2.11 h1:SskMIRQoD2wRlY2Qddg8rjJC+bc0su8i/vmWkYdquMo=
 github.com/ugorji/go/codec v1.2.11 h1:BMaWp1Bb6fHwEtbplGBGJ498wD+LKlNSl25MjdZY4dU=
 github.com/urfave/cli/v2 v2.5.0 h1:2sqblaW62ebcTIEvwb8eRvDfNHeBAeKxfhdynaanhug=
 github.com/urfave/cli/v2 v2.5.0/go.mod h1:oDzoM7pVwz6wHn5ogWgFUU1s4VJayeQS+aEZDqXIEJs=

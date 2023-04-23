@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan/plantestcase"
-	constant "github.com/NpoolPlatform/smoketest-gateway/pkg/const"
+	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 	"github.com/google/uuid"
 )
 
