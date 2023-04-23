@@ -7,7 +7,6 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
 	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
-	"github.com/google/uuid"
 )
 
 type createHandler struct {
@@ -36,10 +35,7 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 		return nil, err
 	}
 
-	id := uuid.NewString()
-	h.ID = &id
-
-	if _, err := testcasemwcli.CreateTestCase(
+	info, err := testcasemwcli.CreateTestCase(
 		ctx,
 		&testcasemgrpb.TestCaseReq{
 			ID:          h.ID,
@@ -51,9 +47,11 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 			InputDesc:   h.InputDesc,
 			Expectation: h.Expectation,
 		},
-	); err != nil {
+	)
+	if err != nil {
 		return nil, err
 	}
 
+	h.ID = &info.ID
 	return h.GetTestCase(ctx)
 }

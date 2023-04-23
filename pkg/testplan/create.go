@@ -7,7 +7,6 @@ import (
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan"
 	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
-	"github.com/google/uuid"
 )
 
 type createHandler struct {
@@ -33,10 +32,7 @@ func (h *Handler) CreateTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 		return nil, err
 	}
 
-	id := uuid.NewString()
-	handler.ID = &id
-
-	if _, err := testcasemwcli.CreateTestPlan(
+	info, err := testcasemwcli.CreateTestPlan(
 		ctx,
 		&testplanmgrpb.TestPlanReq{
 			ID:        handler.ID,
@@ -45,9 +41,11 @@ func (h *Handler) CreateTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 			Executor:  handler.Executor,
 			Deadline:  handler.Deadline,
 		},
-	); err != nil {
+	)
+	if err != nil {
 		return nil, err
 	}
 
+	h.ID = &info.ID
 	return h.GetTestPlan(ctx)
 }

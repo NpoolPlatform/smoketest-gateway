@@ -4,15 +4,11 @@ import (
 	"context"
 
 	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan/plantestcase"
-	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
-	"github.com/google/uuid"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
 )
 
 func (h *Handler) CreatePlanTestCase(ctx context.Context) (*mgrpb.PlanTestCase, error) {
-	id := uuid.NewString()
-	h.ID = &id
-
-	if _, err := testcasemwcli.CreatePlanTestCase(
+	info, err := cli.CreatePlanTestCase(
 		ctx,
 		&mgrpb.PlanTestCaseReq{
 			ID:             h.ID,
@@ -24,9 +20,11 @@ func (h *Handler) CreatePlanTestCase(ctx context.Context) (*mgrpb.PlanTestCase, 
 			Index:          h.Index,
 			RunDuration:    h.RunDuration,
 		},
-	); err != nil {
+	)
+	if err != nil {
 		return nil, err
 	}
 
+	h.ID = &info.ID
 	return h.GetPlanTestCase(ctx)
 }
