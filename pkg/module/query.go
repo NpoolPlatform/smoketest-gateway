@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/module"
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/module"
 )
@@ -17,7 +16,6 @@ func (h *Handler) GetModules(ctx context.Context) ([]*npool.Module, uint32, erro
 		h.Limit,
 	)
 	if err != nil {
-		logger.Sugar().Errorw("GetModules", "err", err)
 		return nil, 0, err
 	}
 
