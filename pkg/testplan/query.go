@@ -4,13 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
-	commonpb "github.com/NpoolPlatform/message/npool"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan"
 	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
-	ptcpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
-	ptccli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
 )
 
 type queryHandler struct {
@@ -20,68 +16,34 @@ type queryHandler struct {
 
 //nolint
 func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestPlan, error) {
-	planIDs := []string{}
 	// userIDs := []string{}
-	for _, info := range h.infos {
-		planIDs = append(planIDs, info.ID)
-		// userIDs = append(userIDs, info.Executor, info.CreatedBy)
-	}
+	// for _, info := range h.infos {
+	// userIDs = append(userIDs, info.Executor, info.CreatedBy)
+	// }
 
-	_infos, total, err := ptccli.GetPlanTestCases(ctx, &ptcpb.Conds{
-		TestPlanIDs: &commonpb.StringSliceVal{
-			Op:    cruder.IN,
-			Value: planIDs,
-		},
-	}, 0, 1)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(_infos) < int(total) {
-		_infos, _, err = ptccli.GetPlanTestCases(ctx, &ptcpb.Conds{
-			TestPlanIDs: &commonpb.StringSliceVal{
-				Op:    cruder.IN,
-				Value: planIDs,
-			},
-		}, 0, int32(total))
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	planTestCaseMap := map[string][]*ptcpb.PlanTestCase{}
-	for _, info := range _infos {
-		_, ok := planTestCaseMap[info.TestPlanID]
-		if !ok {
-			planTestCaseMap[info.TestPlanID] = []*ptcpb.PlanTestCase{}
-		}
-		rows := planTestCaseMap[info.TestPlanID]
-		rows = append(rows, info)
-		planTestCaseMap[info.TestPlanID] = rows
-	}
+	// appusercli.GetUserOnly(ctx, &appuserpb.C)
 
 	infos := []*npool.TestPlan{}
 	for _, info := range h.infos {
-		planTestCases, ok := planTestCaseMap[info.ID]
-		if !ok {
-			continue
-		}
+		// planTestCases, ok := planTestCaseMap[info.ID]
+		// if !ok {
+		// 	continue
+		// }
 		row := npool.TestPlan{
-			ID:               info.ID,
-			Name:             info.Name,
-			State:            info.GetState(),
-			CreatedBy:        info.CreatedBy,
-			Username:         info.CreatedBy,
-			Executor:         info.Executor,
-			ExecutorUsername: info.Executor,
-			Fails:            info.Fails,
-			Skips:            info.Skips,
-			Passes:           info.Passes,
-			RunDuration:      info.RunDuration,
-			Result:           info.Result,
-			Deadline:         info.Deadline,
-			CreatedAt:        info.CreatedAt,
-			PlanTestCases:    planTestCases,
+			ID:            info.ID,
+			Name:          info.Name,
+			State:         info.GetState(),
+			CreatedBy:     info.CreatedBy,
+			Email:         info.CreatedBy,
+			Executor:      info.Executor,
+			ExecutorEmail: info.Executor,
+			Fails:         info.Fails,
+			Skips:         info.Skips,
+			Passes:        info.Passes,
+			RunDuration:   info.RunDuration,
+			Result:        info.Result,
+			Deadline:      info.Deadline,
+			CreatedAt:     info.CreatedAt,
 		}
 		infos = append(infos, &row)
 	}
