@@ -76,19 +76,19 @@ spec:
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
-          - path: /api/smoketest/v1/create/cond
+          - path: /api/smoketest/v1/create/testcasecond
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
-          - path: /api/smoketest/v1/delete/cond
+          - path: /api/smoketest/v1/delete/testcasecond
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
-          - path: /api/smoketest/v1/update/cond
+          - path: /api/smoketest/v1/update/testcasecond
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
-          - path: /api/smoketest/v1/get/conds
+          - path: /api/smoketest/v1/get/testcaseconds
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
