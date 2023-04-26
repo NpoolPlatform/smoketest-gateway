@@ -9,8 +9,8 @@ import (
 	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 
-	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
-	apimgrpb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
+	apicli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
+	apipb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
 
 	commonpb "github.com/NpoolPlatform/message/npool"
 )
@@ -26,14 +26,14 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error)
 		apiIDs = append(apiIDs, info.ApiID)
 	}
 
-	apis, _, err := apimwcli.GetAPIs(ctx, &apimgrpb.Conds{
+	apis, _, err := apicli.GetAPIs(ctx, &apipb.Conds{
 		IDs: &commonpb.StringSliceVal{Op: cruder.IN, Value: apiIDs},
 	}, int32(len(apiIDs)), 0)
 	if err != nil {
 		return nil, err
 	}
 
-	apiMap := map[string]*apimgrpb.API{}
+	apiMap := map[string]*apipb.API{}
 	for _, row := range apis {
 		apiMap[row.ID] = row
 	}
@@ -109,7 +109,7 @@ func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
 	}
 
 	if info == nil {
-		return nil, fmt.Errorf("invalid testcase")
+		return nil, fmt.Errorf("id %v not exist", *h.ID)
 	}
 
 	handler := &queryHandler{

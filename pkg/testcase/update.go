@@ -4,8 +4,8 @@ import (
 	"context"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
-	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
-	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 )
 
 type updateHandler struct {
@@ -13,7 +13,7 @@ type updateHandler struct {
 }
 
 func (h *Handler) UpdateTestCase(ctx context.Context) (*npool.TestCase, error) {
-	_, err := testcasemwcli.UpdateTestCase(ctx, &testcasemgrpb.TestCaseReq{
+	_, err := cli.UpdateTestCase(ctx, &pb.TestCaseReq{
 		ID:           h.ID,
 		Name:         h.Name,
 		Description:  h.Description,
