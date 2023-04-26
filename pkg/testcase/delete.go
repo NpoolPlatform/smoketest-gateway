@@ -4,7 +4,7 @@ import (
 	"context"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
-	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 )
 
 func (h *Handler) DeleteTestCase(ctx context.Context) (*npool.TestCase, error) {
@@ -13,7 +13,7 @@ func (h *Handler) DeleteTestCase(ctx context.Context) (*npool.TestCase, error) {
 		return nil, err
 	}
 
-	_, err = testcasemwcli.DeleteTestCase(ctx, *h.ID)
+	_, err = cli.DeleteTestCase(ctx, *h.ID)
 	if err != nil {
 		return nil, err
 	}
