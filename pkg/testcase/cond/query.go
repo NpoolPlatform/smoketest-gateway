@@ -5,11 +5,11 @@ import (
 	"fmt"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase/cond"
-	testplancli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase/cond"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase/cond"
 )
 
 func (h *Handler) GetConds(ctx context.Context) ([]*npool.Cond, uint32, error) {
-	infos, total, err := testplancli.GetConds(ctx, nil, h.Offset, h.Limit)
+	infos, total, err := cli.GetConds(ctx, nil, h.Offset, h.Limit)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -30,7 +30,7 @@ func (h *Handler) GetCond(ctx context.Context) (*npool.Cond, error) {
 		return nil, fmt.Errorf("invalid id")
 	}
 
-	info, err := testplancli.GetCond(ctx, *h.ID)
+	info, err := cli.GetCond(ctx, *h.ID)
 	if err != nil {
 		return nil, err
 	}

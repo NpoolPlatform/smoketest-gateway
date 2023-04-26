@@ -108,10 +108,6 @@ func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
 		return nil, err
 	}
 
-	if info == nil {
-		return nil, fmt.Errorf("id %v not exist", *h.ID)
-	}
-
 	handler := &queryHandler{
 		Handler: h,
 	}

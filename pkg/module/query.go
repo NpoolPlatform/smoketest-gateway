@@ -37,5 +37,6 @@ func (handler *Handler) GetModule(ctx context.Context) (*npool.Module, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return info, nil
 }
