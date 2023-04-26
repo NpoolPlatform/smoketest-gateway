@@ -6,7 +6,7 @@ import (
 
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
-	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
+	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
 	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 

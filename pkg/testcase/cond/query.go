@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	npool "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase/cond"
+	npool "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase/cond"
 	testplancli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase/cond"
 )
 

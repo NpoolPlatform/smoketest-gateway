@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
-	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
+	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
 	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 
 	"github.com/google/uuid"

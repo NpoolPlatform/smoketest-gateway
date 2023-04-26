@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan"
-	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan"
+	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
 	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
 )
 

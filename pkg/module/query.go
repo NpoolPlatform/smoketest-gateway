@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
-	npool "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/module"
+	npool "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/module"
 	modulemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/module"
 )
 

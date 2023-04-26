@@ -3,7 +3,7 @@ package plantestcase
 import (
 	"context"
 
-	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan/plantestcase"
+	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
 )
 

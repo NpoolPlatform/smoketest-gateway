@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testplan"
+	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
 	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 	"github.com/google/uuid"
 )

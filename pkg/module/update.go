@@ -3,7 +3,7 @@ package module
 import (
 	"context"
 
-	npool "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/module"
+	npool "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/module"
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/module"
 )
 
