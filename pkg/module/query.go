@@ -11,7 +11,7 @@ import (
 func (h *Handler) GetModules(ctx context.Context) ([]*npool.Module, uint32, error) {
 	infos, total, err := cli.GetModules(
 		ctx,
-		&npool.Conds{},
+		nil,
 		h.Offset,
 		h.Limit,
 	)
@@ -19,19 +19,15 @@ func (h *Handler) GetModules(ctx context.Context) ([]*npool.Module, uint32, erro
 		return nil, 0, err
 	}
 
-	if len(infos) == 0 {
-		return []*npool.Module{}, 0, nil
-	}
-
 	return infos, total, nil
 }
 
-func (handler *Handler) GetModule(ctx context.Context) (*npool.Module, error) {
-	if handler.ID == nil {
+func (h *Handler) GetModule(ctx context.Context) (*npool.Module, error) {
+	if h.ID == nil {
 		return nil, fmt.Errorf("invalid module id")
 	}
 
-	info, err := cli.GetModule(ctx, *handler.ID)
+	info, err := cli.GetModule(ctx, *h.ID)
 	if err != nil {
 		return nil, err
 	}
