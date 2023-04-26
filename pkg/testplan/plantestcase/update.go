@@ -7,12 +7,11 @@ import (
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
 )
 
-func (h *Handler) CreatePlanTestCase(ctx context.Context) (*pb.PlanTestCase, error) {
-	info, err := cli.CreatePlanTestCase(
+func (h *Handler) UpdatePlanTestCase(ctx context.Context) (*pb.PlanTestCase, error) {
+	info, err := cli.UpdatePlanTestCase(
 		ctx,
 		&pb.PlanTestCaseReq{
-			TestPlanID:     h.TestPlanID,
-			TestCaseID:     h.TestCaseID,
+			ID:             h.ID,
 			TestUserID:     h.TestUserID,
 			TestCaseOutput: h.TestCaseOutput,
 			Result:         h.Result,
