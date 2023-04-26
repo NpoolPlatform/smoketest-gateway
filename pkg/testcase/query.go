@@ -6,9 +6,8 @@ import (
 
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
-	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
-	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
-	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 
 	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
 	apimgrpb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
@@ -18,7 +17,7 @@ import (
 
 type queryHandler struct {
 	*Handler
-	Infos []*testcasemwpb.TestCase
+	Infos []*pb.TestCase
 }
 
 func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error) {
@@ -75,12 +74,12 @@ func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, 
 		Handler: h,
 	}
 
-	conds := &testcasemgrpb.Conds{}
+	conds := &pb.Conds{}
 	if handler.ModuleID != nil {
 		conds.ModuleID = &commonpb.StringVal{Op: cruder.EQ, Value: *handler.ModuleID}
 	}
 
-	infos, total, err := testcasemwcli.GetTestCases(ctx, conds, handler.Offset, handler.Limit)
+	infos, total, err := cli.GetTestCases(ctx, conds, handler.Offset, handler.Limit)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -104,7 +103,7 @@ func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
 		return nil, fmt.Errorf("invalid id")
 	}
 
-	info, err := testcasemwcli.GetTestCase(ctx, *h.ID)
+	info, err := cli.GetTestCase(ctx, *h.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +116,7 @@ func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
 		Handler: h,
 	}
 
-	handler.Infos = []*testcasemwpb.TestCase{info}
+	handler.Infos = []*pb.TestCase{info}
 
 	_infos, err := handler.formalize(ctx)
 	if err != nil {

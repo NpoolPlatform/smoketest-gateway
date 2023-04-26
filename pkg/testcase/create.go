@@ -35,7 +35,6 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	info, err := cli.CreateTestCase(
 		ctx,
 		&pb.TestCaseReq{
-			ID:          h.ID,
 			Name:        h.Name,
 			Description: h.Description,
 			ModuleName:  h.ModuleName,
@@ -43,6 +42,7 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 			Input:       h.Input,
 			InputDesc:   h.InputDesc,
 			Expectation: h.Expectation,
+			TestCaseType: h.TestCaseType,
 		},
 	)
 	if err != nil {
