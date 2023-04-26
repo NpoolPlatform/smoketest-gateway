@@ -2,9 +2,11 @@ package cond
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
-	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase/cond"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase/cond"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 	"github.com/google/uuid"
 )
@@ -13,7 +15,7 @@ type Handler struct {
 	ID             *string
 	TestCaseID     *string
 	CondTestCaseID *string
-	CondType       *mgrpb.CondType
+	CondType       *pb.CondType
 	Index          *uint32
 	ArgumentMap    *string
 	Offset         int32
@@ -45,6 +47,11 @@ func WithTestCaseID(id *string) func(context.Context, *Handler) error {
 		if _, err := uuid.Parse(*id); err != nil {
 			return err
 		}
+
+		if _, err := cli.ExistTestCase(ctx, *id); err != nil {
+			return err
+		}
+
 		h.TestCaseID = id
 		return nil
 	}
@@ -55,19 +62,23 @@ func WithCondTestCaseID(id *string) func(context.Context, *Handler) error {
 		if _, err := uuid.Parse(*id); err != nil {
 			return err
 		}
+		if _, err := cli.ExistTestCase(ctx, *id); err != nil {
+			return err
+		}
+
 		h.CondTestCaseID = id
 		return nil
 	}
 }
 
-func WithCondType(_type *mgrpb.CondType) func(context.Context, *Handler) error {
+func WithCondType(_type *pb.CondType) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if _type == nil {
 			return nil
 		}
 		switch *_type {
-		case mgrpb.CondType_PreCondition:
-		case mgrpb.CondType_Cleaner:
+		case pb.CondType_PreCondition:
+		case pb.CondType_Cleaner:
 		default:
 			return fmt.Errorf("invalid CondType")
 		}
@@ -91,6 +102,11 @@ func WithArgumentMap(argMap *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if argMap == nil {
 			return nil
+		}
+
+		var r interface{}
+		if err := json.Unmarshal([]byte(*argMap), &r); err != nil {
+			return err
 		}
 		h.ArgumentMap = argMap
 		return nil
