@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
-	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
 	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 
 	"github.com/google/uuid"
@@ -22,7 +22,7 @@ type Handler struct {
 	Input        *string
 	InputDesc    *string
 	Expectation  *string
-	TestCaseType *testcasemgrpb.TestCaseType
+	TestCaseType *pb.TestCaseType
 	Deprecated   *bool
 	Offset       int32
 	Limit        int32
@@ -64,16 +64,18 @@ func WithModuleID(moduleID *string) func(context.Context, *Handler) error {
 //nolint
 func WithApiID(apiID *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if apiID == nil {
-			return nil
-		}
 		if _, err := uuid.Parse(*apiID); err != nil {
 			return err
 		}
-		_, err := apimwcli.ExistAPI(ctx, *apiID)
+
+		exist, err := apimwcli.ExistAPI(ctx, *apiID)
 		if err != nil {
 			return err
 		}
+		if !exist {
+			return fmt.Errorf("invalid api id")
+		}
+
 		h.ApiID = apiID
 		return nil
 	}
@@ -169,14 +171,14 @@ func WithDeprecated(deprecated *bool) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestCaseType(testCaseType *testcasemgrpb.TestCaseType) func(context.Context, *Handler) error {
+func WithTestCaseType(testCaseType *pb.TestCaseType) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if testCaseType == nil {
 			return nil
 		}
 		switch *testCaseType {
-		case testcasemgrpb.TestCaseType_Manual:
-		case testcasemgrpb.TestCaseType_Automatic:
+		case pb.TestCaseType_Manual:
+		case pb.TestCaseType_Automatic:
 		default:
 			return fmt.Errorf("invalid testcase type")
 		}

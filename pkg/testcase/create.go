@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
-	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
-	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 )
 
 type createHandler struct {
@@ -20,9 +20,6 @@ func (h *createHandler) validate() error {
 	if h.ModuleName == nil {
 		return fmt.Errorf("invalid module name")
 	}
-	if h.ApiID == nil {
-		return fmt.Errorf("invalid api")
-	}
 	return nil
 }
 
@@ -35,9 +32,9 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 		return nil, err
 	}
 
-	info, err := testcasemwcli.CreateTestCase(
+	info, err := cli.CreateTestCase(
 		ctx,
-		&testcasemgrpb.TestCaseReq{
+		&pb.TestCaseReq{
 			ID:          h.ID,
 			Name:        h.Name,
 			Description: h.Description,
