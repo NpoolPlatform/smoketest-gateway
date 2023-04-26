@@ -4,7 +4,7 @@ import (
 	"context"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/module"
-	modulecli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/module"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/module"
 )
 
 func (h *Handler) DeleteModule(ctx context.Context) (*npool.Module, error) {
@@ -13,7 +13,7 @@ func (h *Handler) DeleteModule(ctx context.Context) (*npool.Module, error) {
 		return nil, err
 	}
 
-	if _, err := modulecli.DeleteModule(ctx, *h.ID); err != nil {
+	if _, err := cli.DeleteModule(ctx, *h.ID); err != nil {
 		return nil, err
 	}
 	return info, nil

@@ -6,11 +6,11 @@ import (
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/module"
-	modulemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/module"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/module"
 )
 
 func (h *Handler) GetModules(ctx context.Context) ([]*npool.Module, uint32, error) {
-	infos, total, err := modulemwcli.GetModules(
+	infos, total, err := cli.GetModules(
 		ctx,
 		&npool.Conds{},
 		h.Offset,
@@ -33,7 +33,7 @@ func (handler *Handler) GetModule(ctx context.Context) (*npool.Module, error) {
 		return nil, fmt.Errorf("invalid module id")
 	}
 
-	info, err := modulemwcli.GetModule(ctx, *handler.ID)
+	info, err := cli.GetModule(ctx, *handler.ID)
 	if err != nil {
 		return nil, err
 	}
