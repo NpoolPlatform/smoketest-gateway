@@ -5,15 +5,16 @@ import (
 	"fmt"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan"
-	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
 )
 
 type queryHandler struct {
 	*Handler
-	Infos []*testplanmgrpb.TestPlan
+	Infos []*pb.TestPlan
 }
 
+//nolint
 func (h *queryHandler) formalize() ([]*npool.TestPlan, error) {
 	infos := []*npool.TestPlan{}
 	for _, info := range h.Infos {
@@ -76,7 +77,7 @@ func (h *Handler) GetTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 		Handler: h,
 	}
 
-	handler.Infos = []*testplanmgrpb.TestPlan{info}
+	handler.Infos = []*pb.TestPlan{info}
 
 	_info, err := handler.formalize()
 	if err != nil {

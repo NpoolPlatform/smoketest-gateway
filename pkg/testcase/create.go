@@ -35,13 +35,13 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	info, err := cli.CreateTestCase(
 		ctx,
 		&pb.TestCaseReq{
-			Name:        h.Name,
-			Description: h.Description,
-			ModuleName:  h.ModuleName,
-			ApiID:       h.ApiID,
-			Input:       h.Input,
-			InputDesc:   h.InputDesc,
-			Expectation: h.Expectation,
+			Name:         h.Name,
+			Description:  h.Description,
+			ModuleName:   h.ModuleName,
+			ApiID:        h.ApiID,
+			Input:        h.Input,
+			InputDesc:    h.InputDesc,
+			Expectation:  h.Expectation,
 			TestCaseType: h.TestCaseType,
 		},
 	)
