@@ -7,7 +7,7 @@ require (
 	github.com/NpoolPlatform/go-service-framework v0.0.0-20230412082654-0f8f9e7ae58d
 	github.com/NpoolPlatform/libent-cruder v0.0.0-20220621110548-8f3f8049ecc5
 	github.com/NpoolPlatform/message v0.0.0-20230426084058-3d55a28f2ff1
-	github.com/NpoolPlatform/smoketest-middleware v0.0.0-20230426064100-1e969c32d7be
+	github.com/NpoolPlatform/smoketest-middleware v0.0.0-20230426085734-9241b39927ec
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gogo/status v1.1.1
 	github.com/google/uuid v1.3.0
