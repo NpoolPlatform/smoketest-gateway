@@ -50,9 +50,6 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestPlan, error)
 	}
 
 	planTestCaseMap := map[string][]*ptcpb.PlanTestCase{}
-	skipMap := map[string]int{}
-	passMap := map[string]int{}
-	failMap := map[string]int{}
 	for _, info := range _infos {
 		_, ok := planTestCaseMap[info.TestPlanID]
 		if !ok {
@@ -61,48 +58,11 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestPlan, error)
 		rows := planTestCaseMap[info.TestPlanID]
 		rows = append(rows, info)
 		planTestCaseMap[info.TestPlanID] = rows
-
-		_, ok = skipMap[info.TestPlanID]
-		if !ok {
-			skipMap[info.TestPlanID] = 0
-		}
-		_, ok = passMap[info.TestPlanID]
-		if !ok {
-			passMap[info.TestPlanID] = 0
-		}
-		_, ok = failMap[info.TestPlanID]
-		if !ok {
-			failMap[info.TestPlanID] = 0
-		}
-
-		switch info.Result {
-		case ptcpb.TestCaseResult_Skipped:
-			skipMap[info.TestPlanID] += 1
-		case ptcpb.TestCaseResult_Passed:
-			passMap[info.TestPlanID] += 1
-		case ptcpb.TestCaseResult_Failed:
-			failMap[info.TestPlanID] += 1
-		default:
-			//pass
-			continue
-		}
 	}
 
 	infos := []*npool.TestPlan{}
 	for _, info := range h.infos {
 		planTestCases, ok := planTestCaseMap[info.ID]
-		if !ok {
-			continue
-		}
-		skips, ok := skipMap[info.ID]
-		if !ok {
-			continue
-		}
-		passes, ok := passMap[info.ID]
-		if !ok {
-			continue
-		}
-		fails, ok := failMap[info.ID]
 		if !ok {
 			continue
 		}
@@ -114,9 +74,9 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestPlan, error)
 			Username:         info.CreatedBy,
 			Executor:         info.Executor,
 			ExecutorUsername: info.Executor,
-			Fails:            uint32(fails),
-			Skips:            uint32(skips),
-			Passes:           uint32(passes),
+			Fails:            info.Fails,
+			Skips:            info.Skips,
+			Passes:           info.Passes,
 			RunDuration:      info.RunDuration,
 			Result:           info.Result,
 			Deadline:         info.Deadline,
