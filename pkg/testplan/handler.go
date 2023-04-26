@@ -3,8 +3,9 @@ package testplan
 import (
 	"context"
 	"fmt"
+	"time"
 
-	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
 	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 	"github.com/google/uuid"
 )
@@ -12,7 +13,7 @@ import (
 type Handler struct {
 	ID        *string
 	Name      *string
-	State     *testplanmgrpb.TestPlanState
+	State     *pb.TestPlanState
 	CreatedBy *string
 	Executor  *string
 	Deadline  *uint32
@@ -69,6 +70,10 @@ func WithDeadline(deadline *uint32) func(context.Context, *Handler) error {
 		if deadline == nil {
 			return nil
 		}
+		if *deadline <= uint32(time.Now().Unix()) {
+			return fmt.Errorf("deadline less than current time")
+		}
+
 		h.Deadline = deadline
 		return nil
 	}
@@ -87,16 +92,16 @@ func WithExecutor(executor *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithState(state *testplanmgrpb.TestPlanState) func(context.Context, *Handler) error {
+func WithState(state *pb.TestPlanState) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if state == nil {
 			return nil
 		}
 		switch *state {
-		case testplanmgrpb.TestPlanState_WaitStart:
-		case testplanmgrpb.TestPlanState_InProgress:
-		case testplanmgrpb.TestPlanState_Finished:
-		case testplanmgrpb.TestPlanState_Overdue:
+		case pb.TestPlanState_WaitStart:
+		case pb.TestPlanState_InProgress:
+		case pb.TestPlanState_Finished:
+		case pb.TestPlanState_Overdue:
 		default:
 			return fmt.Errorf("plan state %v invalid", *state)
 		}

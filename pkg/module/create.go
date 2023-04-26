@@ -8,6 +8,7 @@ import (
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/module"
 )
 
+//nolint
 func (h *Handler) CreateModule(ctx context.Context) (*npool.Module, error) {
 	if h.Name == nil {
 		return nil, fmt.Errorf("invalid name")

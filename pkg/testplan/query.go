@@ -6,7 +6,7 @@ import (
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan"
 	testplanmgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
-	testplanmwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
 )
 
 type queryHandler struct {
@@ -14,7 +14,7 @@ type queryHandler struct {
 	Infos []*testplanmgrpb.TestPlan
 }
 
-func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestPlan, error) {
+func (h *queryHandler) formalize() ([]*npool.TestPlan, error) {
 	infos := []*npool.TestPlan{}
 	for _, info := range h.Infos {
 		row := npool.TestPlan{
@@ -40,7 +40,7 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestPlan, error)
 }
 
 func (h *Handler) GetTestPlans(ctx context.Context) ([]*npool.TestPlan, uint32, error) {
-	infos, total, err := testplanmwcli.GetTestPlans(ctx, nil, h.Offset, h.Limit)
+	infos, total, err := cli.GetTestPlans(ctx, nil, h.Offset, h.Limit)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -54,7 +54,7 @@ func (h *Handler) GetTestPlans(ctx context.Context) ([]*npool.TestPlan, uint32, 
 	}
 
 	handler.Infos = infos
-	_infos, err := handler.formalize(ctx)
+	_infos, err := handler.formalize()
 	if err != nil {
 		return nil, 0, err
 	}
@@ -67,7 +67,7 @@ func (h *Handler) GetTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 		return nil, fmt.Errorf("invalid id")
 	}
 
-	info, err := testplanmwcli.GetTestPlan(ctx, *h.ID)
+	info, err := cli.GetTestPlan(ctx, *h.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (h *Handler) GetTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 
 	handler.Infos = []*testplanmgrpb.TestPlan{info}
 
-	_info, err := handler.formalize(ctx)
+	_info, err := handler.formalize()
 	if err != nil {
 		return nil, err
 	}
