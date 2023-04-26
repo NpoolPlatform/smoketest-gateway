@@ -4,7 +4,7 @@ import (
 	"context"
 
 	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
-	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
 )
 
 func (h *Handler) DeletePlanTestCase(ctx context.Context) (*mgrpb.PlanTestCase, error) {
@@ -13,7 +13,7 @@ func (h *Handler) DeletePlanTestCase(ctx context.Context) (*mgrpb.PlanTestCase, 
 		return nil, err
 	}
 
-	if _, err := testcasemwcli.DeletePlanTestCase(ctx, *h.ID); err != nil {
+	if _, err := cli.DeletePlanTestCase(ctx, *h.ID); err != nil {
 		return nil, err
 	}
 

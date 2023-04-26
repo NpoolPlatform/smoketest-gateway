@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
 	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 	"github.com/google/uuid"
 )
@@ -15,7 +15,7 @@ type Handler struct {
 	TestCaseID     *string
 	TestUserID     *string
 	TestCaseOutput *string
-	Result         *mgrpb.TestCaseResult
+	Result         *pb.TestCaseResult
 	Description    *string
 	Index          *uint32
 	RunDuration    *uint32
@@ -86,7 +86,7 @@ func WithTestCaseOutput(output *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestCaseResult(result *mgrpb.TestCaseResult) func(context.Context, *Handler) error {
+func WithTestCaseResult(result *pb.TestCaseResult) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if result == nil {
 			return fmt.Errorf("need testcase result")
