@@ -91,6 +91,14 @@ func WithTestCaseResult(result *pb.TestCaseResult) func(context.Context, *Handle
 		if result == nil {
 			return fmt.Errorf("need testcase result")
 		}
+		switch *result {
+		case pb.TestCaseResult_Passed:
+		case pb.TestCaseResult_Failed:
+		case pb.TestCaseResult_Skipped:
+		default:
+			return fmt.Errorf("invalid result")
+		}
+
 		h.Result = result
 		return nil
 	}
