@@ -89,7 +89,7 @@ func WithTestCaseOutput(output *string) func(context.Context, *Handler) error {
 func WithTestCaseResult(result *pb.TestCaseResult) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if result == nil {
-			return fmt.Errorf("need testcase result")
+			return nil
 		}
 		switch *result {
 		case pb.TestCaseResult_Passed:

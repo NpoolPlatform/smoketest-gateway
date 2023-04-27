@@ -17,7 +17,7 @@ func (s *Server) UpdatePlanTestCase(ctx context.Context, in *npool.UpdatePlanTes
 		plantestcase1.WithID(&in.ID),
 		plantestcase1.WithTestUserID(in.TestUserID),
 		plantestcase1.WithTestCaseOutput(in.TestCaseOutput),
-		plantestcase1.WithTestCaseResult(&in.Result),
+		plantestcase1.WithTestCaseResult(in.Result),
 		plantestcase1.WithIndex(in.Index),
 		plantestcase1.WithRunDuration(in.RunDuration),
 	)
