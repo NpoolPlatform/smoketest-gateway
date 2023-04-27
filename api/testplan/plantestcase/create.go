@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func (s *Server) CreatePlanTestCasee(ctx context.Context, in *npool.CreatePlanTestCaseRequest) (*npool.CreatePlanTestCaseResponse, error) {
+func (s *Server) CreatePlanTestCase(ctx context.Context, in *npool.CreatePlanTestCaseRequest) (*npool.CreatePlanTestCaseResponse, error) {
 	handler, err := plantestcase1.NewHandler(
 		ctx,
 		plantestcase1.WithTestPlanID(&in.TestPlanID),

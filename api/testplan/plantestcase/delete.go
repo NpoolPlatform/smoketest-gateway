@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func (s *Server) DeletePlanTestCasee(ctx context.Context, in *npool.DeletePlanTestCaseRequest) (*npool.DeletePlanTestCaseResponse, error) {
+func (s *Server) DeletePlanTestCase(ctx context.Context, in *npool.DeletePlanTestCaseRequest) (*npool.DeletePlanTestCaseResponse, error) {
 	handler, err := plantestcase1.NewHandler(
 		ctx,
 		plantestcase1.WithID(&in.ID),
