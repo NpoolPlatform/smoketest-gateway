@@ -17,6 +17,7 @@ func (h *Handler) UpdatePlanTestCase(ctx context.Context) (*pb.PlanTestCase, err
 			Result:         h.Result,
 			Index:          h.Index,
 			RunDuration:    h.RunDuration,
+			Description:    h.Description,
 		},
 	)
 	if err != nil {
