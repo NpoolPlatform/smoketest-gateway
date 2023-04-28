@@ -17,6 +17,7 @@ func (s *Server) CreatePlanTestCase(ctx context.Context, in *npool.CreatePlanTes
 		plantestcase1.WithTestPlanID(&in.TestPlanID),
 		plantestcase1.WithTestCaseID(&in.TestCaseID),
 		plantestcase1.WithIndex(in.Index),
+		plantestcase1.WithInput(in.Input),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

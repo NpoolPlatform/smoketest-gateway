@@ -2,6 +2,7 @@ package plantestcase
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
@@ -14,6 +15,7 @@ type Handler struct {
 	TestPlanID  *string
 	TestCaseID  *string
 	TestUserID  *string
+	Input       *string
 	Output      *string
 	Result      *pb.TestCaseResult
 	Description *string
@@ -72,6 +74,20 @@ func WithTestUserID(userID *string) func(context.Context, *Handler) error {
 			return err
 		}
 		h.TestUserID = userID
+		return nil
+	}
+}
+
+func WithInput(input *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if input == nil {
+			return nil
+		}
+		var r interface{}
+		if err := json.Unmarshal([]byte(*input), &r); err != nil {
+			return err
+		}
+		h.Input = input
 		return nil
 	}
 }

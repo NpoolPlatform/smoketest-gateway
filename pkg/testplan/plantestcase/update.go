@@ -13,6 +13,7 @@ func (h *Handler) UpdatePlanTestCase(ctx context.Context) (*pb.PlanTestCase, err
 		&pb.PlanTestCaseReq{
 			ID:          h.ID,
 			TestUserID:  h.TestUserID,
+			Input:       h.Input,
 			Output:      h.Output,
 			Result:      h.Result,
 			Index:       h.Index,
