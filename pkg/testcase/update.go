@@ -20,6 +20,7 @@ func (h *Handler) UpdateTestCase(ctx context.Context) (*npool.TestCase, error) {
 		Input:        h.Input,
 		InputDesc:    h.InputDesc,
 		Expectation:  h.Expectation,
+		OutputDesc:   h.OutputDesc,
 		TestCaseType: h.TestCaseType,
 		Deprecated:   h.Deprecated,
 	},

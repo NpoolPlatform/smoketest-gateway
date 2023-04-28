@@ -21,6 +21,7 @@ func (s *Server) CreateTestCase(ctx context.Context, in *npool.CreateTestCaseReq
 		testcase1.WithInput(in.Input),
 		testcase1.WithInputDesc(in.InputDesc),
 		testcase1.WithExpectation(in.Expectation),
+		testcase1.WithOutputDesc(in.OutputDesc),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

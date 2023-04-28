@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
+	apicli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
 	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
 	constant "github.com/NpoolPlatform/smoketest-middleware/pkg/const"
 
@@ -22,6 +22,7 @@ type Handler struct {
 	Input        *string
 	InputDesc    *string
 	Expectation  *string
+	OutputDesc   *string
 	TestCaseType *pb.TestCaseType
 	Deprecated   *bool
 	Offset       int32
@@ -68,7 +69,7 @@ func WithApiID(apiID *string) func(context.Context, *Handler) error {
 			return err
 		}
 
-		exist, err := apimwcli.ExistAPI(ctx, *apiID)
+		exist, err := apicli.ExistAPI(ctx, *apiID)
 		if err != nil {
 			return err
 		}
@@ -105,6 +106,20 @@ func WithExpectation(expectation *string) func(context.Context, *Handler) error 
 			return err
 		}
 		h.Expectation = expectation
+		return nil
+	}
+}
+
+func WithOutputDesc(outputDesc *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if outputDesc == nil {
+			return nil
+		}
+		var r interface{}
+		if err := json.Unmarshal([]byte(*outputDesc), &r); err != nil {
+			return err
+		}
+		h.OutputDesc = outputDesc
 		return nil
 	}
 }

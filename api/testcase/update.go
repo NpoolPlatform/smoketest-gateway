@@ -20,6 +20,7 @@ func (s *Server) UpdateTestCase(ctx context.Context, in *npool.UpdateTestCaseReq
 		testcase1.WithInput(in.Input),
 		testcase1.WithInputDesc(in.InputDesc),
 		testcase1.WithExpectation(in.Expectation),
+		testcase1.WithOutputDesc(in.OutputDesc),
 		testcase1.WithDeprecated(in.Deprecated),
 		testcase1.WithTestCaseType(in.TestCaseType),
 	)
