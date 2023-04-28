@@ -59,6 +59,7 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error)
 			Input:          info.Input,
 			InputDesc:      info.InputDesc,
 			Expectation:    info.Expectation,
+			OutputDesc:     info.OutputDesc,
 			TestCaseType:   info.TestCaseType,
 			Deprecated:     info.Deprecated,
 			CreatedAt:      info.CreatedAt,
