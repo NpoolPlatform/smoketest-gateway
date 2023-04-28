@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
-	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
-	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 )
 
 type createHandler struct {
@@ -20,20 +20,9 @@ func (h *createHandler) validate() error {
 	if h.ModuleName == nil {
 		return fmt.Errorf("invalid module name")
 	}
-	if h.ApiID == nil {
-		return fmt.Errorf("invalid api")
-	}
-	if h.Arguments == nil {
-		return fmt.Errorf("invalid arguments")
-	}
-	if h.ExpectationResult == nil {
-		return fmt.Errorf("invalid expectation")
-	}
-
 	return nil
 }
 
-//nolint
 func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	handler := &createHandler{
 		Handler: h,
@@ -43,16 +32,17 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 		return nil, err
 	}
 
-	info, err := testcasemwcli.CreateTestCase(
+	info, err := cli.CreateTestCase(
 		ctx,
-		&testcasemwpb.CreateTestCaseReq{
-			Name:               h.Name,
-			Description:        h.Description,
-			ModuleName:         h.ModuleName,
-			ApiID:              h.ApiID,
-			Arguments:          h.Arguments,
-			ArgTypeDescription: h.ArgTypeDescription,
-			ExpectationResult:  h.ExpectationResult,
+		&pb.TestCaseReq{
+			Name:         h.Name,
+			Description:  h.Description,
+			ModuleName:   h.ModuleName,
+			ApiID:        h.ApiID,
+			Input:        h.Input,
+			InputDesc:    h.InputDesc,
+			Expectation:  h.Expectation,
+			TestCaseType: h.TestCaseType,
 		},
 	)
 	if err != nil {
@@ -60,6 +50,5 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	}
 
 	h.ID = &info.ID
-
 	return h.GetTestCase(ctx)
 }

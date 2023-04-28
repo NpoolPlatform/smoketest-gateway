@@ -60,15 +60,7 @@ spec:
     - host: api.npool.top
       http: &http_rules
         paths:
-          - path: /api/smoketest/v1/get/testcases
-            backend:
-              serviceName: smoketest-gateway
-              servicePort: 50760
           - path: /api/smoketest/v1/create/testcase
-            backend:
-              serviceName: smoketest-gateway
-              servicePort: 50760
-          - path: /api/smoketest/v1/update/testcase
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
@@ -76,10 +68,42 @@ spec:
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
+          - path: /api/smoketest/v1/update/testcase
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/get/testcases
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/create/testcasecond
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/delete/testcasecond
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/update/testcasecond
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/get/testcaseconds
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
           - path: /api/smoketest/v1/create/module
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
+          - path: /api/smoketest/v1/delete/module
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760       
+          - path: /api/smoketest/v1/update/module
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760   
           - path: /api/smoketest/v1/get/modules
             backend:
               serviceName: smoketest-gateway
@@ -88,15 +112,31 @@ spec:
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
+          - path: /api/smoketest/v1/delete/testplan
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/update/testplan
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
           - path: /api/smoketest/v1/get/testplans
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
-          - path: /api/smoketest/v1/create/planrelatedtestcase
+          - path: /api/smoketest/v1/create/plantestcase
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
-          - path: /api/smoketest/v1/get/planrelatedtestcases
+          - path: /api/smoketest/v1/delete/plantestcase
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/update/plantestcase
+            backend:
+              serviceName: smoketest-gateway
+              servicePort: 50760
+          - path: /api/smoketest/v1/get/plantestcases
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760

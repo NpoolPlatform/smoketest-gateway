@@ -11,32 +11,31 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func (s *Server) CreateModule(ctx context.Context, in *npool.CreateModuleRequest) (*npool.CreateModuleResponse, error) {
+func (s *Server) DeleteModule(ctx context.Context, in *npool.DeleteModuleRequest) (*npool.DeleteModuleResponse, error) {
 	handler, err := module1.NewHandler(
 		ctx,
-		module1.WithName(&in.Name),
-		module1.WithDescription(in.Description),
+		module1.WithID(&in.ID),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(
-			"CreateModule",
+			"DeleteModule",
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreateModuleResponse{}, status.Error(codes.InvalidArgument, err.Error())
+		return &npool.DeleteModuleResponse{}, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	info, err := handler.CreateModule(ctx)
+	info, err := handler.DeleteModule(ctx)
 	if err != nil {
 		logger.Sugar().Errorw(
-			"CreateModule",
+			"DeleteModule",
 			"In", in,
 			"Error", err,
 		)
-		return &npool.CreateModuleResponse{}, status.Error(codes.Internal, err.Error())
+		return &npool.DeleteModuleResponse{}, status.Error(codes.Internal, err.Error())
 	}
 
-	return &npool.CreateModuleResponse{
+	return &npool.DeleteModuleResponse{
 		Info: info,
 	}, nil
 }

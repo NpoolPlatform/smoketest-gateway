@@ -4,28 +4,70 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
-	"github.com/NpoolPlatform/message/npool/smoketest/gw/v1/relatedtestcase"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
-	testcasemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/testcase"
-	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 
-	apimwcli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
-	apimgrpb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
+	apicli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
+	apipb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
 
 	commonpb "github.com/NpoolPlatform/message/npool"
 )
 
 type queryHandler struct {
 	*Handler
+	Infos []*pb.TestCase
 }
 
-func (h *queryHandler) validate() error {
-	if h.Offset == nil {
-		return fmt.Errorf("invalid offset")
+func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error) {
+	apiIDs := []string{}
+	for _, info := range h.Infos {
+		apiIDs = append(apiIDs, info.ApiID)
 	}
-	return nil
+
+	apis, _, err := apicli.GetAPIs(ctx, &apipb.Conds{
+		IDs: &commonpb.StringSliceVal{Op: cruder.IN, Value: apiIDs},
+	}, int32(len(apiIDs)), 0)
+	if err != nil {
+		return nil, err
+	}
+
+	apiMap := map[string]*apipb.API{}
+	for _, row := range apis {
+		apiMap[row.ID] = row
+	}
+
+	infos := []*npool.TestCase{}
+	for _, info := range h.Infos {
+		api, ok := apiMap[info.ApiID]
+		if !ok {
+			continue
+		}
+		row := npool.TestCase{
+			ID:             info.ID,
+			Name:           info.Name,
+			ModuleID:       info.ModuleID,
+			ModuleName:     info.ModuleName,
+			ApiID:          info.ApiID,
+			ApiPath:        api.Path,
+			ApiPathPrefix:  api.PathPrefix,
+			ApiServiceName: api.ServiceName,
+			ApiProtocol:    api.Protocol.String(),
+			ApiMethod:      api.Method.String(),
+			ApiDeprecated:  api.Depracated,
+			Input:          info.Input,
+			InputDesc:      info.InputDesc,
+			Expectation:    info.Expectation,
+			TestCaseType:   info.TestCaseType,
+			Deprecated:     info.Deprecated,
+			CreatedAt:      info.CreatedAt,
+			UpdatedAt:      info.UpdatedAt,
+		}
+		infos = append(infos, &row)
+	}
+
+	return infos, nil
 }
 
 func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, error) {
@@ -33,132 +75,50 @@ func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, 
 		Handler: h,
 	}
 
-	if err := handler.validate(); err != nil {
-		return nil, 0, err
+	conds := &pb.Conds{}
+	if handler.ModuleID != nil {
+		conds.ModuleID = &commonpb.StringVal{Op: cruder.EQ, Value: *handler.ModuleID}
 	}
 
-	conds := &testcasemgrpb.Conds{}
-
-	if h.ModuleID != nil {
-		conds.ModuleID = &commonpb.StringVal{Op: cruder.EQ, Value: *h.ModuleID}
-	}
-
-	infos, total, err := testcasemwcli.GetTestCases(
-		ctx,
-		conds,
-		*handler.Offset,
-		*handler.Limit,
-	)
+	infos, total, err := cli.GetTestCases(ctx, conds, handler.Offset, handler.Limit)
 	if err != nil {
-		logger.Sugar().Errorw("GetTestCases", "err", err)
 		return nil, 0, err
 	}
 
 	if len(infos) == 0 {
-		return []*npool.TestCase{}, 0, nil
+		return nil, 0, nil
 	}
 
-	testCaseIDs := []string{}
-	apiIDs := []string{}
-	for _, info := range infos {
-		apiIDs = append(apiIDs, info.ApiID)
-		testCaseIDs = append(testCaseIDs, info.ID)
-	}
+	handler.Infos = infos
 
-	fmt.Println("TestCaseIDs: ", testCaseIDs)
-
-	apis, _, err := apimwcli.GetAPIs(ctx, &apimgrpb.Conds{
-		IDs: &commonpb.StringSliceVal{
-			Op:    cruder.IN,
-			Value: apiIDs,
-		},
-	}, int32(len(apiIDs)), 0)
+	_infos, err := handler.formalize(ctx)
 	if err != nil {
-		logger.Sugar().Errorw("GetTestCases", "err", err)
 		return nil, 0, err
-	}
-	apiMap := map[string]*apimgrpb.API{}
-
-	for _, row := range apis {
-		apiMap[row.ID] = row
-	}
-
-	_infos := []*npool.TestCase{}
-	for _, info := range infos {
-		_api, ok := apiMap[info.ApiID]
-		if !ok {
-			continue
-		}
-		row := npool.TestCase{
-			ID:                 info.ID,
-			Name:               info.Name,
-			ModuleID:           info.ModuleID,
-			ModuleName:         info.ModuleName,
-			ApiID:              info.ApiID,
-			ApiPath:            _api.Path,
-			ApiPathPrefix:      _api.PathPrefix,
-			ApiServiceName:     _api.ServiceName,
-			ApiProtocol:        _api.Protocol.String(),
-			ApiMethod:          _api.Method.String(),
-			ApiDeprecated:      _api.Depracated,
-			Arguments:          info.Arguments,
-			ArgTypeDescription: info.ArgTypeDescription,
-			TestCaseType:       info.TestCaseType,
-			RelatedTestCases:   []*relatedtestcase.RelatedTestCase{},
-			Deprecated:         info.Deprecated,
-			CreatedAt:          info.CreatedAt,
-			UpdatedAt:          info.UpdatedAt,
-		}
-		_infos = append(_infos, &row)
 	}
 
 	return _infos, total, nil
 }
 
-func (handler *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
-	if handler.ID == nil {
-		return nil, fmt.Errorf("invalid testcase id")
+func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
+	if h.ID == nil {
+		return nil, fmt.Errorf("invalid id")
 	}
 
-	info, err := testcasemwcli.GetTestCase(ctx, *handler.ID)
+	info, err := cli.GetTestCase(ctx, *h.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	_api, err := apimwcli.GetAPIOnly(
-		ctx,
-		&apimgrpb.Conds{
-			ID: &commonpb.StringVal{
-				Op:    cruder.EQ,
-				Value: info.ApiID,
-			},
-		},
-	)
+	handler := &queryHandler{
+		Handler: h,
+	}
+
+	handler.Infos = []*pb.TestCase{info}
+
+	_infos, err := handler.formalize(ctx)
 	if err != nil {
-		logger.Sugar().Errorw("CreateTestCase", "err", err)
 		return nil, err
 	}
 
-	_info := &npool.TestCase{
-		ID:                 info.ID,
-		Name:               info.Name,
-		ModuleID:           info.ModuleID,
-		ModuleName:         info.ModuleName,
-		ApiID:              info.ApiID,
-		ApiPath:            _api.Path,
-		ApiPathPrefix:      _api.PathPrefix,
-		ApiServiceName:     _api.ServiceName,
-		ApiProtocol:        _api.Protocol.String(),
-		ApiMethod:          _api.Method.String(),
-		ApiDeprecated:      _api.GetDepracated(),
-		Arguments:          info.Arguments,
-		ArgTypeDescription: info.ArgTypeDescription,
-		Expectation:        info.ExpectationResult,
-		TestCaseType:       info.TestCaseType,
-		RelatedTestCases:   []*relatedtestcase.RelatedTestCase{},
-		Deprecated:         info.Deprecated,
-		CreatedAt:          info.CreatedAt,
-		UpdatedAt:          info.UpdatedAt,
-	}
-	return _info, nil
+	return _infos[0], nil
 }

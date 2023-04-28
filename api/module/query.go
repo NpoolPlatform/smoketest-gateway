@@ -5,7 +5,6 @@ import (
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/module"
-	modulemgrpb "github.com/NpoolPlatform/message/npool/smoketest/mgr/v1/module"
 	module1 "github.com/NpoolPlatform/smoketest-gateway/pkg/module"
 	"github.com/gogo/status"
 	"google.golang.org/grpc/codes"
@@ -14,12 +13,10 @@ import (
 func (s *Server) GetModules(ctx context.Context, in *npool.GetModulesRequest) (*npool.GetModulesResponse, error) {
 	handler, err := module1.NewHandler(
 		ctx,
-		module1.WithConds(
-			&modulemgrpb.Conds{},
-			in.GetOffset(),
-			in.GetLimit(),
-		),
+		module1.WithOffset(in.GetOffset()),
+		module1.WithLimit(in.GetLimit()),
 	)
+
 	if err != nil {
 		logger.Sugar().Errorw(
 			"GetModules",

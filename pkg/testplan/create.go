@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan"
-	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
-	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
+	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
+	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
 )
 
 type createHandler struct {
@@ -17,13 +17,9 @@ func (h *createHandler) validate() error {
 	if h.Name == nil {
 		return fmt.Errorf("invalid name")
 	}
-	if h.OwnerID == nil {
-		return fmt.Errorf("invalid owner id")
-	}
 	return nil
 }
 
-//nolint
 func (h *Handler) CreateTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 	handler := &createHandler{
 		Handler: h,
@@ -33,15 +29,13 @@ func (h *Handler) CreateTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 		return nil, err
 	}
 
-	info, err := testcasemwcli.CreateTestPlan(
+	info, err := cli.CreateTestPlan(
 		ctx,
-		&testcasemwpb.CreateTestPlanRequest{
-			Info: &testcasemwpb.TestPlanReq{
-				Name:              handler.Name,
-				OwnerID:           handler.OwnerID,
-				ResponsibleUserID: handler.ResponsibleUserID,
-				Deadline:          handler.Deadline,
-			},
+		&pb.TestPlanReq{
+			Name:      handler.Name,
+			CreatedBy: handler.CreatedBy,
+			Executor:  handler.Executor,
+			Deadline:  handler.Deadline,
 		},
 	)
 	if err != nil {
@@ -49,6 +43,5 @@ func (h *Handler) CreateTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 	}
 
 	h.ID = &info.ID
-
 	return h.GetTestPlan(ctx)
 }
