@@ -11,13 +11,13 @@ func (h *Handler) UpdatePlanTestCase(ctx context.Context) (*pb.PlanTestCase, err
 	info, err := cli.UpdatePlanTestCase(
 		ctx,
 		&pb.PlanTestCaseReq{
-			ID:             h.ID,
-			TestUserID:     h.TestUserID,
-			TestCaseOutput: h.TestCaseOutput,
-			Result:         h.Result,
-			Index:          h.Index,
-			RunDuration:    h.RunDuration,
-			Description:    h.Description,
+			ID:          h.ID,
+			TestUserID:  h.TestUserID,
+			Output:      h.Output,
+			Result:      h.Result,
+			Index:       h.Index,
+			RunDuration: h.RunDuration,
+			Description: h.Description,
 		},
 	)
 	if err != nil {

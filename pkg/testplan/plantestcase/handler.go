@@ -10,17 +10,17 @@ import (
 )
 
 type Handler struct {
-	ID             *string
-	TestPlanID     *string
-	TestCaseID     *string
-	TestUserID     *string
-	TestCaseOutput *string
-	Result         *pb.TestCaseResult
-	Description    *string
-	Index          *uint32
-	RunDuration    *uint32
-	Offset         int32
-	Limit          int32
+	ID          *string
+	TestPlanID  *string
+	TestCaseID  *string
+	TestUserID  *string
+	Output      *string
+	Result      *pb.TestCaseResult
+	Description *string
+	Index       *uint32
+	RunDuration *uint32
+	Offset      int32
+	Limit       int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -76,17 +76,17 @@ func WithTestUserID(userID *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestCaseOutput(output *string) func(context.Context, *Handler) error {
+func WithOutput(output *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if output == nil {
 			return nil
 		}
-		h.TestCaseOutput = output
+		h.Output = output
 		return nil
 	}
 }
 
-func WithTestCaseResult(result *pb.TestCaseResult) func(context.Context, *Handler) error {
+func WithResult(result *pb.TestCaseResult) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if result == nil {
 			return nil
