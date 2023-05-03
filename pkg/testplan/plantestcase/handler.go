@@ -65,14 +65,21 @@ func WithTestCaseID(testCaseID *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestUserID(userID *string) func(context.Context, *Handler) error {
+func WithTestUserID(userID, appID *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if userID == nil {
 			return nil
 		}
+		if userID != nil && appID == nil {
+			return fmt.Errorf("app id is empty")
+		}
 		if _, err := uuid.Parse(*userID); err != nil {
 			return err
 		}
+		if _, err := uuid.Parse(*appID); err != nil {
+			return err
+		}
+		// TODO: Query User By AppID & UserID
 		h.TestUserID = userID
 		return nil
 	}
