@@ -15,9 +15,10 @@ func (s *Server) UpdatePlanTestCase(ctx context.Context, in *npool.UpdatePlanTes
 	handler, err := plantestcase1.NewHandler(
 		ctx,
 		plantestcase1.WithID(&in.ID),
-		plantestcase1.WithTestUserID(in.TestUserID),
-		plantestcase1.WithTestCaseOutput(in.TestCaseOutput),
-		plantestcase1.WithTestCaseResult(in.Result),
+		plantestcase1.WithTestUserID(in.TestUserID, in.AppID),
+		plantestcase1.WithInput(in.Input),
+		plantestcase1.WithOutput(in.Output),
+		plantestcase1.WithResult(in.Result),
 		plantestcase1.WithDescription(in.Description),
 		plantestcase1.WithIndex(in.Index),
 		plantestcase1.WithRunDuration(in.RunDuration),

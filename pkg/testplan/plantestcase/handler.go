@@ -2,6 +2,7 @@ package plantestcase
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
@@ -10,17 +11,18 @@ import (
 )
 
 type Handler struct {
-	ID             *string
-	TestPlanID     *string
-	TestCaseID     *string
-	TestUserID     *string
-	TestCaseOutput *string
-	Result         *pb.TestCaseResult
-	Description    *string
-	Index          *uint32
-	RunDuration    *uint32
-	Offset         int32
-	Limit          int32
+	ID          *string
+	TestPlanID  *string
+	TestCaseID  *string
+	TestUserID  *string
+	Input       *string
+	Output      *string
+	Result      *pb.TestCaseResult
+	Description *string
+	Index       *uint32
+	RunDuration *uint32
+	Offset      int32
+	Limit       int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -63,30 +65,51 @@ func WithTestCaseID(testCaseID *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestUserID(userID *string) func(context.Context, *Handler) error {
+func WithTestUserID(userID, appID *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if userID == nil {
 			return nil
 		}
+		if userID != nil && appID == nil {
+			return fmt.Errorf("app id is empty")
+		}
 		if _, err := uuid.Parse(*userID); err != nil {
 			return err
 		}
+		if _, err := uuid.Parse(*appID); err != nil {
+			return err
+		}
+		// TODO: Query User By AppID & UserID
 		h.TestUserID = userID
 		return nil
 	}
 }
 
-func WithTestCaseOutput(output *string) func(context.Context, *Handler) error {
+func WithInput(input *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if output == nil {
+		if input == nil {
 			return nil
 		}
-		h.TestCaseOutput = output
+		var r interface{}
+		if err := json.Unmarshal([]byte(*input), &r); err != nil {
+			return err
+		}
+		h.Input = input
 		return nil
 	}
 }
 
-func WithTestCaseResult(result *pb.TestCaseResult) func(context.Context, *Handler) error {
+func WithOutput(output *string) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if output == nil {
+			return nil
+		}
+		h.Output = output
+		return nil
+	}
+}
+
+func WithResult(result *pb.TestCaseResult) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if result == nil {
 			return nil

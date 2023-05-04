@@ -15,6 +15,7 @@ func (h *Handler) CreatePlanTestCase(ctx context.Context) (*pb.PlanTestCase, err
 			TestCaseID: h.TestCaseID,
 			TestUserID: h.TestUserID,
 			Index:      h.Index,
+			Input:      h.Input,
 		},
 	)
 	if err != nil {
