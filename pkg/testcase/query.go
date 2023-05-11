@@ -47,6 +47,7 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error)
 		row := npool.TestCase{
 			ID:             info.ID,
 			Name:           info.Name,
+			Description:    info.Description,
 			ModuleID:       info.ModuleID,
 			ModuleName:     info.ModuleName,
 			ApiID:          info.ApiID,
