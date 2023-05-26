@@ -10,7 +10,7 @@ import (
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 
 	apicli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
-	apipb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
+	apipb "github.com/NpoolPlatform/message/npool/basal/mw/v1/api"
 
 	commonpb "github.com/NpoolPlatform/message/npool"
 )

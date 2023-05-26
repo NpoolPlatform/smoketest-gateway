@@ -14,6 +14,7 @@ import (
 func (s *Server) CreateTestCase(ctx context.Context, in *npool.CreateTestCaseRequest) (*npool.CreateTestCaseResponse, error) {
 	handler, err := testcase1.NewHandler(
 		ctx,
+		testcase1.WithName(&in.ID),
 		testcase1.WithName(&in.Name),
 		testcase1.WithDescription(in.Description),
 		testcase1.WithModuleName(&in.ModuleName),
