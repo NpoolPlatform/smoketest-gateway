@@ -11,6 +11,7 @@ func (h *Handler) CreateCond(ctx context.Context) (*npool.Cond, error) {
 	info, err := cli.CreateCond(
 		ctx,
 		&npool.CondReq{
+			ID:             h.ID,
 			TestCaseID:     h.TestCaseID,
 			CondTestCaseID: h.CondTestCaseID,
 			CondType:       h.CondType,
