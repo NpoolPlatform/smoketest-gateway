@@ -32,6 +32,7 @@ func (h *Handler) CreateTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 	info, err := cli.CreateTestPlan(
 		ctx,
 		&pb.TestPlanReq{
+			ID:        handler.ID,
 			Name:      handler.Name,
 			CreatedBy: handler.CreatedBy,
 			Executor:  handler.Executor,
