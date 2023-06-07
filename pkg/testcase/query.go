@@ -27,7 +27,7 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error)
 
 	apis, _, err := apicli.GetAPIs(ctx, &apipb.Conds{
 		IDs: &basetypes.StringSliceVal{Op: cruder.IN, Value: apiIDs},
-	}, int32(len(apiIDs)), int32(len(apiIDs)))
+	}, 0, int32(len(apiIDs)))
 	if err != nil {
 		return nil, err
 	}
