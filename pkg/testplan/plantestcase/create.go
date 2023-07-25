@@ -11,6 +11,7 @@ func (h *Handler) CreatePlanTestCase(ctx context.Context) (*pb.PlanTestCase, err
 	info, err := cli.CreatePlanTestCase(
 		ctx,
 		&pb.PlanTestCaseReq{
+			ID:         h.ID,
 			TestPlanID: h.TestPlanID,
 			TestCaseID: h.TestCaseID,
 			TestUserID: h.TestUserID,

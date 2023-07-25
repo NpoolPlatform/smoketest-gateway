@@ -10,9 +10,8 @@ import (
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 
 	apicli "github.com/NpoolPlatform/basal-middleware/pkg/client/api"
-	apipb "github.com/NpoolPlatform/message/npool/basal/mgr/v1/api"
-
-	commonpb "github.com/NpoolPlatform/message/npool"
+	apipb "github.com/NpoolPlatform/message/npool/basal/mw/v1/api"
+	basetypes "github.com/NpoolPlatform/message/npool/basetypes/v1"
 )
 
 type queryHandler struct {
@@ -27,8 +26,8 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error)
 	}
 
 	apis, _, err := apicli.GetAPIs(ctx, &apipb.Conds{
-		IDs: &commonpb.StringSliceVal{Op: cruder.IN, Value: apiIDs},
-	}, int32(len(apiIDs)), 0)
+		IDs: &basetypes.StringSliceVal{Op: cruder.IN, Value: apiIDs},
+	}, 0, int32(len(apiIDs)))
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +78,7 @@ func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, 
 
 	conds := &pb.Conds{}
 	if handler.ModuleID != nil {
-		conds.ModuleID = &commonpb.StringVal{Op: cruder.EQ, Value: *handler.ModuleID}
+		conds.ModuleID = &basetypes.StringVal{Op: cruder.EQ, Value: *handler.ModuleID}
 	}
 
 	infos, total, err := cli.GetTestCases(ctx, conds, handler.Offset, handler.Limit)
@@ -120,6 +119,9 @@ func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
 	_infos, err := handler.formalize(ctx)
 	if err != nil {
 		return nil, err
+	}
+	if len(_infos) == 0 {
+		return nil, nil
 	}
 
 	return _infos[0], nil

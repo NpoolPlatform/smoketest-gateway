@@ -37,6 +37,9 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 
 func WithID(id *string) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
+		if id == nil {
+			return nil
+		}
 		if _, err := uuid.Parse(*id); err != nil {
 			return err
 		}

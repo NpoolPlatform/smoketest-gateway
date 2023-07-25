@@ -14,6 +14,7 @@ import (
 func (s *Server) CreateCond(ctx context.Context, in *npool.CreateCondRequest) (*npool.CreateCondResponse, error) {
 	handler, err := cond1.NewHandler(
 		ctx,
+		cond1.WithID(in.ID),
 		cond1.WithTestCaseID(&in.TestCaseID),
 		cond1.WithCondTestCaseID(&in.CondTestCaseID),
 		cond1.WithCondType(&in.CondType),

@@ -5,14 +5,14 @@ import (
 	"fmt"
 
 	"github.com/NpoolPlatform/libent-cruder/pkg/cruder"
-	commonpb "github.com/NpoolPlatform/message/npool"
+	basetypes "github.com/NpoolPlatform/message/npool/basetypes/v1"
 	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
 )
 
 func (h *Handler) GetPlanTestCases(ctx context.Context) ([]*pb.PlanTestCase, uint32, error) {
 	infos, total, err := cli.GetPlanTestCases(ctx, &pb.Conds{
-		TestPlanID: &commonpb.StringVal{
+		TestPlanID: &basetypes.StringVal{
 			Op:    cruder.EQ,
 			Value: *h.TestPlanID,
 		},
