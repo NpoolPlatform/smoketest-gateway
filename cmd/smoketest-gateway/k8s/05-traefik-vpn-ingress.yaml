@@ -21,11 +21,13 @@ spec:
     - host: api.npool.top
       http: &http_rules
         paths:
-          - path: /api/smoketest-gateway
+          - path: /api/smoketest
             backend:
               serviceName: smoketest-gateway
               servicePort: 50760
-    - host: api.procyon.vip
-      http: *http_rules
     - host: api.xpool.top
+      http: *http_rules
+    - host: api.development.npool.top
+      http: *http_rules
+    - host: api.jh-testing.npool.top
       http: *http_rules
