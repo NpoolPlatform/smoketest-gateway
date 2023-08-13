@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/NpoolPlatform/basal-middleware v0.0.0-20230518061816-62bd589c0f63
-	github.com/NpoolPlatform/go-service-framework v0.0.0-20230509081417-267df92cab6d
+	github.com/NpoolPlatform/go-service-framework v0.0.0-20230812113554-9fa7285b9d16
 	github.com/NpoolPlatform/libent-cruder v0.0.0-20221109023947-366125b690fb
 	github.com/NpoolPlatform/message v0.0.0-20230607095128-d09c71db14d4
 	github.com/NpoolPlatform/smoketest-middleware v0.0.0-20230607095356-1a82c48aa423
