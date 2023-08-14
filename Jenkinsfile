@@ -320,7 +320,7 @@ pipeline {
         expression { RELEASE_TARGET == 'true' }
       }
       steps {
-        sh(returnStdout: false, script: '''
+        sh(returnStdout: true, script: '''
           set +e
           taglist=`git rev-list --tags`
           rc=$?
