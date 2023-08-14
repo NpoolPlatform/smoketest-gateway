@@ -110,7 +110,7 @@ pipeline {
       steps {
         sh 'make verify-build'
         sh(returnStdout: true, script: '''
-          feature_name=`echo $BRANCH_NAME -F '/' '{ print $2 }'`
+          feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
           DEVELOPMENT=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make generate-docker-images
         '''.stripIndent())
       }
