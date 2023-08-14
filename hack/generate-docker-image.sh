@@ -28,7 +28,7 @@ service_name=$1
 if [ "xdevelopment" == "x$2" ]; then
   version=latest
 elif [[ "xdevelopment" != "x$2" && "xother" != "x$2" ]]; then
-  verison=$2
+  version=$2
 fi
 
 registry=uhub.service.ucloud.cn
