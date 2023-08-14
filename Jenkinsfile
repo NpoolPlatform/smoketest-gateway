@@ -111,7 +111,7 @@ pipeline {
         sh 'make verify-build'
         sh(returnStdout: true, script: '''
           feature_name=`echo $BRANCH_NAME -F '/' '{ print $2 }'`
-          DEVELOPMENT=development BRANCH_NAME=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make generate-docker-images
+          DEVELOPMENT=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make generate-docker-images
         '''.stripIndent())
       }
     }
