@@ -366,7 +366,7 @@ pipeline {
           if [ ! 0 -eq $rc ]; then
             exit 0
           fi
-          tag=`git describe --abbrev=0 --tags $taglist |grep [0\|2\|4\|6\|8]$ | head -n1`
+          tag=`git describe --abbrev=0 --tags $taglist |grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
           git reset --hard
           git checkout $tag
           sed -i "s/service-template:latest/service-template:$tag/g" cmd/service-template/k8s/02-service-template.yaml
