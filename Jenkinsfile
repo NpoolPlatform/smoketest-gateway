@@ -272,6 +272,7 @@ pipeline {
           done
         '''.stripIndent())
       }
+    }
 
     stage('Release docker image for development') {
       when {
