@@ -257,6 +257,22 @@ pipeline {
       }
     }
 
+    stage('Release docker image for feature') {
+      when {
+        expression { RELEASE_TARGET == 'true' }
+        expression { BRANCH_NAME != 'master' }
+      }
+      steps {
+        sh(returnStdout: false, script: '''
+          feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
+          TAG=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
+          images=`docker images | grep entropypool | grep smoketest-gateway | grep none | awk '{ print $3 }'`
+          for image in $images; do
+            docker rmi $image -f
+          done
+        '''.stripIndent())
+      }
+
     stage('Release docker image for development') {
       when {
         expression { RELEASE_TARGET == 'true' }
@@ -264,7 +280,7 @@ pipeline {
       steps {
         sh 'TAG=latest DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images'
         sh(returnStdout: false, script: '''
-          images=`docker images | grep entropypool | grep service-template | grep none | awk '{ print $3 }'`
+          images=`docker images | grep entropypool | grep smoketest-gateway | grep none | awk '{ print $3 }'`
           for image in $images; do
             docker rmi $image -f
           done
@@ -305,20 +321,13 @@ pipeline {
       steps {
         sh(returnStdout: false, script: '''
           set +e
-          revlist=`git rev-list --tags --max-count=1`
+          taglist=`git rev-list --tags`
           rc=$?
           set -e
-          if [ 0 -eq $rc ]; then
+          if [ ! 0 -eq $rc ]; then
             exit 0
           fi
-          tag=`git describe --tags $revlist`
-
-          major=`echo $tag | awk -F '.' '{ print $1 }'`
-          minor=`echo $tag | awk -F '.' '{ print $2 }'`
-          patch=`echo $tag | awk -F '.' '{ print $3 }'`
-
-          patch=$(( $patch - $patch % 2 ))
-          tag=$major.$minor.$patch
+          tag=`git describe --abbrev=0 --tags $taglist |grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
 
           set +e
           docker images | grep service-template | grep $tag
