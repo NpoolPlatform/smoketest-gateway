@@ -34,7 +34,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
-        sh (returnStdout: false, script: '''
+        sh(returnStdout: false, script: '''
           make verify-build
         '''.stripIndent())
       }
@@ -62,7 +62,7 @@ pipeline {
       steps {
         sh 'rm .apollo-base-config -rf'
         sh 'git clone https://github.com/NpoolPlatform/apollo-base-config.git .apollo-base-config'
-        sh (returnStdout: false, script: '''
+        sh(returnStdout: false, script: '''
           PASSWORD=`kubectl get secret --namespace "kube-system" mysql-password-secret -o jsonpath="{.data.rootpassword}" | base64 --decode`
           kubectl exec --namespace kube-system mysql-0 -- mysql -h 127.0.0.1 -uroot -p$PASSWORD -P3306 -e "create database if not exists smoketest_manager;"
 
@@ -85,7 +85,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
-        sh (returnStdout: false, script: '''
+        sh(returnStdout: false, script: '''
           devboxpod=`kubectl get pods -A | grep development-box | head -n1 | awk '{print $2}'`
           servicename="smoketest-gateway"
 
@@ -109,7 +109,7 @@ pipeline {
       }
       steps {
         sh 'make verify-build'
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
           DEVELOPMENT=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make generate-docker-images
         '''.stripIndent())
@@ -132,7 +132,7 @@ pipeline {
         expression { TAG_PATCH == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
@@ -173,7 +173,7 @@ pipeline {
         expression { TAG_MINOR == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
@@ -206,7 +206,7 @@ pipeline {
         expression { TAG_MAJOR == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
@@ -240,7 +240,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
@@ -387,7 +387,7 @@ pipeline {
         expression { TARGET_ENV ==~ /.*testing.*/ }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
@@ -412,7 +412,7 @@ pipeline {
         expression { TARGET_ENV ==~ /.*production.*/ }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           taglist=`git rev-list --tags`
           rc=$?
