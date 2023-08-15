@@ -305,7 +305,7 @@ pipeline {
           tag=`git describe --tags $revlist`
 
           set +e
-          docker images | grep service-template | grep $tag
+          docker images | grep smoketest-gateway | grep $tag
           rc=$?
           set -e
           if [ 0 -eq $rc ]; then
@@ -331,7 +331,7 @@ pipeline {
           tag=`git describe --abbrev=0 --tags $taglist |grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
 
           set +e
-          docker images | grep service-template | grep $tag
+          docker images | grep smoketest-gateway | grep $tag
           rc=$?
           set -e
           if [ 0 -eq $rc ]; then
@@ -341,13 +341,29 @@ pipeline {
       }
     }
 
+    stage('Deploy for feature') {
+      when {
+        expression { DEPLOY_TARGET == 'true' }
+        expression { TARGET_ENV ==~ /.*development.*/ }
+        expression { BRANCH_NAME != 'master' }
+      }
+      steps {
+        sh(returnStdout: false, script: '''
+          feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
+          TAG=$feature_name make deploy-to-k8s-cluster
+        '''.stripIndent())
+      }
+    }
+
     stage('Deploy for development') {
       when {
         expression { DEPLOY_TARGET == 'true' }
         expression { TARGET_ENV ==~ /.*development.*/ }
+        expression { BRANCH_NAME == 'master' }
       }
       steps {
-        sh 'sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/service-template/k8s/02-service-template.yaml'
+        sh 'sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml'
         sh 'TAG=latest make deploy-to-k8s-cluster'
       }
     }
@@ -370,8 +386,8 @@ pipeline {
 
           git reset --hard
           git checkout $tag
-          sed -i "s/service-template:latest/service-template:$tag/g" cmd/service-template/k8s/02-service-template.yaml
-          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/service-template/k8s/02-service-template.yaml
+          sed -i "s/smoketest-gateway:latest/smoketest-gateway:$tag/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           TAG=$tag make deploy-to-k8s-cluster
         '''.stripIndent())
       }
@@ -394,8 +410,8 @@ pipeline {
           tag=`git describe --abbrev=0 --tags $taglist |grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
           git reset --hard
           git checkout $tag
-          sed -i "s/service-template:latest/service-template:$tag/g" cmd/service-template/k8s/02-service-template.yaml
-          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/service-template/k8s/02-service-template.yaml
+          sed -i "s/smoketest-gateway:latest/smoketest-gateway:$tag/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           TAG=$tag make deploy-to-k8s-cluster
         '''.stripIndent())
       }
