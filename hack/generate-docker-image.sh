@@ -27,7 +27,7 @@ service_name=$1
 ## For development environment, pass the second variable
 if [ "xdevelopment" == "x$2" ]; then
   version=latest
-elif [[ "xdevelopment" != "x$2" && "xother" != "x$2" ]]; then
+elif [ "xother" != "x$2" ]; then
   version=$2
 fi
 
