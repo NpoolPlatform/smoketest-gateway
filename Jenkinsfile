@@ -362,6 +362,7 @@ pipeline {
       steps {
         sh(returnStdout: false, script: '''
           feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
+          sed -i "s/smoketest-gateway:latest/smoketest-gateway:$feature_name/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           TAG=$feature_name make deploy-to-k8s-cluster
         '''.stripIndent())
