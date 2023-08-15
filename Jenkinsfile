@@ -265,7 +265,13 @@ pipeline {
       steps {
         sh(returnStdout: false, script: '''
           feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
-          TAG=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
+          set +e
+          docker images | grep smoketest-gateway | grep $feature_name
+          rc=$?
+          set -e
+          if [ 0 -eq $rc ]; then
+            TAG=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
+          fi
           images=`docker images | grep entropypool | grep smoketest-gateway | grep none | awk '{ print $3 }'`
           for image in $images; do
             docker rmi $image -f
@@ -279,8 +285,14 @@ pipeline {
         expression { RELEASE_TARGET == 'true' }
       }
       steps {
-        sh 'TAG=latest DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images'
         sh(returnStdout: false, script: '''
+          set +e
+          docker images | grep smoketest-gateway | grep latest
+          rc=$?
+          set -e
+          if [ 0 -eq $rc ]; then
+            TAG=latest DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
+          fi
           images=`docker images | grep entropypool | grep smoketest-gateway | grep none | awk '{ print $3 }'`
           for image in $images; do
             docker rmi $image -f
