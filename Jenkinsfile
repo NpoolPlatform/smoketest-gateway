@@ -102,9 +102,24 @@ pipeline {
       }
     }
 
+    stage('Generate docker image for feature') {
+      when {
+        expression { BUILD_TARGET == 'true' }
+        expression { BRANCH_NAME != 'master' }
+      }
+      steps {
+        sh 'make verify-build'
+        sh(returnStdout: true, script: '''
+          feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
+          DEVELOPMENT=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make generate-docker-images
+        '''.stripIndent())
+      }
+    }
+
     stage('Generate docker image for development') {
       when {
         expression { BUILD_TARGET == 'true' }
+        expression { BRANCH_NAME == 'master' }
       }
       steps {
         sh 'make verify-build'
@@ -242,14 +257,43 @@ pipeline {
       }
     }
 
+    stage('Release docker image for feature') {
+      when {
+        expression { RELEASE_TARGET == 'true' }
+        expression { BRANCH_NAME != 'master' }
+      }
+      steps {
+        sh(returnStdout: false, script: '''
+          feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
+          set +e
+          docker images | grep smoketest-gateway | grep $feature_name
+          rc=$?
+          set -e
+          if [ 0 -eq $rc ]; then
+            TAG=$feature_name DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
+          fi
+          images=`docker images | grep entropypool | grep smoketest-gateway | grep none | awk '{ print $3 }'`
+          for image in $images; do
+            docker rmi $image -f
+          done
+        '''.stripIndent())
+      }
+    }
+
     stage('Release docker image for development') {
       when {
         expression { RELEASE_TARGET == 'true' }
       }
       steps {
-        sh 'TAG=latest DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images'
         sh(returnStdout: false, script: '''
-          images=`docker images | grep entropypool | grep service-template | grep none | awk '{ print $3 }'`
+          set +e
+          docker images | grep smoketest-gateway | grep latest
+          rc=$?
+          set -e
+          if [ 0 -eq $rc ]; then
+            TAG=latest DOCKER_REGISTRY=$DOCKER_REGISTRY make release-docker-images
+          fi
+          images=`docker images | grep entropypool | grep smoketest-gateway | grep none | awk '{ print $3 }'`
           for image in $images; do
             docker rmi $image -f
           done
@@ -273,7 +317,7 @@ pipeline {
           tag=`git describe --tags $revlist`
 
           set +e
-          docker images | grep service-template | grep $tag
+          docker images | grep smoketest-gateway | grep $tag
           rc=$?
           set -e
           if [ 0 -eq $rc ]; then
@@ -290,23 +334,16 @@ pipeline {
       steps {
         sh(returnStdout: false, script: '''
           set +e
-          revlist=`git rev-list --tags --max-count=1`
+          taglist=`git rev-list --tags`
           rc=$?
           set -e
-          if [ 0 -eq $rc ]; then
+          if [ ! 0 -eq $rc ]; then
             exit 0
           fi
-          tag=`git describe --tags $revlist`
-
-          major=`echo $tag | awk -F '.' '{ print $1 }'`
-          minor=`echo $tag | awk -F '.' '{ print $2 }'`
-          patch=`echo $tag | awk -F '.' '{ print $3 }'`
-
-          patch=$(( $patch - $patch % 2 ))
-          tag=$major.$minor.$patch
+          tag=`git describe --abbrev=0 --tags $taglist |grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
 
           set +e
-          docker images | grep service-template | grep $tag
+          docker images | grep smoketest-gateway | grep $tag
           rc=$?
           set -e
           if [ 0 -eq $rc ]; then
@@ -316,13 +353,30 @@ pipeline {
       }
     }
 
+    stage('Deploy for feature') {
+      when {
+        expression { DEPLOY_TARGET == 'true' }
+        expression { TARGET_ENV ==~ /.*development.*/ }
+        expression { BRANCH_NAME != 'master' }
+      }
+      steps {
+        sh(returnStdout: false, script: '''
+          feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
+          sed -i "s/smoketest-gateway:latest/smoketest-gateway:$feature_name/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
+          TAG=$feature_name make deploy-to-k8s-cluster
+        '''.stripIndent())
+      }
+    }
+
     stage('Deploy for development') {
       when {
         expression { DEPLOY_TARGET == 'true' }
         expression { TARGET_ENV ==~ /.*development.*/ }
+        expression { BRANCH_NAME == 'master' }
       }
       steps {
-        sh 'sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/service-template/k8s/02-service-template.yaml'
+        sh 'sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml'
         sh 'TAG=latest make deploy-to-k8s-cluster'
       }
     }
@@ -345,8 +399,8 @@ pipeline {
 
           git reset --hard
           git checkout $tag
-          sed -i "s/service-template:latest/service-template:$tag/g" cmd/service-template/k8s/02-service-template.yaml
-          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/service-template/k8s/02-service-template.yaml
+          sed -i "s/smoketest-gateway:latest/smoketest-gateway:$tag/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           TAG=$tag make deploy-to-k8s-cluster
         '''.stripIndent())
       }
@@ -360,24 +414,17 @@ pipeline {
       steps {
         sh(returnStdout: true, script: '''
           set +e
-          revlist=`git rev-list --tags --max-count=1`
+          taglist=`git rev-list --tags`
           rc=$?
           set -e
-          if [ 0 -eq $rc ]; then
+          if [ ! 0 -eq $rc ]; then
             exit 0
           fi
-          tag=`git describe --tags $revlist`
-
-          major=`echo $tag | awk -F '.' '{ print $1 }'`
-          minor=`echo $tag | awk -F '.' '{ print $2 }'`
-          patch=`echo $tag | awk -F '.' '{ print $3 }'`
-          patch=$(( $patch - $patch % 2 ))
-          tag=$major.$minor.$patch
-
+          tag=`git describe --abbrev=0 --tags $taglist |grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
           git reset --hard
           git checkout $tag
-          sed -i "s/service-template:latest/service-template:$tag/g" cmd/service-template/k8s/02-service-template.yaml
-          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/service-template/k8s/02-service-template.yaml
+          sed -i "s/smoketest-gateway:latest/smoketest-gateway:$tag/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           TAG=$tag make deploy-to-k8s-cluster
         '''.stripIndent())
       }
