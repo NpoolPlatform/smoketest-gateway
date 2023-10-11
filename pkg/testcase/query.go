@@ -26,7 +26,7 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error)
 	}
 
 	apis, _, err := apicli.GetAPIs(ctx, &apipb.Conds{
-		IDs: &basetypes.StringSliceVal{Op: cruder.IN, Value: apiIDs},
+		EntIDs: &basetypes.StringSliceVal{Op: cruder.IN, Value: apiIDs},
 	}, 0, int32(len(apiIDs)))
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error)
 
 	apiMap := map[string]*apipb.API{}
 	for _, row := range apis {
-		apiMap[row.ID] = row
+		apiMap[row.EntID] = row
 	}
 
 	infos := []*npool.TestCase{}
@@ -55,7 +55,7 @@ func (h *queryHandler) formalize(ctx context.Context) ([]*npool.TestCase, error)
 			ApiServiceName: api.ServiceName,
 			ApiProtocol:    api.Protocol.String(),
 			ApiMethod:      api.Method.String(),
-			ApiDeprecated:  api.Depracated,
+			ApiDeprecated:  api.Deprecated,
 			Input:          info.Input,
 			InputDesc:      info.InputDesc,
 			Expectation:    info.Expectation,
