@@ -13,7 +13,7 @@ import (
 func (s *Server) GetPlanTestCases(ctx context.Context, in *npool.GetPlanTestCasesRequest) (*npool.GetPlanTestCasesResponse, error) {
 	handler, err := plantestcase1.NewHandler(
 		ctx,
-		plantestcase1.WithTestPlanID(&in.TestPlanID),
+		plantestcase1.WithTestPlanID(&in.TestPlanID, false),
 		plantestcase1.WithOffset(in.GetOffset()),
 		plantestcase1.WithLimit(in.GetLimit()),
 	)

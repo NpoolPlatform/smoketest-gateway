@@ -38,7 +38,7 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 			ID:           h.ID,
 			Name:         h.Name,
 			Description:  h.Description,
-			ModuleName:   h.ModuleName,
+			ModuleID:     h.ModuleID,
 			ApiID:        h.ApiID,
 			Input:        h.Input,
 			InputDesc:    h.InputDesc,

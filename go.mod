@@ -3,11 +3,12 @@ module github.com/NpoolPlatform/smoketest-gateway
 go 1.17
 
 require (
+	github.com/NpoolPlatform/appuser-middleware v0.0.0-20231011071633-e14f373f95cb
 	github.com/NpoolPlatform/basal-middleware v0.0.0-20231011062124-7ea6e9549a66
 	github.com/NpoolPlatform/go-service-framework v0.0.0-20230930023319-e48074d9472e
 	github.com/NpoolPlatform/libent-cruder v0.0.0-20231008051607-f64457cf6ab6
-	github.com/NpoolPlatform/message v0.0.0-20231008114012-493e7589dda5
-	github.com/NpoolPlatform/smoketest-middleware v0.0.0-20231011064333-f950bf39fcd0
+	github.com/NpoolPlatform/message v0.0.0-20231013071211-97ebb6354461
+	github.com/NpoolPlatform/smoketest-middleware v0.0.0-20231013071501-1ac99162e22f
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gogo/status v1.1.1
 	github.com/google/uuid v1.3.0
@@ -76,7 +77,6 @@ require (
 	github.com/prometheus/procfs v0.9.0 // indirect
 	github.com/rabbitmq/amqp091-go v1.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.9.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
