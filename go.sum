@@ -54,8 +54,8 @@ github.com/NpoolPlatform/go-service-framework v0.0.0-20230930023319-e48074d9472e
 github.com/NpoolPlatform/go-service-framework v0.0.0-20230930023319-e48074d9472e/go.mod h1:Kh7DMkWnYOMHxEKq7QfJqbxm1HaUPkhTNN74lfHQxyE=
 github.com/NpoolPlatform/libent-cruder v0.0.0-20231008051607-f64457cf6ab6 h1:zbM3Zq0qObWEiw+wYJihNFOsBfXey8mBgAhT7HzGB8Y=
 github.com/NpoolPlatform/libent-cruder v0.0.0-20231008051607-f64457cf6ab6/go.mod h1:EXCihQpRNNyWaPu1IphiZFLTyyUK/CJMZdW4My7y48Q=
-github.com/NpoolPlatform/message v0.0.0-20231017105237-107e0ff09681 h1:NauRXNqHgicofZums2k3iNstzLncLip8BModjRNGWe0=
-github.com/NpoolPlatform/message v0.0.0-20231017105237-107e0ff09681/go.mod h1:PxJpF0vSSOke+NJskbRBRQ2fK2K3SRe8zaEja+GxSHk=
+github.com/NpoolPlatform/message v0.0.0-20231017112746-e79690910e5c h1:8F7Xypgv6FiEiMFf2RdNrXsqKb2bUugrLVAxPRI68oY=
+github.com/NpoolPlatform/message v0.0.0-20231017112746-e79690910e5c/go.mod h1:PxJpF0vSSOke+NJskbRBRQ2fK2K3SRe8zaEja+GxSHk=
 github.com/NpoolPlatform/smoketest-middleware v0.0.0-20231017071734-d2933587b6ac h1:y2x0RZPqQHfpzxKRQfb+eTJN9f+NepyhupJxwIULF4o=
 github.com/NpoolPlatform/smoketest-middleware v0.0.0-20231017071734-d2933587b6ac/go.mod h1:F5IwAgViwFWalINawo0Z7O05RTYH9g5ANulaXBXTgiY=
 github.com/OneOfOne/xxhash v1.2.2 h1:KMrpdQIwFcEqXDklaen+P1axHaj9BSKzvpUUfnHldSE=

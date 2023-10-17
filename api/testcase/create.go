@@ -18,7 +18,7 @@ func (s *Server) CreateTestCase(ctx context.Context, in *npool.CreateTestCaseReq
 		testcase1.WithName(&in.Name, true),
 		testcase1.WithDescription(in.Description, false),
 		testcase1.WithModuleID(&in.ModuleID, true),
-		testcase1.WithApiID(&in.ApiID, false),
+		testcase1.WithApiID(in.ApiID, false),
 		testcase1.WithInput(in.Input, true),
 		testcase1.WithInputDesc(in.InputDesc, true),
 		testcase1.WithExpectation(in.Expectation, true),
