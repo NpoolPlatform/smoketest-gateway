@@ -10,15 +10,16 @@ import (
 
 func (h *Handler) UpdateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	_, err := cli.UpdateTestCase(ctx, &pb.TestCaseReq{
-		ID:           h.ID,
-		Name:         h.Name,
-		Description:  h.Description,
-		Input:        h.Input,
-		InputDesc:    h.InputDesc,
-		Expectation:  h.Expectation,
-		OutputDesc:   h.OutputDesc,
-		TestCaseType: h.TestCaseType,
-		Deprecated:   h.Deprecated,
+		ID:            h.ID,
+		Name:          h.Name,
+		Description:   h.Description,
+		Input:         h.Input,
+		InputDesc:     h.InputDesc,
+		Expectation:   h.Expectation,
+		OutputDesc:    h.OutputDesc,
+		TestCaseType:  h.TestCaseType,
+		TestCaseClass: h.TestCaseClass,
+		Deprecated:    h.Deprecated,
 	},
 	)
 	if err != nil {

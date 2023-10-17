@@ -13,19 +13,20 @@ import (
 )
 
 type Handler struct {
-	ID           *string
-	Name         *string
-	Description  *string
-	ModuleID     *string
-	ApiID        *string //nolint
-	Input        *string
-	InputDesc    *string
-	Expectation  *string
-	OutputDesc   *string
-	TestCaseType *pb.TestCaseType
-	Deprecated   *bool
-	Offset       int32
-	Limit        int32
+	ID            *string
+	Name          *string
+	Description   *string
+	ModuleID      *string
+	ApiID         *string //nolint
+	Input         *string
+	InputDesc     *string
+	Expectation   *string
+	OutputDesc    *string
+	TestCaseType  *pb.TestCaseType
+	TestCaseClass *pb.TestCaseClass
+	Deprecated    *bool
+	Offset        int32
+	Limit         int32
 }
 
 func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) error) (*Handler, error) {
@@ -206,6 +207,25 @@ func WithTestCaseType(testCaseType *pb.TestCaseType, must bool) func(context.Con
 			return fmt.Errorf("invalid testcase type")
 		}
 		h.TestCaseType = testCaseType
+		return nil
+	}
+}
+
+func WithTestCaseClass(testCaseClass *pb.TestCaseClass, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if testCaseClass == nil {
+			if must {
+				return fmt.Errorf("invalid testcaseclass")
+			}
+			return nil
+		}
+		switch *testCaseClass {
+		case pb.TestCaseClass_Functionality:
+		case pb.TestCaseClass_Interface:
+		default:
+			return fmt.Errorf("invalid testcaseclass")
+		}
+		h.TestCaseClass = testCaseClass
 		return nil
 	}
 }

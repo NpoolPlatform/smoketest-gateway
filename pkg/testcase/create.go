@@ -12,16 +12,17 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	info, err := cli.CreateTestCase(
 		ctx,
 		&pb.TestCaseReq{
-			ID:           h.ID,
-			Name:         h.Name,
-			Description:  h.Description,
-			ModuleID:     h.ModuleID,
-			ApiID:        h.ApiID,
-			Input:        h.Input,
-			InputDesc:    h.InputDesc,
-			Expectation:  h.Expectation,
-			OutputDesc:   h.OutputDesc,
-			TestCaseType: h.TestCaseType,
+			ID:            h.ID,
+			Name:          h.Name,
+			Description:   h.Description,
+			ModuleID:      h.ModuleID,
+			ApiID:         h.ApiID,
+			Input:         h.Input,
+			InputDesc:     h.InputDesc,
+			Expectation:   h.Expectation,
+			OutputDesc:    h.OutputDesc,
+			TestCaseType:  h.TestCaseType,
+			TestCaseClass: h.TestCaseClass,
 		},
 	)
 	if err != nil {
