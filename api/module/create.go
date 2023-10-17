@@ -14,8 +14,8 @@ import (
 func (s *Server) CreateModule(ctx context.Context, in *npool.CreateModuleRequest) (*npool.CreateModuleResponse, error) {
 	handler, err := module1.NewHandler(
 		ctx,
-		module1.WithName(&in.Name),
-		module1.WithDescription(in.Description),
+		module1.WithName(&in.Name, true),
+		module1.WithDescription(in.Description, false),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

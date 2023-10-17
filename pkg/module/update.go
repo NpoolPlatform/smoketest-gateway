@@ -8,14 +8,11 @@ import (
 )
 
 func (h *Handler) UpdateModule(ctx context.Context) (*npool.Module, error) {
-	if _, err := cli.UpdateModule(
-		ctx,
-		&npool.ModuleReq{
-			ID:          h.ID,
-			Name:        h.Name,
-			Description: h.Description,
-		},
-	); err != nil {
+	if _, err := cli.UpdateModule(ctx, &npool.ModuleReq{
+		ID:          h.ID,
+		Name:        h.Name,
+		Description: h.Description,
+	}); err != nil {
 		return nil, err
 	}
 
