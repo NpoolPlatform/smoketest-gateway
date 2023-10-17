@@ -38,32 +38,31 @@ func (h *queryHandler) getAPIs(ctx context.Context) error {
 
 func (h *queryHandler) formalize() {
 	for _, info := range h.testCases {
+		_info := npool.TestCase{
+			ID:            info.ID,
+			Name:          info.Name,
+			Description:   info.Description,
+			ModuleID:      info.ModuleID,
+			ModuleName:    info.ModuleName,
+			ApiID:         info.ApiID,
+			Input:         info.Input,
+			InputDesc:     info.InputDesc,
+			Expectation:   info.Expectation,
+			OutputDesc:    info.OutputDesc,
+			TestCaseType:  info.TestCaseType,
+			TestCaseClass: info.TestCaseClass,
+			Deprecated:    info.Deprecated,
+			CreatedAt:     info.CreatedAt,
+			UpdatedAt:     info.UpdatedAt,
+		}
 		api, ok := h.apis[info.ApiID]
 		if !ok {
-			continue
-		}
-		_info := npool.TestCase{
-			ID:             info.ID,
-			Name:           info.Name,
-			Description:    info.Description,
-			ModuleID:       info.ModuleID,
-			ModuleName:     info.ModuleName,
-			ApiID:          info.ApiID,
-			ApiPath:        api.Path,
-			ApiPathPrefix:  api.PathPrefix,
-			ApiServiceName: api.ServiceName,
-			ApiProtocol:    api.Protocol.String(),
-			ApiMethod:      api.Method.String(),
-			ApiDeprecated:  api.Deprecated,
-			Input:          info.Input,
-			InputDesc:      info.InputDesc,
-			Expectation:    info.Expectation,
-			OutputDesc:     info.OutputDesc,
-			TestCaseType:   info.TestCaseType,
-			TestCaseClass:  info.TestCaseClass,
-			Deprecated:     info.Deprecated,
-			CreatedAt:      info.CreatedAt,
-			UpdatedAt:      info.UpdatedAt,
+			_info.ApiPath = api.Path
+			_info.ApiPathPrefix = api.PathPrefix
+			_info.ApiServiceName = api.ServiceName
+			_info.ApiProtocol = api.Protocol.String()
+			_info.ApiMethod = api.Method.String()
+			_info.ApiDeprecated = api.Deprecated
 		}
 		h.infos = append(h.infos, &_info)
 	}
