@@ -37,7 +37,6 @@ func (h *queryHandler) getUsers(ctx context.Context) error {
 	return nil
 }
 
-//nolint
 func (h *queryHandler) formalize() {
 	for _, info := range h.testPlans {
 		creator, ok := h.users[info.CreatedBy]
