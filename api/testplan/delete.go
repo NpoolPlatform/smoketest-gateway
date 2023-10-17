@@ -14,7 +14,7 @@ import (
 func (s *Server) DeleteTestPlan(ctx context.Context, in *npool.DeleteTestPlanRequest) (*npool.DeleteTestPlanResponse, error) {
 	handler, err := testplan1.NewHandler(
 		ctx,
-		testplan1.WithID(&in.ID),
+		testplan1.WithID(&in.ID, true),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

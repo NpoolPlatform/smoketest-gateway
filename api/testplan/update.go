@@ -14,16 +14,16 @@ import (
 func (s *Server) UpdateTestPlan(ctx context.Context, in *npool.UpdateTestPlanRequest) (*npool.UpdateTestPlanResponse, error) {
 	handler, err := testplan1.NewHandler(
 		ctx,
-		testplan1.WithID(&in.ID),
-		testplan1.WithName(in.Name),
-		testplan1.WithExecutor(in.Executor),
-		testplan1.WithState(in.State),
-		testplan1.WithDeadline(in.Deadline),
-		testplan1.WithFails(in.Fails),
-		testplan1.WithSkips(in.Skips),
-		testplan1.WithFails(in.Fails),
-		testplan1.WithResult(in.Result),
-		testplan1.WithRunDuration(in.RunDuration),
+		testplan1.WithID(&in.ID, true),
+		testplan1.WithName(in.Name, false),
+		testplan1.WithExecutor(in.Executor, false),
+		testplan1.WithState(in.State, false),
+		testplan1.WithDeadline(in.Deadline, false),
+		testplan1.WithFails(in.Fails, false),
+		testplan1.WithSkips(in.Skips, false),
+		testplan1.WithFails(in.Fails, false),
+		testplan1.WithResult(in.Result, false),
+		testplan1.WithRunDuration(in.RunDuration, false),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

@@ -14,11 +14,11 @@ import (
 func (s *Server) CreateTestPlan(ctx context.Context, in *npool.CreateTestPlanRequest) (*npool.CreateTestPlanResponse, error) {
 	handler, err := testplan1.NewHandler(
 		ctx,
-		testplan1.WithID(in.ID),
-		testplan1.WithName(&in.Name),
-		testplan1.WithCreatedBy(&in.CreatedBy),
-		testplan1.WithExecutor(in.Executor),
-		testplan1.WithDeadline(in.Deadline),
+		testplan1.WithID(in.ID, false),
+		testplan1.WithName(&in.Name, true),
+		testplan1.WithCreatedBy(&in.CreatedBy, true),
+		testplan1.WithExecutor(in.Executor, false),
+		testplan1.WithDeadline(in.Deadline, false),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

@@ -36,7 +36,7 @@ func (h *queryHandler) getAPIs(ctx context.Context) error {
 	return nil
 }
 
-func (h *queryHandler) formalize(ctx context.Context) {
+func (h *queryHandler) formalize() {
 	for _, info := range h.testCases {
 		api, ok := h.apis[info.ApiID]
 		if !ok {
@@ -89,7 +89,7 @@ func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, 
 	if err := handler.getAPIs(ctx); err != nil {
 		return nil, 0, err
 	}
-	handler.formalize(ctx)
+	handler.formalize()
 	return handler.infos, total, nil
 }
 
@@ -107,7 +107,7 @@ func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
 		return nil, err
 	}
 
-	handler.formalize(ctx)
+	handler.formalize()
 	if len(handler.infos) == 0 {
 		return nil, nil
 	}
