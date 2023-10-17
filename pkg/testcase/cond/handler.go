@@ -32,9 +32,12 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	return handler, nil
 }
 
-func WithID(id *string) func(context.Context, *Handler) error {
+func WithID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
+			if must {
+				return fmt.Errorf("invalid id")
+			}
 			return nil
 		}
 		if _, err := uuid.Parse(*id); err != nil {
@@ -45,25 +48,29 @@ func WithID(id *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestCaseID(id *string) func(context.Context, *Handler) error {
+func WithTestCaseID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if _, err := uuid.Parse(*id); err != nil {
-			return err
+		if id == nil {
+			if must {
+				return fmt.Errorf("invalid testcaseid")
+			}
+			return nil
 		}
-
 		if _, err := cli.ExistTestCase(ctx, *id); err != nil {
 			return err
 		}
-
 		h.TestCaseID = id
 		return nil
 	}
 }
 
-func WithCondTestCaseID(id *string) func(context.Context, *Handler) error {
+func WithCondTestCaseID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if _, err := uuid.Parse(*id); err != nil {
-			return err
+		if id == nil {
+			if must {
+				return fmt.Errorf("invalid condtestcaseid")
+			}
+			return nil
 		}
 		if _, err := cli.ExistTestCase(ctx, *id); err != nil {
 			return err
@@ -74,9 +81,12 @@ func WithCondTestCaseID(id *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithCondType(_type *pb.CondType) func(context.Context, *Handler) error {
+func WithCondType(_type *pb.CondType, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if _type == nil {
+			if must {
+				return fmt.Errorf("invalid condtype")
+			}
 			return nil
 		}
 		switch *_type {
@@ -91,19 +101,19 @@ func WithCondType(_type *pb.CondType) func(context.Context, *Handler) error {
 	}
 }
 
-func WithIndex(index *uint32) func(context.Context, *Handler) error {
+func WithIndex(index *uint32, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if index == nil {
-			return nil
-		}
 		h.Index = index
 		return nil
 	}
 }
 
-func WithArgumentMap(argMap *string) func(context.Context, *Handler) error {
+func WithArgumentMap(argMap *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if argMap == nil {
+			if must {
+				return fmt.Errorf("invalid argmap")
+			}
 			return nil
 		}
 
