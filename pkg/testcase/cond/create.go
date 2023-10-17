@@ -8,17 +8,14 @@ import (
 )
 
 func (h *Handler) CreateCond(ctx context.Context) (*npool.Cond, error) {
-	info, err := cli.CreateCond(
-		ctx,
-		&npool.CondReq{
-			ID:             h.ID,
-			TestCaseID:     h.TestCaseID,
-			CondTestCaseID: h.CondTestCaseID,
-			CondType:       h.CondType,
-			ArgumentMap:    h.ArgumentMap,
-			Index:          h.Index,
-		},
-	)
+	info, err := cli.CreateCond(ctx, &npool.CondReq{
+		ID:             h.ID,
+		TestCaseID:     h.TestCaseID,
+		CondTestCaseID: h.CondTestCaseID,
+		CondType:       h.CondType,
+		ArgumentMap:    h.ArgumentMap,
+		Index:          h.Index,
+	})
 	if err != nil {
 		return nil, err
 	}

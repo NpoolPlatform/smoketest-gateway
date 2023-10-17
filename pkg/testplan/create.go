@@ -2,43 +2,20 @@ package testplan
 
 import (
 	"context"
-	"fmt"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan"
-	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
-	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
+	testplanmwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan"
+	testplanmwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
 )
 
-type createHandler struct {
-	*Handler
-}
-
-func (h *createHandler) validate() error {
-	if h.Name == nil {
-		return fmt.Errorf("invalid name")
-	}
-	return nil
-}
-
 func (h *Handler) CreateTestPlan(ctx context.Context) (*npool.TestPlan, error) {
-	handler := &createHandler{
-		Handler: h,
-	}
-
-	if err := handler.validate(); err != nil {
-		return nil, err
-	}
-
-	info, err := cli.CreateTestPlan(
-		ctx,
-		&pb.TestPlanReq{
-			ID:        handler.ID,
-			Name:      handler.Name,
-			CreatedBy: handler.CreatedBy,
-			Executor:  handler.Executor,
-			Deadline:  handler.Deadline,
-		},
-	)
+	info, err := testplanmwcli.CreateTestPlan(ctx, &testplanmwpb.TestPlanReq{
+		ID:        h.ID,
+		Name:      h.Name,
+		CreatedBy: h.CreatedBy,
+		Executor:  h.Executor,
+		Deadline:  h.Deadline,
+	})
 	if err != nil {
 		return nil, err
 	}

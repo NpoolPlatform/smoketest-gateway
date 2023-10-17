@@ -3,11 +3,11 @@ package plantestcase
 import (
 	"context"
 
-	mgrpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testplan/plantestcase"
+	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan/plantestcase"
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan/plantestcase"
 )
 
-func (h *Handler) DeletePlanTestCase(ctx context.Context) (*mgrpb.PlanTestCase, error) {
+func (h *Handler) DeletePlanTestCase(ctx context.Context) (*npool.PlanTestCase, error) {
 	info, err := h.GetPlanTestCase(ctx)
 	if err != nil {
 		return nil, err

@@ -35,9 +35,12 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	return handler, nil
 }
 
-func WithID(id *string) func(context.Context, *Handler) error {
+func WithID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
+			if must {
+				return fmt.Errorf("invalid id")
+			}
 			return nil
 		}
 		if _, err := uuid.Parse(*id); err != nil {
@@ -48,8 +51,14 @@ func WithID(id *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestPlanID(planID *string) func(context.Context, *Handler) error {
+func WithTestPlanID(planID *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
+		if planID == nil {
+			if must {
+				return fmt.Errorf("invalid testplanid")
+			}
+			return nil
+		}
 		if _, err := uuid.Parse(*planID); err != nil {
 			return err
 		}
@@ -58,8 +67,14 @@ func WithTestPlanID(planID *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestCaseID(testCaseID *string) func(context.Context, *Handler) error {
+func WithTestCaseID(testCaseID *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
+		if testCaseID == nil {
+			if must {
+				return fmt.Errorf("invalid testcaseid")
+			}
+			return nil
+		}
 		if _, err := uuid.Parse(*testCaseID); err != nil {
 			return err
 		}
@@ -68,29 +83,31 @@ func WithTestCaseID(testCaseID *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithTestUserID(userID, appID *string) func(context.Context, *Handler) error {
+func WithTestUserID(userID *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if userID == nil {
+			if must {
+				return fmt.Errorf("invalid testuserid")
+			}
 			return nil
 		}
-		if userID != nil && appID == nil {
+		if userID != nil {
 			return fmt.Errorf("app id is empty")
 		}
 		if _, err := uuid.Parse(*userID); err != nil {
 			return err
 		}
-		if _, err := uuid.Parse(*appID); err != nil {
-			return err
-		}
-		// TODO: Query User By AppID & UserID
 		h.TestUserID = userID
 		return nil
 	}
 }
 
-func WithInput(input *string) func(context.Context, *Handler) error {
+func WithInput(input *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if input == nil {
+			if must {
+				return fmt.Errorf("invalid input")
+			}
 			return nil
 		}
 		var r interface{}
@@ -102,19 +119,19 @@ func WithInput(input *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithOutput(output *string) func(context.Context, *Handler) error {
+func WithOutput(output *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if output == nil {
-			return nil
-		}
 		h.Output = output
 		return nil
 	}
 }
 
-func WithResult(result *pb.TestCaseResult) func(context.Context, *Handler) error {
+func WithResult(result *pb.TestCaseResult, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if result == nil {
+			if must {
+				return fmt.Errorf("invalid result")
+			}
 			return nil
 		}
 		switch *result {
@@ -130,31 +147,22 @@ func WithResult(result *pb.TestCaseResult) func(context.Context, *Handler) error
 	}
 }
 
-func WithRunDuration(duration *uint32) func(context.Context, *Handler) error {
+func WithRunDuration(duration *uint32, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if duration == nil {
-			return nil
-		}
 		h.RunDuration = duration
 		return nil
 	}
 }
 
-func WithIndex(index *uint32) func(context.Context, *Handler) error {
+func WithIndex(index *uint32, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if index == nil {
-			return nil
-		}
 		h.Index = index
 		return nil
 	}
 }
 
-func WithDescription(description *string) func(context.Context, *Handler) error {
+func WithDescription(description *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if description == nil {
-			return nil
-		}
 		h.Description = description
 		return nil
 	}

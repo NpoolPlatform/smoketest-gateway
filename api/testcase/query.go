@@ -13,9 +13,9 @@ import (
 func (s *Server) GetTestCases(ctx context.Context, in *npool.GetTestCasesRequest) (*npool.GetTestCasesResponse, error) {
 	handler, err := testcase1.NewHandler(
 		ctx,
+		testcase1.WithModuleID(in.ModuleID, false),
 		testcase1.WithOffset(in.GetOffset()),
 		testcase1.WithLimit(in.GetLimit()),
-		testcase1.WithModuleID(in.ModuleID),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

@@ -14,11 +14,11 @@ import (
 func (s *Server) CreatePlanTestCase(ctx context.Context, in *npool.CreatePlanTestCaseRequest) (*npool.CreatePlanTestCaseResponse, error) {
 	handler, err := plantestcase1.NewHandler(
 		ctx,
-		plantestcase1.WithID(in.ID),
-		plantestcase1.WithTestPlanID(&in.TestPlanID),
-		plantestcase1.WithTestCaseID(&in.TestCaseID),
-		plantestcase1.WithIndex(in.Index),
-		plantestcase1.WithInput(in.Input),
+		plantestcase1.WithID(in.ID, false),
+		plantestcase1.WithTestPlanID(&in.TestPlanID, true),
+		plantestcase1.WithTestCaseID(&in.TestCaseID, true),
+		plantestcase1.WithIndex(in.Index, false),
+		plantestcase1.WithInput(in.Input, false),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

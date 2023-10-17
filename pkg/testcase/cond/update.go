@@ -8,15 +8,12 @@ import (
 )
 
 func (h *Handler) UpdateCond(ctx context.Context) (*npool.Cond, error) {
-	if _, err := cli.UpdateCond(
-		ctx,
-		&npool.CondReq{
-			ID:          h.ID,
-			CondType:    h.CondType,
-			ArgumentMap: h.ArgumentMap,
-			Index:       h.Index,
-		},
-	); err != nil {
+	if _, err := cli.UpdateCond(ctx, &npool.CondReq{
+		ID:          h.ID,
+		CondType:    h.CondType,
+		ArgumentMap: h.ArgumentMap,
+		Index:       h.Index,
+	}); err != nil {
 		return nil, err
 	}
 

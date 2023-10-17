@@ -4,7 +4,7 @@ import (
 	"context"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testplan"
-	mwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
+	testplanmwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testplan"
 )
 
 func (h *Handler) DeleteTestPlan(ctx context.Context) (*npool.TestPlan, error) {
@@ -13,7 +13,7 @@ func (h *Handler) DeleteTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 		return nil, err
 	}
 
-	if _, err := mwcli.DeleteTestPlan(ctx, *h.ID); err != nil {
+	if _, err := testplanmwcli.DeleteTestPlan(ctx, *h.ID); err != nil {
 		return nil, err
 	}
 

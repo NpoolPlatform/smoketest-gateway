@@ -16,7 +16,6 @@ func (s *Server) GetModules(ctx context.Context, in *npool.GetModulesRequest) (*
 		module1.WithOffset(in.GetOffset()),
 		module1.WithLimit(in.GetLimit()),
 	)
-
 	if err != nil {
 		logger.Sugar().Errorw(
 			"GetModules",

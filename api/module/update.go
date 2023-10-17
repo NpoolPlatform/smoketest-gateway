@@ -14,9 +14,9 @@ import (
 func (s *Server) UpdateModule(ctx context.Context, in *npool.UpdateModuleRequest) (*npool.UpdateModuleResponse, error) {
 	handler, err := module1.NewHandler(
 		ctx,
-		module1.WithID(&in.ID),
-		module1.WithName(in.Name),
-		module1.WithDescription(in.Description),
+		module1.WithID(&in.ID, true),
+		module1.WithName(in.Name, false),
+		module1.WithDescription(in.Description, false),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

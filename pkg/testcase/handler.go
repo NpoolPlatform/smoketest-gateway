@@ -16,7 +16,6 @@ type Handler struct {
 	ID           *string
 	Name         *string
 	Description  *string
-	ModuleName   *string
 	ModuleID     *string
 	ApiID        *string //nolint
 	Input        *string
@@ -39,9 +38,12 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	return handler, nil
 }
 
-func WithID(id *string) func(context.Context, *Handler) error {
+func WithID(id *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
+			if must {
+				return fmt.Errorf("invalid id")
+			}
 			return nil
 		}
 		if _, err := uuid.Parse(*id); err != nil {
@@ -52,9 +54,12 @@ func WithID(id *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithModuleID(moduleID *string) func(context.Context, *Handler) error {
+func WithModuleID(moduleID *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if moduleID == nil {
+			if must {
+				return fmt.Errorf("invalid moduleid")
+			}
 			return nil
 		}
 		if _, err := uuid.Parse(*moduleID); err != nil {
@@ -66,18 +71,20 @@ func WithModuleID(moduleID *string) func(context.Context, *Handler) error {
 }
 
 //nolint
-func WithApiID(apiID *string) func(context.Context, *Handler) error {
+func WithApiID(apiID *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if _, err := uuid.Parse(*apiID); err != nil {
-			return err
+		if apiID == nil {
+			if must {
+				return fmt.Errorf("invalid apiid")
+			}
+			return nil
 		}
-
 		exist, err := apicli.ExistAPI(ctx, *apiID)
 		if err != nil {
 			return err
 		}
 		if !exist {
-			return fmt.Errorf("invalid api id")
+			return fmt.Errorf("invalid apiid")
 		}
 
 		h.ApiID = apiID
@@ -85,23 +92,12 @@ func WithApiID(apiID *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithModuleName(moduleName *string) func(context.Context, *Handler) error {
-	return func(ctx context.Context, h *Handler) error {
-		if moduleName == nil {
-			return nil
-		}
-		const leastModuleNameLen = 2
-		if len(*moduleName) < leastModuleNameLen {
-			return fmt.Errorf("invalid module name")
-		}
-		h.ModuleName = moduleName
-		return nil
-	}
-}
-
-func WithExpectation(expectation *string) func(context.Context, *Handler) error {
+func WithExpectation(expectation *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if expectation == nil {
+			if must {
+				return fmt.Errorf("invalid expectation")
+			}
 			return nil
 		}
 		var r interface{}
@@ -113,9 +109,12 @@ func WithExpectation(expectation *string) func(context.Context, *Handler) error 
 	}
 }
 
-func WithOutputDesc(outputDesc *string) func(context.Context, *Handler) error {
+func WithOutputDesc(outputDesc *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if outputDesc == nil {
+			if must {
+				return fmt.Errorf("invalid outputdesc")
+			}
 			return nil
 		}
 		var r interface{}
@@ -127,9 +126,12 @@ func WithOutputDesc(outputDesc *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithInput(input *string) func(context.Context, *Handler) error {
+func WithInput(input *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if input == nil {
+			if must {
+				return fmt.Errorf("invalid input")
+			}
 			return nil
 		}
 		var r interface{}
@@ -141,9 +143,12 @@ func WithInput(input *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithInputDesc(description *string) func(context.Context, *Handler) error {
+func WithInputDesc(description *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if description == nil {
+			if must {
+				return fmt.Errorf("invalid inputdesc")
+			}
 			return nil
 		}
 		var r interface{}
@@ -155,19 +160,19 @@ func WithInputDesc(description *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithDescription(description *string) func(context.Context, *Handler) error {
+func WithDescription(description *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if description == nil {
-			return nil
-		}
 		h.Description = description
 		return nil
 	}
 }
 
-func WithName(name *string) func(context.Context, *Handler) error {
+func WithName(name *string, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if name == nil {
+			if must {
+				return fmt.Errorf("invalid name")
+			}
 			return nil
 		}
 		const leastNameLen = 5
@@ -179,19 +184,19 @@ func WithName(name *string) func(context.Context, *Handler) error {
 	}
 }
 
-func WithDeprecated(deprecated *bool) func(context.Context, *Handler) error {
+func WithDeprecated(deprecated *bool, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
-		if deprecated == nil {
-			return nil
-		}
 		h.Deprecated = deprecated
 		return nil
 	}
 }
 
-func WithTestCaseType(testCaseType *pb.TestCaseType) func(context.Context, *Handler) error {
+func WithTestCaseType(testCaseType *pb.TestCaseType, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if testCaseType == nil {
+			if must {
+				return fmt.Errorf("invalid testcasetype")
+			}
 			return nil
 		}
 		switch *testCaseType {
@@ -218,7 +223,6 @@ func WithLimit(limit int32) func(context.Context, *Handler) error {
 			limit = constant.DefaultRowLimit
 		}
 		h.Limit = limit
-
 		return nil
 	}
 }

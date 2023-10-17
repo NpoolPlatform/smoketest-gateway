@@ -9,21 +9,18 @@ import (
 )
 
 func (h *Handler) UpdateTestPlan(ctx context.Context) (*npool.TestPlan, error) {
-	if _, err := cli.UpdateTestPlan(
-		ctx,
-		&pb.TestPlanReq{
-			ID:          h.ID,
-			Name:        h.Name,
-			Executor:    h.Executor,
-			State:       h.State,
-			Deadline:    h.Deadline,
-			Fails:       h.Fails,
-			Skips:       h.Skips,
-			Passes:      h.Passes,
-			RunDuration: h.RunDuration,
-			Result:      h.Result,
-		},
-	); err != nil {
+	if _, err := cli.UpdateTestPlan(ctx, &pb.TestPlanReq{
+		ID:          h.ID,
+		Name:        h.Name,
+		Executor:    h.Executor,
+		State:       h.State,
+		Deadline:    h.Deadline,
+		Fails:       h.Fails,
+		Skips:       h.Skips,
+		Passes:      h.Passes,
+		RunDuration: h.RunDuration,
+		Result:      h.Result,
+	}); err != nil {
 		return nil, err
 	}
 

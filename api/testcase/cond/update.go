@@ -14,10 +14,10 @@ import (
 func (s *Server) UpdateCond(ctx context.Context, in *npool.UpdateCondRequest) (*npool.UpdateCondResponse, error) {
 	handler, err := cond1.NewHandler(
 		ctx,
-		cond1.WithID(&in.ID),
-		cond1.WithCondType(in.CondType),
-		cond1.WithArgumentMap(in.ArgumentMap),
-		cond1.WithIndex(in.Index),
+		cond1.WithID(&in.ID, true),
+		cond1.WithCondType(in.CondType, false),
+		cond1.WithArgumentMap(in.ArgumentMap, false),
+		cond1.WithIndex(in.Index, false),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

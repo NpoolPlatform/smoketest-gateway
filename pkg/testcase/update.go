@@ -8,10 +8,6 @@ import (
 	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 )
 
-type updateHandler struct {
-	*Handler
-}
-
 func (h *Handler) UpdateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	_, err := cli.UpdateTestCase(ctx, &pb.TestCaseReq{
 		ID:           h.ID,
@@ -28,15 +24,5 @@ func (h *Handler) UpdateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	handler := &updateHandler{
-		Handler: h,
-	}
-
-	info, err := handler.GetTestCase(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return info, nil
+	return h.GetTestCase(ctx)
 }

@@ -14,7 +14,7 @@ import (
 func (s *Server) DeletePlanTestCase(ctx context.Context, in *npool.DeletePlanTestCaseRequest) (*npool.DeletePlanTestCaseResponse, error) {
 	handler, err := plantestcase1.NewHandler(
 		ctx,
-		plantestcase1.WithID(&in.ID),
+		plantestcase1.WithID(&in.ID, true),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(
