@@ -56,7 +56,7 @@ func (h *queryHandler) formalize() {
 			UpdatedAt:     info.UpdatedAt,
 		}
 		api, ok := h.apis[info.ApiID]
-		if !ok {
+		if ok {
 			_info.ApiPath = api.Path
 			_info.ApiPathPrefix = api.PathPrefix
 			_info.ApiServiceName = api.ServiceName
