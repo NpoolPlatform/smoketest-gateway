@@ -14,15 +14,15 @@ import (
 func (s *Server) UpdateTestCase(ctx context.Context, in *npool.UpdateTestCaseRequest) (*npool.UpdateTestCaseResponse, error) {
 	handler, err := testcase1.NewHandler(
 		ctx,
-		testcase1.WithID(&in.ID),
-		testcase1.WithName(in.Name),
-		testcase1.WithDescription(in.Description),
-		testcase1.WithInput(in.Input),
-		testcase1.WithInputDesc(in.InputDesc),
-		testcase1.WithExpectation(in.Expectation),
-		testcase1.WithOutputDesc(in.OutputDesc),
-		testcase1.WithDeprecated(in.Deprecated),
-		testcase1.WithTestCaseType(in.TestCaseType),
+		testcase1.WithID(&in.ID, true),
+		testcase1.WithName(in.Name, false),
+		testcase1.WithDescription(in.Description, false),
+		testcase1.WithInput(in.Input, false),
+		testcase1.WithInputDesc(in.InputDesc, false),
+		testcase1.WithExpectation(in.Expectation, false),
+		testcase1.WithOutputDesc(in.OutputDesc, false),
+		testcase1.WithDeprecated(in.Deprecated, false),
+		testcase1.WithTestCaseType(in.TestCaseType, false),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(
