@@ -85,6 +85,7 @@ func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, 
 	handler := &queryHandler{
 		Handler:   h,
 		testCases: infos,
+		apis:      map[string]*apimwpb.API{},
 	}
 	if err := handler.getAPIs(ctx); err != nil {
 		return nil, 0, err
@@ -102,6 +103,7 @@ func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
 	handler := &queryHandler{
 		Handler:   h,
 		testCases: []*testcasemwpb.TestCase{info},
+		apis:      map[string]*apimwpb.API{},
 	}
 	if err := handler.getAPIs(ctx); err != nil {
 		return nil, err
