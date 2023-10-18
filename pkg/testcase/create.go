@@ -4,12 +4,12 @@ import (
 	"context"
 
 	npool "github.com/NpoolPlatform/message/npool/smoketest/gw/v1/testcase"
-	pb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
-	cli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
+	testcasemwpb "github.com/NpoolPlatform/message/npool/smoketest/mw/v1/testcase"
+	testcasemwcli "github.com/NpoolPlatform/smoketest-middleware/pkg/client/testcase"
 )
 
 func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
-	info, err := cli.CreateTestCase(ctx, &pb.TestCaseReq{
+	info, err := testcasemwcli.CreateTestCase(ctx, &testcasemwpb.TestCaseReq{
 		ID:            h.ID,
 		Name:          h.Name,
 		Description:   h.Description,
