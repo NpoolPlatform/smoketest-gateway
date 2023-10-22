@@ -39,29 +39,25 @@ func (h *queryHandler) getUsers(ctx context.Context) error {
 
 func (h *queryHandler) formalize() {
 	for _, info := range h.testPlans {
-		creator, ok := h.users[info.CreatedBy]
-		if !ok {
-			continue
-		}
-		executor, ok := h.users[info.Executor]
-		if !ok {
-			continue
-		}
 		row := npool.TestPlan{
-			ID:            info.ID,
-			Name:          info.Name,
-			State:         info.State,
-			CreatedBy:     info.CreatedBy,
-			CreatorEmail:  creator.EmailAddress,
-			Executor:      info.Executor,
-			ExecutorEmail: executor.EmailAddress,
-			Fails:         info.Fails,
-			Skips:         info.Skips,
-			Passes:        info.Passes,
-			RunDuration:   info.RunDuration,
-			Result:        info.Result,
-			Deadline:      info.Deadline,
-			CreatedAt:     info.CreatedAt,
+			ID:          info.ID,
+			Name:        info.Name,
+			State:       info.State,
+			CreatedBy:   info.CreatedBy,
+			Executor:    info.Executor,
+			Fails:       info.Fails,
+			Skips:       info.Skips,
+			Passes:      info.Passes,
+			RunDuration: info.RunDuration,
+			Result:      info.Result,
+			Deadline:    info.Deadline,
+			CreatedAt:   info.CreatedAt,
+		}
+		if creator, ok := h.users[info.CreatedBy]; ok {
+			row.CreatorEmail = creator.EmailAddress
+		}
+		if executor, ok := h.users[info.Executor]; ok {
+			row.ExecutorEmail = executor.EmailAddress
 		}
 		h.infos = append(h.infos, &row)
 	}
