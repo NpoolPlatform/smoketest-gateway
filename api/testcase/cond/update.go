@@ -15,6 +15,7 @@ func (s *Server) UpdateCond(ctx context.Context, in *npool.UpdateCondRequest) (*
 	handler, err := cond1.NewHandler(
 		ctx,
 		cond1.WithID(&in.ID, true),
+		cond1.WithEntID(&in.EntID, true),
 		cond1.WithCondType(in.CondType, false),
 		cond1.WithArgumentMap(in.ArgumentMap, false),
 		cond1.WithIndex(in.Index, false),

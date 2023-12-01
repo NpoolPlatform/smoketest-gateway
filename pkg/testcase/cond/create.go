@@ -9,7 +9,7 @@ import (
 
 func (h *Handler) CreateCond(ctx context.Context) (*npool.Cond, error) {
 	info, err := cli.CreateCond(ctx, &npool.CondReq{
-		ID:             h.ID,
+		EntID:          h.EntID,
 		TestCaseID:     h.TestCaseID,
 		CondTestCaseID: h.CondTestCaseID,
 		CondType:       h.CondType,
@@ -20,6 +20,7 @@ func (h *Handler) CreateCond(ctx context.Context) (*npool.Cond, error) {
 		return nil, err
 	}
 
+	h.EntID = &info.EntID
 	h.ID = &info.ID
 	return h.GetCond(ctx)
 }

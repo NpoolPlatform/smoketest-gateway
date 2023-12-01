@@ -12,5 +12,5 @@ func (h *Handler) GetConds(ctx context.Context) ([]*npool.Cond, uint32, error) {
 }
 
 func (h *Handler) GetCond(ctx context.Context) (*npool.Cond, error) {
-	return cli.GetCond(ctx, *h.ID)
+	return cli.GetCond(ctx, *h.EntID)
 }
