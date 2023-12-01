@@ -17,5 +17,6 @@ func (h *Handler) CreateModule(ctx context.Context) (*npool.Module, error) {
 	}
 
 	h.ID = &info.ID
+	h.EntID = &info.EntID
 	return h.GetModule(ctx)
 }

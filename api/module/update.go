@@ -15,6 +15,7 @@ func (s *Server) UpdateModule(ctx context.Context, in *npool.UpdateModuleRequest
 	handler, err := module1.NewHandler(
 		ctx,
 		module1.WithID(&in.ID, true),
+		module1.WithEntID(&in.EntID, true),
 		module1.WithName(in.Name, false),
 		module1.WithDescription(in.Description, false),
 	)
