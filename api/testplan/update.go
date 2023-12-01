@@ -15,13 +15,13 @@ func (s *Server) UpdateTestPlan(ctx context.Context, in *npool.UpdateTestPlanReq
 	handler, err := testplan1.NewHandler(
 		ctx,
 		testplan1.WithID(&in.ID, true),
+		testplan1.WithEntID(&in.EntID, true),
 		testplan1.WithName(in.Name, false),
 		testplan1.WithExecutor(in.Executor, false),
 		testplan1.WithState(in.State, false),
 		testplan1.WithDeadline(in.Deadline, false),
 		testplan1.WithFails(in.Fails, false),
 		testplan1.WithSkips(in.Skips, false),
-		testplan1.WithFails(in.Fails, false),
 		testplan1.WithResult(in.Result, false),
 		testplan1.WithRunDuration(in.RunDuration, false),
 	)

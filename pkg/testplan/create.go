@@ -10,7 +10,7 @@ import (
 
 func (h *Handler) CreateTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 	info, err := testplanmwcli.CreateTestPlan(ctx, &testplanmwpb.TestPlanReq{
-		ID:        h.ID,
+		EntID:     h.EntID,
 		Name:      h.Name,
 		CreatedBy: h.CreatedBy,
 		Executor:  h.Executor,
@@ -21,5 +21,6 @@ func (h *Handler) CreateTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 	}
 
 	h.ID = &info.ID
+	h.EntID = &info.EntID
 	return h.GetTestPlan(ctx)
 }

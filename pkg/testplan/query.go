@@ -41,6 +41,7 @@ func (h *queryHandler) formalize() {
 	for _, info := range h.testPlans {
 		row := npool.TestPlan{
 			ID:          info.ID,
+			EntID:       info.EntID,
 			Name:        info.Name,
 			State:       info.State,
 			CreatedBy:   info.CreatedBy,
@@ -89,7 +90,7 @@ func (h *Handler) GetTestPlan(ctx context.Context) (*npool.TestPlan, error) {
 		return nil, fmt.Errorf("invalid id")
 	}
 
-	info, err := testplanmwcli.GetTestPlan(ctx, *h.ID)
+	info, err := testplanmwcli.GetTestPlan(ctx, *h.EntID)
 	if err != nil {
 		return nil, err
 	}
