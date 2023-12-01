@@ -24,5 +24,6 @@ func (h *Handler) UpdatePlanTestCase(ctx context.Context) (*npool.PlanTestCase, 
 	}
 
 	h.ID = &info.ID
+	h.EntID = &info.EntID
 	return h.GetPlanTestCase(ctx)
 }

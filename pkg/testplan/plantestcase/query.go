@@ -60,6 +60,7 @@ func (h *queryHandler) formalize() {
 	for _, info := range h.testCases {
 		_info := &npool.PlanTestCase{
 			ID:            info.ID,
+			EntID:         info.EntID,
 			TestPlanID:    info.TestPlanID,
 			TestCaseID:    info.TestCaseID,
 			TestCaseName:  info.TestCaseName,
@@ -118,7 +119,7 @@ func (h *Handler) GetPlanTestCases(ctx context.Context) ([]*npool.PlanTestCase, 
 }
 
 func (h *Handler) GetPlanTestCase(ctx context.Context) (*npool.PlanTestCase, error) {
-	info, err := cli.GetPlanTestCase(ctx, *h.ID)
+	info, err := cli.GetPlanTestCase(ctx, *h.EntID)
 	if err != nil {
 		return nil, err
 	}

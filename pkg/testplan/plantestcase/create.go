@@ -10,7 +10,7 @@ import (
 
 func (h *Handler) CreatePlanTestCase(ctx context.Context) (*npool.PlanTestCase, error) {
 	info, err := cli.CreatePlanTestCase(ctx, &plantestcasemwpb.PlanTestCaseReq{
-		ID:         h.ID,
+		EntID:      h.EntID,
 		TestPlanID: h.TestPlanID,
 		TestCaseID: h.TestCaseID,
 		TestUserID: h.TestUserID,
@@ -22,5 +22,6 @@ func (h *Handler) CreatePlanTestCase(ctx context.Context) (*npool.PlanTestCase, 
 	}
 
 	h.ID = &info.ID
+	h.EntID = &info.EntID
 	return h.GetPlanTestCase(ctx)
 }
