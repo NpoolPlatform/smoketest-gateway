@@ -40,6 +40,7 @@ func (h *queryHandler) formalize() {
 	for _, info := range h.testCases {
 		_info := npool.TestCase{
 			ID:            info.ID,
+			EntID:         info.EntID,
 			Name:          info.Name,
 			Description:   info.Description,
 			ModuleID:      info.ModuleID,
@@ -94,7 +95,7 @@ func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, 
 }
 
 func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
-	info, err := testcasemwcli.GetTestCase(ctx, *h.ID)
+	info, err := testcasemwcli.GetTestCase(ctx, *h.EntID)
 	if err != nil {
 		return nil, err
 	}

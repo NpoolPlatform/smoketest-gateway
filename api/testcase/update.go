@@ -15,6 +15,7 @@ func (s *Server) UpdateTestCase(ctx context.Context, in *npool.UpdateTestCaseReq
 	handler, err := testcase1.NewHandler(
 		ctx,
 		testcase1.WithID(&in.ID, true),
+		testcase1.WithEntID(&in.EntID, true),
 		testcase1.WithName(in.Name, false),
 		testcase1.WithDescription(in.Description, false),
 		testcase1.WithInput(in.Input, false),
@@ -23,6 +24,7 @@ func (s *Server) UpdateTestCase(ctx context.Context, in *npool.UpdateTestCaseReq
 		testcase1.WithOutputDesc(in.OutputDesc, false),
 		testcase1.WithDeprecated(in.Deprecated, false),
 		testcase1.WithTestCaseType(in.TestCaseType, false),
+		testcase1.WithTestCaseClass(in.TestCaseClass, false),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

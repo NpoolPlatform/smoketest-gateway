@@ -10,7 +10,7 @@ import (
 
 func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	info, err := testcasemwcli.CreateTestCase(ctx, &testcasemwpb.TestCaseReq{
-		ID:            h.ID,
+		EntID:         h.EntID,
 		Name:          h.Name,
 		Description:   h.Description,
 		ModuleID:      h.ModuleID,
@@ -27,5 +27,6 @@ func (h *Handler) CreateTestCase(ctx context.Context) (*npool.TestCase, error) {
 	}
 
 	h.ID = &info.ID
+	h.EntID = &info.EntID
 	return h.GetTestCase(ctx)
 }
