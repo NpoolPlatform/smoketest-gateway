@@ -143,3 +143,24 @@ func (h *Handler) GetPlanTestCase(ctx context.Context) (*npool.PlanTestCase, err
 
 	return handler.infos[0], nil
 }
+
+func (h *Handler) GetPlanTestCaseExt(ctx context.Context, info *plantestcasemwpb.PlanTestCase) (*npool.PlanTestCase, error) {
+	handler := &queryHandler{
+		Handler:   h,
+		testCases: []*plantestcasemwpb.PlanTestCase{info},
+		apis:      map[string]*apimwpb.API{},
+	}
+	if err := handler.getAPIs(ctx); err != nil {
+		return nil, err
+	}
+	if err := handler.getUsers(ctx); err != nil {
+		return nil, err
+	}
+
+	handler.formalize()
+	if len(handler.infos) == 0 {
+		return nil, nil
+	}
+
+	return handler.infos[0], nil
+}
