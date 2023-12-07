@@ -23,6 +23,7 @@ func (s *Server) UpdateTestPlan(ctx context.Context, in *npool.UpdateTestPlanReq
 		testplan1.WithFails(in.Fails, false),
 		testplan1.WithSkips(in.Skips, false),
 		testplan1.WithResult(in.Result, false),
+		testplan1.WithPasses(in.Passes, false),
 		testplan1.WithRunDuration(in.RunDuration, false),
 	)
 	if err != nil {
