@@ -116,3 +116,21 @@ func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
 
 	return handler.infos[0], nil
 }
+
+func (h *Handler) GetTestCaseExt(ctx context.Context, info *testcasemwpb.TestCase) (*npool.TestCase, error) {
+	handler := &queryHandler{
+		Handler:   h,
+		testCases: []*testcasemwpb.TestCase{info},
+		apis:      map[string]*apimwpb.API{},
+	}
+	if err := handler.getAPIs(ctx); err != nil {
+		return nil, err
+	}
+
+	handler.formalize()
+	if len(handler.infos) == 0 {
+		return nil, nil
+	}
+
+	return handler.infos[0], nil
+}
