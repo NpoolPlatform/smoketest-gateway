@@ -15,6 +15,7 @@ func (s *Server) UpdatePlanTestCase(ctx context.Context, in *npool.UpdatePlanTes
 	handler, err := plantestcase1.NewHandler(
 		ctx,
 		plantestcase1.WithID(&in.ID, true),
+		plantestcase1.WithEntID(&in.EntID, true),
 		plantestcase1.WithTestUserID(in.TestUserID, false),
 		plantestcase1.WithInput(in.Input, false),
 		plantestcase1.WithOutput(in.Output, false),

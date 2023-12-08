@@ -2,7 +2,6 @@ package testplan
 
 import (
 	"context"
-	"fmt"
 
 	usermwcli "github.com/NpoolPlatform/appuser-middleware/pkg/client/user"
 	cruder "github.com/NpoolPlatform/libent-cruder/pkg/cruder"
@@ -41,6 +40,7 @@ func (h *queryHandler) formalize() {
 	for _, info := range h.testPlans {
 		row := npool.TestPlan{
 			ID:          info.ID,
+			EntID:       info.EntID,
 			Name:        info.Name,
 			State:       info.State,
 			CreatedBy:   info.CreatedBy,
@@ -85,15 +85,29 @@ func (h *Handler) GetTestPlans(ctx context.Context) ([]*npool.TestPlan, uint32, 
 }
 
 func (h *Handler) GetTestPlan(ctx context.Context) (*npool.TestPlan, error) {
-	if h.ID == nil {
-		return nil, fmt.Errorf("invalid id")
-	}
-
-	info, err := testplanmwcli.GetTestPlan(ctx, *h.ID)
+	info, err := testplanmwcli.GetTestPlan(ctx, *h.EntID)
 	if err != nil {
 		return nil, err
 	}
 
+	handler := &queryHandler{
+		Handler:   h,
+		testPlans: []*testplanmwpb.TestPlan{info},
+		users:     map[string]*usermwpb.User{},
+	}
+	if err := handler.getUsers(ctx); err != nil {
+		return nil, err
+	}
+
+	handler.formalize()
+	if len(handler.infos) == 0 {
+		return nil, nil
+	}
+
+	return handler.infos[0], nil
+}
+
+func (h *Handler) GetTestPlanExt(ctx context.Context, info *testplanmwpb.TestPlan) (*npool.TestPlan, error) {
 	handler := &queryHandler{
 		Handler:   h,
 		testPlans: []*testplanmwpb.TestPlan{info},

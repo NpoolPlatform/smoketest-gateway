@@ -15,6 +15,7 @@ func (s *Server) DeleteTestCase(ctx context.Context, in *npool.DeleteTestCaseReq
 	handler, err := testcase1.NewHandler(
 		ctx,
 		testcase1.WithID(&in.ID, true),
+		testcase1.WithEntID(&in.EntID, true),
 	)
 	if err != nil {
 		logger.Sugar().Errorw(

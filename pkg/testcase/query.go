@@ -40,6 +40,7 @@ func (h *queryHandler) formalize() {
 	for _, info := range h.testCases {
 		_info := npool.TestCase{
 			ID:            info.ID,
+			EntID:         info.EntID,
 			Name:          info.Name,
 			Description:   info.Description,
 			ModuleID:      info.ModuleID,
@@ -94,11 +95,29 @@ func (h *Handler) GetTestCases(ctx context.Context) ([]*npool.TestCase, uint32, 
 }
 
 func (h *Handler) GetTestCase(ctx context.Context) (*npool.TestCase, error) {
-	info, err := testcasemwcli.GetTestCase(ctx, *h.ID)
+	info, err := testcasemwcli.GetTestCase(ctx, *h.EntID)
 	if err != nil {
 		return nil, err
 	}
 
+	handler := &queryHandler{
+		Handler:   h,
+		testCases: []*testcasemwpb.TestCase{info},
+		apis:      map[string]*apimwpb.API{},
+	}
+	if err := handler.getAPIs(ctx); err != nil {
+		return nil, err
+	}
+
+	handler.formalize()
+	if len(handler.infos) == 0 {
+		return nil, nil
+	}
+
+	return handler.infos[0], nil
+}
+
+func (h *Handler) GetTestCaseExt(ctx context.Context, info *testcasemwpb.TestCase) (*npool.TestCase, error) {
 	handler := &queryHandler{
 		Handler:   h,
 		testCases: []*testcasemwpb.TestCase{info},

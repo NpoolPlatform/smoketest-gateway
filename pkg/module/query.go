@@ -17,5 +17,5 @@ func (h *Handler) GetModules(ctx context.Context) ([]*npool.Module, uint32, erro
 }
 
 func (h *Handler) GetModule(ctx context.Context) (*npool.Module, error) {
-	return cli.GetModule(ctx, *h.ID)
+	return cli.GetModule(ctx, *h.EntID)
 }

@@ -14,7 +14,7 @@ import (
 func (s *Server) CreatePlanTestCase(ctx context.Context, in *npool.CreatePlanTestCaseRequest) (*npool.CreatePlanTestCaseResponse, error) {
 	handler, err := plantestcase1.NewHandler(
 		ctx,
-		plantestcase1.WithID(in.ID, false),
+		plantestcase1.WithEntID(in.EntID, false),
 		plantestcase1.WithTestPlanID(&in.TestPlanID, true),
 		plantestcase1.WithTestCaseID(&in.TestCaseID, true),
 		plantestcase1.WithIndex(in.Index, false),

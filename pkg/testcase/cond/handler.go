@@ -12,7 +12,8 @@ import (
 )
 
 type Handler struct {
-	ID             *string
+	ID             *uint32
+	EntID          *string
 	TestCaseID     *string
 	CondTestCaseID *string
 	CondType       *pb.CondType
@@ -32,7 +33,7 @@ func NewHandler(ctx context.Context, options ...func(context.Context, *Handler) 
 	return handler, nil
 }
 
-func WithID(id *string, must bool) func(context.Context, *Handler) error {
+func WithID(id *uint32, must bool) func(context.Context, *Handler) error {
 	return func(ctx context.Context, h *Handler) error {
 		if id == nil {
 			if must {
@@ -40,10 +41,23 @@ func WithID(id *string, must bool) func(context.Context, *Handler) error {
 			}
 			return nil
 		}
+		h.ID = id
+		return nil
+	}
+}
+
+func WithEntID(id *string, must bool) func(context.Context, *Handler) error {
+	return func(ctx context.Context, h *Handler) error {
+		if id == nil {
+			if must {
+				return fmt.Errorf("invalid entid")
+			}
+			return nil
+		}
 		if _, err := uuid.Parse(*id); err != nil {
 			return err
 		}
-		h.ID = id
+		h.EntID = id
 		return nil
 	}
 }

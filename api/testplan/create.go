@@ -14,7 +14,7 @@ import (
 func (s *Server) CreateTestPlan(ctx context.Context, in *npool.CreateTestPlanRequest) (*npool.CreateTestPlanResponse, error) {
 	handler, err := testplan1.NewHandler(
 		ctx,
-		testplan1.WithID(in.ID, false),
+		testplan1.WithEntID(in.EntID, false),
 		testplan1.WithName(&in.Name, true),
 		testplan1.WithCreatedBy(&in.CreatedBy, true),
 		testplan1.WithExecutor(in.Executor, false),
