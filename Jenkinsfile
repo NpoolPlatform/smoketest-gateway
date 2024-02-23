@@ -122,7 +122,7 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ 0 -eq $rc ]; then
+          if [ 0 -eq $rc -a x"$revlist" != x ]; then
             tag=`git describe --tags $revlist`
 
             major=`echo $tag | awk -F '.' '{ print $1 }'`
@@ -163,7 +163,7 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ 0 -eq $rc ]; then
+          if [ 0 -eq $rc -a x"$revlist" != x ]; then
             tag=`git describe --tags $revlist`
 
             major=`echo $tag | awk -F '.' '{ print $1 }'`
@@ -196,7 +196,7 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ 0 -eq $rc ]; then
+          if [ 0 -eq $rc -a x"$revlist" != x ]; then
             tag=`git describe --tags $revlist`
 
             major=`echo $tag | awk -F '.' '{ print $1 }'`
@@ -247,9 +247,9 @@ pipeline {
       }
       steps {
         sh(returnStdout: false, script: '''
-          branch=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
-          if [ "x$branch" == "xmaster" ]; then
-            branch=latest
+          branch=latest
+          if [ "x$BRANCH_NAME" != "xmaster" ]; then
+            branch=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
           fi
           set +e
           docker images | grep smoketest-gateway | grep $branch
@@ -278,7 +278,7 @@ pipeline {
           set -e
 
           if [ 0 -eq $rc -a x"$revlist" != x ]; then
-            tag=`git describe --tags $revlist`
+            tag=`git tag --sort=-v:refname | grep [1\\|3\\|5\\|7\\|9]$ | head -n1`
             set +e
             docker images | grep smoketest-gateway | grep $tag
             rc=$?
@@ -303,7 +303,7 @@ pipeline {
           set -e
 
           if [ 0 -eq $rc -a x"$taglist" != x ]; then
-            tag=`git describe --abbrev=0 --tags $taglist |grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
+            tag=`git tag --sort=-v:refname | grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
             set +e
             docker images | grep smoketest-gateway | grep $tag
             rc=$?
@@ -323,12 +323,16 @@ pipeline {
       }
       steps {
         sh(returnStdout: false, script: '''
-          branch=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
-          if [ "x$branch" == "xmaster" ]; then
-            branch=latest
+          branch=latest
+          if [ "x$BRANCH_NAME" != "xmaster" ]; then
+            branch=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
           fi
           sed -i "s/smoketest-gateway:latest/smoketest-gateway:$branch/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
+          if [ "x$REPLICAS_COUNT" == "x" ];then
+            REPLICAS_COUNT=2
+          fi
+          sed -i "s/replicas: 2/replicas: $REPLICAS_COUNT/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           make deploy-to-k8s-cluster
         '''.stripIndent())
       }
@@ -345,15 +349,19 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ ! 0 -eq $rc ]; then
+          if [ ! 0 -eq $rc -o x"$revlist" == x]; then
             exit 0
           fi
-          tag=`git describe --tags $revlist`
+          tag=`git tag --sort=-v:refname | grep [1\\|3\\|5\\|7\\|9]$ | head -n1`
 
           git reset --hard
           git checkout $tag
           sed -i "s/smoketest-gateway:latest/smoketest-gateway:$tag/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
+          if [ "x$REPLICAS_COUNT" == "x" ];then
+            REPLICAS_COUNT=2
+          fi
+          sed -i "s/replicas: 2/replicas: $REPLICAS_COUNT/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           make deploy-to-k8s-cluster
         '''.stripIndent())
       }
@@ -370,14 +378,18 @@ pipeline {
           taglist=`git rev-list --tags`
           rc=$?
           set -e
-          if [ ! 0 -eq $rc ]; then
+          if [ ! 0 -eq $rc -o x"$revlist" == x]; then
             exit 0
           fi
-          tag=`git describe --abbrev=0 --tags $taglist |grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
+          tag=`git tag --sort=-v:refname | grep [0\\|2\\|4\\|6\\|8]$ | head -n1`
           git reset --hard
           git checkout $tag
           sed -i "s/smoketest-gateway:latest/smoketest-gateway:$tag/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
+          if [ "x$REPLICAS_COUNT" == "x" ];then
+            REPLICAS_COUNT=2
+          fi
+          sed -i "s/replicas: 2/replicas: $REPLICAS_COUNT/g" cmd/smoketest-gateway/k8s/02-smoketest-gateway.yaml
           make deploy-to-k8s-cluster
         '''.stripIndent())
       }
