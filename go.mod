@@ -3,12 +3,12 @@ module github.com/NpoolPlatform/smoketest-gateway
 go 1.17
 
 require (
-	github.com/NpoolPlatform/appuser-middleware v0.0.0-20231130084704-4550aabac9c7
-	github.com/NpoolPlatform/basal-middleware v0.0.0-20231015112137-254853c60eec
+	github.com/NpoolPlatform/appuser-middleware v0.0.0-20240228082801-b01a96a4f419
+	github.com/NpoolPlatform/basal-middleware v0.0.0-20240228105108-f00107969a4f
 	github.com/NpoolPlatform/go-service-framework v0.0.0-20230930023319-e48074d9472e
 	github.com/NpoolPlatform/libent-cruder v0.0.0-20231008051607-f64457cf6ab6
-	github.com/NpoolPlatform/message v0.0.0-20231208103735-3617bf7c967b
-	github.com/NpoolPlatform/smoketest-middleware v0.0.0-20231208104409-5974799043eb
+	github.com/NpoolPlatform/message v0.0.0-20240313082548-dac7f92925da
+	github.com/NpoolPlatform/smoketest-middleware v0.0.0-20240314030317-b60ebbc165f2
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gogo/status v1.1.1
 	github.com/google/uuid v1.3.0
